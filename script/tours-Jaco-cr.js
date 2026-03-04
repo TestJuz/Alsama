@@ -1,16 +1,17 @@
-// ---------- Data (replace with your real tours) ----------
+// ---------- Data ----------
 // Cards include: title, excerpt, tags, duration, price, view details,
-// next departures, and availability months (como en la página). :contentReference[oaicite:2]{index=2}
+// next departures, and availability months.
 const TOURS = [
   {
-    title: "Manuel Antonio",
-    excerpt: "This national park is considered one of the most beautiful in the country...",
-    locations: ["Manuel Antonio"],
-    difficulty: "Easy",
-    people: "2 People",
-    durationText: "13 Hours",
-    durationHours: 13,
-    price: 153.93,
+    title: "White Water Rafting",
+    excerpt: "Full-day rafting adventure with scenic tropical landscapes.",
+    image: "../img/tours/jaco/Rafting-1.webp",
+    locations: ["Jaco"],
+    difficulty: "Medium",
+    people: "",
+    durationText: "1 Day",
+    durationHours: 24,
+    price: 210.00,
     detailsUrl: "#",
     nextDepartures: [
       { date: "February 7, 2026", status: "Available" },
@@ -20,14 +21,15 @@ const TOURS = [
     availabilityMonths: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
   },
   {
-    title: "Beach Day",
-    excerpt: "The experience begins leaving the main hotels in San José ...",
-    locations: ["Jacó"],
-    difficulty: "Easy",
+    title: "Tortuga Island Tour",
+    excerpt: "Tortuga Island is known for white sand beach and turquoise waters.",
+    image: "../img/tours/jaco/Tortuga-7.webp",
+    locations: ["Jaco"],
+    difficulty: "Medium",
     people: "",
-    durationText: "10 Hours",
-    durationHours: 10,
-    price: 175.71,
+    durationText: "4 Hours",
+    durationHours: 4,
+    price: 161.07,
     detailsUrl: "#",
     nextDepartures: [
       { date: "February 7, 2026", status: "Available" },
@@ -37,14 +39,15 @@ const TOURS = [
     availabilityMonths: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
   },
   {
-    title: "Nature Combo",
-    excerpt: "Breakfast and then immediately start with the Coffee Tour...",
-    locations: ["Alajuela"],
+    title: "Monkey Mangrove Tour",
+    excerpt: "Relaxing mangrove and wildlife experience near Jaco.",
+    image: "../img/tours/jaco/Monkey-Tour-9-1.webp",
+    locations: ["Jaco"],
     difficulty: "Easy",
     people: "",
-    durationText: "12 Hours",
-    durationHours: 12,
-    price: 183.45,
+    durationText: "3 Hours",
+    durationHours: 3,
+    price: 80.54,
     detailsUrl: "#",
     nextDepartures: [
       { date: "February 7, 2026", status: "Available" },
@@ -141,7 +144,9 @@ function render(list) {
     const el = document.createElement("article");
     el.className = "card";
     el.innerHTML = `
-      <div class="card__media" aria-hidden="true"></div>
+      <div class="card__media">
+        <img src="${t.image}" alt="${t.title}" loading="lazy">
+      </div>
       <div class="card__body">
         <h3 class="card__title">${t.title}</h3>
         <p class="card__desc">${t.excerpt}</p>

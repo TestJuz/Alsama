@@ -5,6 +5,7 @@ const TOURS = [
   {
     title: "Manuel Antonio",
     excerpt: "This national park is considered one of the most beautiful in the country...",
+    image: "../img/tours/sj/Manuel-Antonio.webp",
     locations: ["Manuel Antonio"],
     difficulty: "Easy",
     people: "2 People",
@@ -22,6 +23,7 @@ const TOURS = [
   {
     title: "Beach Day",
     excerpt: "The experience begins leaving the main hotels in San José ...",
+    image: "../img/tours/sj/beach-day.webp",
     locations: ["Jacó"],
     difficulty: "Easy",
     people: "",
@@ -39,6 +41,7 @@ const TOURS = [
   {
     title: "Nature Combo",
     excerpt: "Breakfast and then immediately start with the Coffee Tour...",
+    image: "../img/tours/sj/La-Paz-Waterfall-Gardens-2.webp",
     locations: ["Alajuela"],
     difficulty: "Easy",
     people: "",
@@ -141,7 +144,9 @@ function render(list) {
     const el = document.createElement("article");
     el.className = "card";
     el.innerHTML = `
-      <div class="card__media" aria-hidden="true"></div>
+      <div class="card__media">
+        <img src="${t.image}" alt="${t.title}" loading="lazy">
+      </div>
       <div class="card__body">
         <h3 class="card__title">${t.title}</h3>
         <p class="card__desc">${t.excerpt}</p>
@@ -284,3 +289,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   render(applyFilters());
 });
+
+
