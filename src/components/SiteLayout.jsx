@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { asset, homeLinks, routes, serviceMenu } from "../lib/site";
+import { asset, homeLinks, routes, safetyPdf, serviceMenu } from "../lib/site";
 
 function SmartLink({ to, className, children, ...props }) {
   if (typeof to === "string" && to.startsWith("#")) {
@@ -10,7 +10,7 @@ function SmartLink({ to, className, children, ...props }) {
   return <Link className={className} to={to} {...props}>{children}</Link>;
 }
 
-function Navigation({ homeTo, servicesTo, contactTo, brandTo }) {
+function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const menuRef = useRef(null);
@@ -76,7 +76,7 @@ function Navigation({ homeTo, servicesTo, contactTo, brandTo }) {
             </div>
           </div>
 
-          <SmartLink to={servicesTo} className="nav__link">Services</SmartLink>
+          <a className="nav__link" href={safetyHref} target="_blank" rel="noreferrer">Safety</a>
           <SmartLink to={contactTo} className="nav__link nav__cta">Contact</SmartLink>
         </nav>
       </div>
@@ -87,7 +87,7 @@ function Navigation({ homeTo, servicesTo, contactTo, brandTo }) {
 export function SiteLayout({
   children,
   homeTo = homeLinks.home,
-  servicesTo = homeLinks.services,
+  safetyHref = safetyPdf,
   contactTo = "#contact",
   brandTo = routes.home,
   footerBackToTop = "#",
@@ -97,7 +97,7 @@ export function SiteLayout({
     <>
       <Navigation
         homeTo={homeTo}
-        servicesTo={servicesTo}
+        safetyHref={safetyHref}
         contactTo={contactTo}
         brandTo={brandTo}
       />

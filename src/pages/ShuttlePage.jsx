@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
+import { ShuttleExplorer } from "../components/ShuttleExplorer";
 import { SiteLayout } from "../components/SiteLayout";
 import { homeLinks, routes } from "../lib/site";
 
@@ -7,7 +8,6 @@ export function ShuttlePage() {
   return (
     <SiteLayout
       homeTo={routes.home}
-      servicesTo={homeLinks.services}
       contactTo="#contact"
       brandTo={routes.home}
       footerBackToTop="#"
@@ -43,22 +43,7 @@ export function ShuttlePage() {
           </div>
         </section>
 
-        <section className="section" id="shuttle-details">
-          <div className="container">
-            <div className="transport-grid transport-grid--single">
-              <article className="transport-card">
-                <span className="transport-card__tag">How it works</span>
-                <h3>Scheduled shared transport</h3>
-                <p className="muted">Shuttle service usually operates on common travel routes and may include coordinated pickup windows depending on the area.</p>
-                <ul className="transport-list">
-                  <li>Good for solo travelers, couples and small parties</li>
-                  <li>Useful between high-demand destinations</li>
-                  <li>Can be paired with hotels and tours</li>
-                </ul>
-              </article>
-            </div>
-          </div>
-        </section>
+        <ShuttleExplorer />
 
         <section className="section">
           <div className="container">

@@ -2,6 +2,8 @@ export function asset(path) {
   return `${import.meta.env.BASE_URL}${path}`;
 }
 
+export const safetyPdf = asset("Safety.pdf");
+
 export const routes = {
   home: "/",
   shuttle: "/shuttle",
@@ -13,7 +15,6 @@ export const routes = {
 
 export const homeLinks = {
   home: { pathname: routes.home, hash: "#home" },
-  services: { pathname: routes.home, hash: "#services" },
   contact: { pathname: routes.home, hash: "#contact" }
 };
 

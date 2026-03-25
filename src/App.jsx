@@ -1,12 +1,17 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-import { JacoToursPage } from "./pages/JacoToursPage";
-import { HomePage } from "./pages/HomePage";
-import { PrivateTransportPage } from "./pages/PrivateTransportPage";
-import { RentACarPage } from "./pages/RentACarPage";
-import { SanJoseToursPage } from "./pages/SanJoseToursPage";
-import { ShuttlePage } from "./pages/ShuttlePage";
 import { routes } from "./lib/site";
+
+const HomePage = lazy(() => import("./pages/HomePage").then((module) => ({ default: module.HomePage })));
+const ShuttlePage = lazy(() => import("./pages/ShuttlePage").then((module) => ({ default: module.ShuttlePage })));
+const PrivateTransportPage = lazy(() =>
+  import("./pages/PrivateTransportPage").then((module) => ({ default: module.PrivateTransportPage }))
+);
+const RentACarPage = lazy(() => import("./pages/RentACarPage").then((module) => ({ default: module.RentACarPage })));
+const SanJoseToursPage = lazy(() =>
+  import("./pages/SanJoseToursPage").then((module) => ({ default: module.SanJoseToursPage }))
+);
+const JacoToursPage = lazy(() => import("./pages/JacoToursPage").then((module) => ({ default: module.JacoToursPage })));
 
 const routeTitles = [
   { path: routes.home, title: "Alsama Tours | Travel Services in Costa Rica" },
@@ -45,7 +50,7 @@ function ScrollManager() {
 
 export function App() {
   return (
-    <>
+    <Suspense fallback={null}>
       <ScrollManager />
       <Routes>
         <Route path={routes.home} element={<HomePage />} />
@@ -63,6 +68,6 @@ export function App() {
         <Route path="/tours/Jaco/*" element={<Navigate replace to={routes.toursJaco} />} />
         <Route path="*" element={<Navigate replace to={routes.home} />} />
       </Routes>
-    </>
+    </Suspense>
   );
 }

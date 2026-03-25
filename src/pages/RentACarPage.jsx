@@ -6,7 +6,6 @@ export function RentACarPage() {
   return (
     <SiteLayout
       homeTo={routes.home}
-      servicesTo={homeLinks.services}
       contactTo="#contact"
       brandTo={routes.home}
       footerBackToTop="#"

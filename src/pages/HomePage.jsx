@@ -29,7 +29,6 @@ export function HomePage() {
   return (
     <SiteLayout
       homeTo={homeLinks.home}
-      servicesTo="#services"
       contactTo="#contact"
       brandTo={routes.home}
       footerBackToTop="#home"
