@@ -1,213 +1,25 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tour Website Template</title>
-  <link rel="stylesheet" href="Style/style.css" />
-  <link rel="stylesheet" href="Style/logo.css" />
-  <link rel="stylesheet" href="Style/miniGallery.css" />
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alsama Tours | Travel Services in Costa Rica</title>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var redirectPath = params.get("p");
+        var redirectHash = params.get("h");
+        if (!redirectPath) return;
 
-<body>
-  <!-- Header / Nav -->
-  <header class="site-header">
-    <div class="container nav">
-    <a class="brand" href="../index.html">
-      <span class="brand__logo" aria-hidden="true">
-        <img src="img/tortuga.png" alt="Logo" class="brand__logo-img">
-      </span>
-      <span class="brand__text">Alsama Tours</span>
-    </a>
-
-      <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu">
-        <span class="sr-only"></span>
-        ☰
-      </button>
-
-      <nav class="nav__menu" id="navMenu">
-        <a href="#home" class="nav__link">Home</a>
-
-        <div class="nav__dropdown" data-dropdown>
-          <button class="nav__link nav__dropdownBtn" type="button" aria-expanded="false">
-            Services <span aria-hidden="true">▾</span>
-          </button>
-          <div class="nav__dropdownMenu" role="menu">
-            <a role="menuitem" href="#transport">Transport</a>
-            <a role="menuitem" href="SanJose/index.html">Tours San José</a>
-            <a role="menuitem" href="Jaco/index.html">Tours Jacó</a>
-            <a role="menuitem" href="#rent">Rent a Car</a>
-          </div>
-        </div>
-
-        <a href="#safety" class="nav__link">Safety</a>
-        <a href="#contact" class="nav__link nav__cta">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="home">
-    <!-- Hero -->
-    <section class="hero">
-      <div class="container hero__grid">
-        <div class="hero__copy">
-          <p class="hero__kicker">Discover Costa Rica</p>
-          <h1 class="hero__title">Discover the best of our country</h1>
-          <p class="hero__subtitle">
-             Tours, Hotels, Shuttles, Transfers and more — Build your itinerary in minutes.
-          </p>
-
-          <div class="hero__actions">
-            <a class="btn btn--primary" href="#tours">BOOK YOUR TOUR NOW</a>
-            <a class="btn btn--ghost" href="#contact">Get a quote</a>
-          </div>
-        </div>
-
-        <div class="hero__media" aria-hidden="true">
-        <div class="hero__card">
-            <img src="img/hero/1.webp" class="hero__img" alt="Hero Image 1">
-            <img src="img/hero/2.webp" class="hero__img hero__img--2" alt="Hero Image 2">
-            <img src="img/hero/3.webp" class="hero__img hero__img--3" alt="Hero Image 3">
-        </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Image Grid / Gallery -->
-    <section class="section">
-      <div class="container">
-        <p class="muted">
-          Surrounded by scenic beauty and attractive tourist attractions, we make it convenient for you
-          to visit the best places with local guidance.
-        </p>
-
-
-      </div>
-    </section>
-
-    <!-- Experience -->
-    <section class="section section--alt">
-      <div class="container split">
-        <div>
-          <h2>Experience the life of Costa Rica</h2>
-          <p class="muted">
-            From local flavors to iconic destinations, we help you build a trip you’ll remember.
-          </p>
-        </div>
-        <div class="mini-gallery" aria-hidden="true">
-            <img src="img/gallery/1.webp"  alt="Gallery Image 01">
-            <img src="img/gallery/2.webp"  alt="Gallery Image 02">
-            <img src="img/gallery/3.webp"  alt="Gallery Image 03">
-            <img src="img/gallery/4.webp"  alt="Gallery Image 04">
-            <img src="img/gallery/5.webp"  alt="Gallery Image 05">
-            <img src="img/gallery/6.webp"  alt="Gallery Image 06">
-            <img src="img/gallery/7.webp"  alt="Gallery Image 07">
-            <img src="img/gallery/8.webp"  alt="Gallery Image 08">
-            <img src="img/gallery/9.webp"  alt="Gallery Image 09">
-            <img src="img/gallery/10.webp"  alt="Gallery Image 10">
-        </div>
-      </div>
-    </section>
-
-    <!-- Highlights -->
-    <section class="section">
-      <div class="container">
-        <h2>Discover Costa Rica</h2>
-        <p class="muted">Simple booking, clear itinerary, punctual departures.</p>
-
-        <div class="features">
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">⭐</div>
-            <h3>Experience</h3>
-            <p class="muted">Curated tours and trusted local operators.</p>
-          </article>
-
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">🗺️</div>
-            <h3>Easy access</h3>
-            <p class="muted">See destinations and plan your itinerary online.</p>
-          </article>
-
-          <article class="feature">
-            <div class="feature__icon" aria-hidden="true">⏱️</div>
-            <h3>Always on time</h3>
-            <p class="muted">Maximize the day with efficient schedules.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tours -->
-    <section class="section section--alt" id="tours">
-      <div class="container">
-        <div class="sectionHead" id="tours-sj">
-          <div>
-            <h2>From SAN JOSÉ</h2>
-            <p class="muted">Choose from our most popular day trips.</p>
-          </div>
-          <a class="btn btn--ghost" href="#" id="viewAllSJ">View All</a>
-        </div>
-
-        <div class="cards" id="cardsSanJose" aria-live="polite"></div>
-
-        <hr class="divider" />
-
-        <div class="sectionHead" id="tours-jaco">
-          <div>
-            <h2>From Jacó</h2>
-            <p class="muted">Adventure, beach, and nature options.</p>
-          </div>
-          <a class="btn btn--ghost" href="#" id="viewAllJaco">View All</a>
-        </div>
-
-        <div class="cards" id="cardsJaco" aria-live="polite"></div>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section class="section" id="contact">
-      <div class="container contact">
-        <div>
-          <h2>Contact</h2>
-          <p class="muted">Tell us dates, pickup area, and number of travelers.</p>
-        </div>
-
-        <form class="form" id="contactForm">
-          <label>
-            Name
-            <input name="name" required placeholder="Your name" />
-          </label>
-          <label>
-            Email
-            <input name="email" type="email" required placeholder="you@email.com" />
-          </label>
-          <label>
-            Message
-            <textarea name="message" rows="4" required placeholder="What tour are you looking for?"></textarea>
-          </label>
-          <button class="btn btn--primary" type="submit">Send</button>
-          <p class="form__hint muted" id="formHint" role="status"></p>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <!--Add display of the Gallery's image-->
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-  <button class="lightbox__close" id="lightboxClose" aria-label="Close">×</button>
-  <img class="lightbox__img" id="lightboxImg" alt="">
-</div>
-
-
-  <footer class="footer">
-    <div class="container footer__grid">
-      <p class="muted">© <span id="year"></span> Your Tours. All rights reserved.</p>
-      <a class="muted" href="#home">Back to top</a>
-    </div>
-  </footer>
-
-  <script src="script/app.js" defer></script>
-  <script src="script/miniGallery.js" defer></script>
-</body>
+        var base = "%BASE_URL%".replace(/\/$/, "");
+        var normalizedPath = redirectPath.startsWith("/") ? redirectPath : "/" + redirectPath;
+        var nextHash = redirectHash ? "#" + redirectHash : window.location.hash;
+        window.history.replaceState(null, "", base + normalizedPath + nextHash);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="./src/main.jsx"></script>
+  </body>
 </html>
