@@ -1,17 +1,14 @@
-// ---------- Helpers ----------
 const $ = (sel, root = document) => root.querySelector(sel);
 
 function formatUSD(value) {
-  // Keep it simple; replace with CRC formatting if needed
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
-// ---------- Demo data (replace with your own or fetch from API) ----------
 const toursSanJose = [
   {
     title: "Manuel Antonio",
-    summary: "One of the most beautiful national parks with beach + wildlife.",
-    location: "San José",
+    summary: "A full-day nature experience that can be paired with hotel pickup and private transportation.",
+    location: "San Jose",
     difficulty: "Easy",
     people: "2 People",
     duration: "13 Hours",
@@ -20,8 +17,8 @@ const toursSanJose = [
   },
   {
     title: "Beach Day",
-    summary: "A full-day beach escape with pickup options and local stops.",
-    location: "Jacó",
+    summary: "A beach escape from the city with flexible pickup options and easy itinerary coordination.",
+    location: "Jaco",
     difficulty: "Easy",
     people: "",
     duration: "10 Hours",
@@ -30,7 +27,7 @@ const toursSanJose = [
   },
   {
     title: "Nature Combo",
-    summary: "Coffee tour + nature stops for a full Costa Rica day.",
+    summary: "A balanced day with scenic stops, ideal to include inside a broader Costa Rica vacation package.",
     location: "Alajuela",
     difficulty: "Easy",
     people: "",
@@ -40,12 +37,11 @@ const toursSanJose = [
   }
 ];
 
-
 const toursJaco = [
   {
     title: "White Water Rafting",
-    summary: "Full-day rafting adventure with scenic tropical landscapes.",
-    location: "Jacó",
+    summary: "Adventure from Jaco with transportation support for travelers building a full multi-day itinerary.",
+    location: "Jaco",
     difficulty: "Medium",
     people: "",
     duration: "1 Day",
@@ -54,8 +50,8 @@ const toursJaco = [
   },
   {
     title: "Tortuga Island Tour",
-    summary: "Tortuga Island that is known for its immaculate white sand beach and turquoise waters.",
-    location: "Jacó",
+    summary: "Island excursion that works well with hotel stays, transfers and other Pacific coast services.",
+    location: "Jaco",
     difficulty: "Medium",
     people: "",
     duration: "4 Hours",
@@ -64,8 +60,8 @@ const toursJaco = [
   },
   {
     title: "Monkey Mangrove Tour",
-    summary: "Relaxing cruise with ocean views and sunset vibes.",
-    location: "Jacó",
+    summary: "Wildlife-focused outing near Jaco, easy to combine with private transportation and nearby lodging.",
+    location: "Jaco",
     difficulty: "Easy",
     people: "",
     duration: "3 Hours",
@@ -74,7 +70,6 @@ const toursJaco = [
   }
 ];
 
-// ---------- Render cards ----------
 function renderTours(containerId, tours) {
   const container = document.getElementById(containerId);
   container.innerHTML = "";
@@ -86,7 +81,6 @@ function renderTours(containerId, tours) {
       <div class="card__media">
         <img src="${t.image}" alt="${t.title}" loading="lazy">
       </div>
-
       <div class="card__body">
         <h3 class="card__title">${t.title}</h3>
         <p class="muted" style="margin:0">${t.summary}</p>
@@ -100,8 +94,8 @@ function renderTours(containerId, tours) {
 
         <div class="card__priceRow">
           <span class="price">${formatUSD(t.price)}</span>
-          <a class="btn btn--ghost" href="#contact" aria-label="View details for ${t.title}">
-            View Details
+          <a class="btn btn--ghost" href="#contact" aria-label="Request details for ${t.title}">
+            Request Info
           </a>
         </div>
       </div>
@@ -110,8 +104,6 @@ function renderTours(containerId, tours) {
   });
 }
 
-
-// ---------- Nav interactions ----------
 function setupNav() {
   const toggle = $("#navToggle");
   const menu = $("#navMenu");
@@ -122,7 +114,6 @@ function setupNav() {
     toggle.setAttribute("aria-expanded", String(!isOpen));
   });
 
-  // Dropdown (Services)
   const dd = document.querySelector("[data-dropdown]");
   const ddBtn = $(".nav__dropdownBtn", dd);
 
@@ -132,7 +123,6 @@ function setupNav() {
     ddBtn.setAttribute("aria-expanded", String(!isOpen));
   });
 
-  // Close dropdown/menu on outside click
   document.addEventListener("click", (e) => {
     const clickedInsideDropdown = dd.contains(e.target);
     if (!clickedInsideDropdown) {
@@ -148,7 +138,6 @@ function setupNav() {
     }
   });
 
-  // Close mobile menu when clicking a link
   menu.addEventListener("click", (e) => {
     const a = e.target.closest("a");
     if (!a) return;
@@ -157,19 +146,17 @@ function setupNav() {
   });
 }
 
-// ---------- Contact form (demo) ----------
 function setupForm() {
   const form = document.getElementById("contactForm");
   const hint = document.getElementById("formHint");
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
-    hint.textContent = "Message prepared (demo). Connect this to your backend or email service.";
+    hint.textContent = "Message prepared. Connect this form to your backend or email service.";
     form.reset();
   });
 }
 
-// ---------- Init ----------
 document.addEventListener("DOMContentLoaded", () => {
   $("#year").textContent = String(new Date().getFullYear());
   setupNav();
@@ -178,14 +165,13 @@ document.addEventListener("DOMContentLoaded", () => {
   renderTours("cardsSanJose", toursSanJose);
   renderTours("cardsJaco", toursJaco);
 
-  // Demo buttons
   $("#viewAllSJ").addEventListener("click", (e) => {
     e.preventDefault();
-    alert("Hook this to a full listing page or filters (San José).");
+    window.location.href = "tours/SanJose/index.html";
   });
 
   $("#viewAllJaco").addEventListener("click", (e) => {
     e.preventDefault();
-    alert("Hook this to a full listing page or filters (Jacó).");
+    window.location.href = "tours/Jaco/index.html";
   });
 });
