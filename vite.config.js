@@ -9,5 +9,5 @@ export default defineConfig(({ command }) => ({
       "@": path.resolve(__dirname, "./src")
     }
   },
-  base: command === "build" ? "/Alsama_Pagina/" : "/"
+  base: command === "build" ? "/Alsama/" : "/"
 }));
