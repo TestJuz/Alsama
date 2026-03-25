@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alsama Tours</title>
+    <script>
+      (function () {
+        var base = "/Alsama_Pagina";
+        var path = window.location.pathname.replace(base, "") || "/";
+        var hash = window.location.hash ? window.location.hash.slice(1) : "";
+        var query = new URLSearchParams();
+        query.set("p", path);
+        if (hash) query.set("h", hash);
+        window.location.replace(base + "/?" + query.toString());
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
