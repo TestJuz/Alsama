@@ -14,8 +14,8 @@ export const shuttleRoutes = [
     },
     stops: [
       { name: "Santa Teresa", lng: -85.1694, lat: 9.6439 },
-      { name: "Montezuma", lng: -85.0674, lat: 9.6558 },
       { name: "Mal Pais", lng: -85.1464, lat: 9.5973 },
+      { name: "Montezuma", lng: -85.0674, lat: 9.6558 },
       { name: "Tambor", lng: -85.0264, lat: 9.7389 }
     ]
   },

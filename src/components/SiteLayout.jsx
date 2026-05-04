@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { CartWidget } from "./CartWidget";
 import { asset, homeLinks, routes, safetyPdf, serviceMenu } from "../lib/site";
 
 function SmartLink({ to, className, children, ...props }) {
@@ -101,6 +102,7 @@ export function SiteLayout({
         contactTo={contactTo}
         brandTo={brandTo}
       />
+      <CartWidget />
       {children}
       <footer className="footer">
         <div className="container footer__grid">

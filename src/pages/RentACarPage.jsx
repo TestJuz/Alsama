@@ -1,6 +1,7 @@
 import { ContactForm } from "../components/ContactForm";
+import { RentACarRates } from "../components/RentACarRates";
 import { SiteLayout } from "../components/SiteLayout";
-import { homeLinks, routes } from "../lib/site";
+import { routes } from "../lib/site";
 
 export function RentACarPage() {
   return (
@@ -22,6 +23,7 @@ export function RentACarPage() {
 
               <div className="hero__actions">
                 <a className="btn btn--primary" href="#fleet">See vehicle categories</a>
+                <a className="btn btn--ghost" href="#rates">Compare rates</a>
                 <a className="btn btn--ghost" href="#contact">Request a quote</a>
               </div>
             </div>
@@ -94,6 +96,8 @@ export function RentACarPage() {
             </div>
           </div>
         </section>
+
+        <RentACarRates />
 
         <section className="section section--alt">
           <div className="container">
