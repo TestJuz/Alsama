@@ -147,6 +147,7 @@ export function HomePage() {
               <article className="service-card">
                 <h3>Hotels and stays</h3>
                 <p className="muted">Lodging recommendations and reservations matched to your route and budget.</p>
+                <Link className="service-card__link" to={routes.hotels}>View hotel options</Link>
               </article>
               <article className="service-card">
                 <h3>Day tours</h3>
@@ -250,8 +251,8 @@ export function HomePage() {
         <FeaturedToursSection
           sanJoseTours={sanJoseFeaturedTours}
           jacoTours={jacoFeaturedTours}
-          sanJoseHref={routes.toursSanJose}
-          jacoHref={routes.toursJaco}
+          sanJoseHref={`${routes.tours}#from-san-jose`}
+          jacoHref={`${routes.tours}#from-jaco`}
         />
 
         <ContactForm

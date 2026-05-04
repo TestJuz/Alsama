@@ -8,8 +8,10 @@ export const routes = {
   home: "/",
   shuttle: "/shuttle",
   privateTransport: "/private-transport",
+  tours: "/tours",
   toursSanJose: "/tours/san-jose",
   toursJaco: "/tours/jaco",
+  hotels: "/hotels",
   rentACar: "/rent-a-car"
 };
 
@@ -21,8 +23,8 @@ export const homeLinks = {
 export const serviceMenu = [
   { label: "Shuttle", to: routes.shuttle },
   { label: "Private Transport", to: routes.privateTransport },
-  { label: "Tours San Jose", to: routes.toursSanJose },
-  { label: "Tours Jaco", to: routes.toursJaco },
+  { label: "Tours", to: routes.tours },
+  { label: "Hotels", to: routes.hotels },
   { label: "Rent a Car", to: routes.rentACar }
 ];
 

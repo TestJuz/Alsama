@@ -1,14 +1,32 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { ImageGalleryModal } from "./ImageGalleryModal";
+import { useCart } from "../context/CartContext";
 
 function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
-function FeaturedCard({ item }) {
+function FeaturedCard({ item, onOpenGallery }) {
+  const { addItem } = useCart();
+
+  function handleAddToCart() {
+    addItem({
+      id: `tour-${item.title}`,
+      type: "Tour",
+      title: item.title,
+      subtitle: item.summary,
+      price: item.price,
+      meta: [item.location, item.difficulty, item.duration].filter(Boolean)
+    });
+  }
+
   return (
     <article className="card">
       <div className="card__media">
-        <img src={item.image} alt={item.title} loading="lazy" />
+        <button type="button" aria-label={`View ${item.title} image`} onClick={() => onOpenGallery(item)}>
+          <img src={item.image} alt={item.title} loading="lazy" />
+        </button>
       </div>
       <div className="card__body">
         <h3 className="card__title">{item.title}</h3>
@@ -23,7 +41,7 @@ function FeaturedCard({ item }) {
 
         <div className="card__priceRow">
           <span className="price">{formatUSD(item.price)}</span>
-          <a className="btn btn--ghost" href="#contact">Request Info</a>
+          <button className="btn btn--ghost" type="button" onClick={handleAddToCart}>Add to cart</button>
         </div>
       </div>
     </article>
@@ -31,6 +49,16 @@ function FeaturedCard({ item }) {
 }
 
 export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jacoHref }) {
+  const [galleryState, setGalleryState] = useState(null);
+
+  function openGallery(item) {
+    setGalleryState({
+      title: item.title,
+      gallery: item.gallery || [item.image],
+      index: 0
+    });
+  }
+
   return (
     <section className="section section--alt" id="tours">
       <div className="container">
@@ -43,7 +71,7 @@ export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jac
         </div>
 
         <div className="cards" aria-live="polite">
-          {sanJoseTours.map((item) => <FeaturedCard key={item.title} item={item} />)}
+          {sanJoseTours.map((item) => <FeaturedCard key={item.title} item={item} onOpenGallery={openGallery} />)}
         </div>
 
         <hr className="divider" />
@@ -57,9 +85,19 @@ export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jac
         </div>
 
         <div className="cards" aria-live="polite">
-          {jacoTours.map((item) => <FeaturedCard key={item.title} item={item} />)}
+          {jacoTours.map((item) => <FeaturedCard key={item.title} item={item} onOpenGallery={openGallery} />)}
         </div>
       </div>
+
+      {galleryState ? (
+        <ImageGalleryModal
+          title={galleryState.title}
+          gallery={galleryState.gallery}
+          index={galleryState.index}
+          onChangeIndex={(index) => setGalleryState((current) => ({ ...current, index }))}
+          onClose={() => setGalleryState(null)}
+        />
+      ) : null}
     </section>
   );
 }

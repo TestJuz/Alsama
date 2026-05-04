@@ -22,6 +22,8 @@ function formatUSD(value) {
   }).format(value);
 }
 
+const naturalMapStyle = "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
+
 async function fetchRoadRoute(route) {
   const coordinates = route.stops.map((stop) => `${stop.lng},${stop.lat}`).join(";");
   const response = await fetch(
@@ -264,6 +266,7 @@ export function ShuttleExplorer() {
                               <div>
                                 <h3>Shuttle path map</h3>
                                 <p className="muted">{routeSourceLabel}</p>
+                                <p className="shuttle-mapDisclaimer">Routes are examples and may vary.</p>
                               </div>
                             </div>
 
@@ -273,6 +276,8 @@ export function ShuttleExplorer() {
                                 onViewportChange={setViewport}
                                 center={selectedRoute.viewport.center}
                                 zoom={selectedRoute.viewport.zoom}
+                                theme="light"
+                                styles={{ light: naturalMapStyle, dark: naturalMapStyle }}
                               >
                                 <MapControls showZoom showFullscreen />
                                 <MapRoute coordinates={routeCoordinates} color="#0f8b8d" width={4} />
