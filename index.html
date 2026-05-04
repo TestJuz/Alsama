@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alsama Tours | Travel Services in Costa Rica</title>
+    <script>
+      (function () {
+        var params = new URLSearchParams(window.location.search);
+        var redirectPath = params.get("p");
+        var redirectHash = params.get("h");
+        if (!redirectPath) return;
+
+        var base = "/Alsama/".replace(/\/$/, "");
+        var normalizedPath = redirectPath.startsWith("/") ? redirectPath : "/" + redirectPath;
+        var nextHash = redirectHash ? "#" + redirectHash : window.location.hash;
+        window.history.replaceState(null, "", base + normalizedPath + nextHash);
+      })();
+    </script>
+    <script type="module" crossorigin src="/Alsama/assets/index-BRyLJYo6.js"></script>
+    <link rel="stylesheet" crossorigin href="/Alsama/assets/index-tLuSPNFk.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
