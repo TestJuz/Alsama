@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Map,
   MapControls,
@@ -9,13 +9,21 @@ import {
 import { ContactForm } from "../components/ContactForm";
 import { ImageGalleryModal } from "../components/ImageGalleryModal";
 import { SiteLayout } from "../components/SiteLayout";
+import { useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { hotelZones } from "../lib/hotels";
-import { routes } from "../lib/site";
+import { asset, routes } from "../lib/site";
 
 function formatUSD(value) {
   if (typeof value !== "number") return "Ask";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
+}
+
+function getHotelRoomPrice(room) {
+  if (!room) return undefined;
+  if (typeof room.alta === "number") return room.alta;
+  if (typeof room.verde === "number") return room.verde;
+  return undefined;
 }
 
 function toDateInputValue(date) {
@@ -96,7 +104,6 @@ function HotelRequestModal({
   zone,
   hotel,
   roomType,
-  season,
   details,
   onUpdateDetails,
   onSubmit,
@@ -105,7 +112,7 @@ function HotelRequestModal({
   if (!zone || !hotel) return null;
 
   const room = hotel.habitaciones.find((item) => item.tipo === details.roomType) || hotel.habitaciones[0];
-  const price = room?.[season];
+  const price = getHotelRoomPrice(room);
   const nights = getHotelNights(details.checkIn, details.checkOut);
   const hasPastDate = hasPastHotelDate(details.checkIn, details.checkOut);
   const total = typeof price === "number" ? price * nights : undefined;
@@ -124,21 +131,14 @@ function HotelRequestModal({
           <button className="rate-modal__close" type="button" aria-label="Close" onClick={onClose}>x</button>
         </div>
 
-        <div className="rate-modal__grid">
-          <label className="control">
-            Room type
-            <select value={details.roomType || roomType} onChange={(event) => onUpdateDetails("roomType", event.target.value)}>
-              {hotel.habitaciones.map((item) => (
-                <option key={item.tipo} value={item.tipo}>{item.tipo}</option>
-              ))}
-            </select>
-          </label>
-
-          <label className="control">
-            Season
-            <input value={season === "alta" ? "High season" : "Green season"} readOnly />
-          </label>
-        </div>
+        <label className="control">
+          Room type
+          <select value={details.roomType || roomType} onChange={(event) => onUpdateDetails("roomType", event.target.value)}>
+            {hotel.habitaciones.map((item) => (
+              <option key={item.tipo} value={item.tipo}>{item.tipo}</option>
+            ))}
+          </select>
+        </label>
 
         <div className="rate-modal__grid">
           <label className="control">
@@ -208,7 +208,7 @@ function HotelRequestModal({
         ) : null}
 
         {typeof price !== "number" ? (
-          <p className="rate-modal__error" role="alert">This room has no listed rate for the selected season. We can request availability and price.</p>
+          <p className="rate-modal__error" role="alert">This room has no listed rate. We can request availability and price.</p>
         ) : null}
 
         <div className="rate-modal__actions">
@@ -222,11 +222,12 @@ function HotelRequestModal({
 
 export function HotelsPage() {
   const { addItem } = useCart();
-  const [zoneId, setZoneId] = useState("all");
-  const [mapZoneId, setMapZoneId] = useState("all");
-  const [query, setQuery] = useState("");
-  const [season, setSeason] = useState("alta");
-  const [selectedHotel, setSelectedHotel] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialZone = hotelZones.some((zone) => zone.id === searchParams.get("zone")) ? searchParams.get("zone") : "all";
+  const [zoneId, setZoneId] = useState(initialZone);
+  const [mapZoneId, setMapZoneId] = useState(initialZone);
+  const [query, setQuery] = useState(searchParams.get("query") || "");
+  const [selectedHotel, setSelectedHotel] = useState(searchParams.get("hotel") || "");
   const [galleryState, setGalleryState] = useState(null);
   const [hotelRequest, setHotelRequest] = useState(null);
   const [hotelRequestDetails, setHotelRequestDetails] = useState({
@@ -236,6 +237,14 @@ export function HotelsPage() {
     checkIn: "",
     checkOut: ""
   });
+
+  useEffect(() => {
+    const nextZone = hotelZones.some((zone) => zone.id === searchParams.get("zone")) ? searchParams.get("zone") : "all";
+    setZoneId(nextZone);
+    setMapZoneId(nextZone);
+    setQuery(searchParams.get("query") || "");
+    setSelectedHotel(searchParams.get("hotel") || "");
+  }, [searchParams]);
 
   const visibleZones = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -296,23 +305,20 @@ export function HotelsPage() {
 
     const { zone, hotel } = hotelRequest;
     const room = hotel.habitaciones.find((item) => item.tipo === hotelRequestDetails.roomType) || hotelRequest.room;
-    const price = room[season];
+    const price = getHotelRoomPrice(room);
     const nights = getHotelNights(hotelRequestDetails.checkIn, hotelRequestDetails.checkOut);
     if (!nights || hasPastHotelDate(hotelRequestDetails.checkIn, hotelRequestDetails.checkOut)) return;
 
-    const seasonLabel = season === "alta" ? "High season" : "Green season";
     const total = typeof price === "number" ? price * nights : undefined;
 
     addItem({
-      id: `hotel-${zone.id}-${hotel.hotel}-${room.tipo}-${season}-${hotelRequestDetails.checkIn}-${hotelRequestDetails.checkOut}-${hotelRequestDetails.adults}-${hotelRequestDetails.children}`,
+      id: `hotel-${zone.id}-${hotel.hotel}-${room.tipo}-${hotelRequestDetails.checkIn}-${hotelRequestDetails.checkOut}-${hotelRequestDetails.adults}-${hotelRequestDetails.children}`,
       type: "Hotel",
       title: hotel.hotel,
       subtitle: room.tipo,
       price: total,
       details: {
         zone: zone.name,
-        season,
-        seasonLabel,
         roomType: room.tipo,
         rooms: hotel.habitaciones,
         adults: Number(hotelRequestDetails.adults) || 1,
@@ -325,7 +331,6 @@ export function HotelsPage() {
       meta: [
         zone.name,
         room.tipo,
-        seasonLabel,
         `${nights} night${nights === 1 ? "" : "s"}`,
         `${hotelRequestDetails.adults} adult${Number(hotelRequestDetails.adults) === 1 ? "" : "s"}`,
         `${hotelRequestDetails.children} child${Number(hotelRequestDetails.children) === 1 ? "" : "ren"}`,
@@ -354,7 +359,7 @@ export function HotelsPage() {
       footerBackToTop="#"
     >
       <main>
-        <section className="page-hero">
+        <section className="page-hero page-hero--image page-hero--hotels" style={{ "--hero-image": `url(${asset("img/hotels/hotel-manuel-antonio.webp")})` }}>
           <div className="container">
             <h1 className="page-title">Hotels in Costa Rica</h1>
             <p className="muted">
@@ -400,13 +405,6 @@ export function HotelsPage() {
                 </select>
               </label>
 
-              <label className="control">
-                Season
-                <select value={season} onChange={(event) => setSeason(event.target.value)}>
-                  <option value="alta">High season</option>
-                  <option value="verde">Green season</option>
-                </select>
-              </label>
             </div>
           </div>
         </section>
@@ -477,12 +475,11 @@ export function HotelsPage() {
 
                         <div className="hotel-roomList">
                           {hotel.habitaciones.map((room) => {
-                            const price = room[season];
+                            const price = getHotelRoomPrice(room);
                             return (
                               <div className="hotel-room" key={room.tipo}>
                                 <div>
                                   <strong>{room.tipo}</strong>
-                                  <span>{season === "alta" ? "High season" : "Green season"}</span>
                                 </div>
                                 <div className="hotel-room__side">
                                   <strong>{formatUSD(price)}</strong>
@@ -532,7 +529,6 @@ export function HotelsPage() {
             zone={hotelRequest.zone}
             hotel={hotelRequest.hotel}
             roomType={hotelRequest.room.tipo}
-            season={season}
             details={hotelRequestDetails}
             onUpdateDetails={updateHotelRequestDetail}
             onSubmit={addHotelToCart}
@@ -543,3 +539,4 @@ export function HotelsPage() {
     </SiteLayout>
   );
 }
+

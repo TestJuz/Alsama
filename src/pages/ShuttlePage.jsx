@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
 import { ShuttleExplorer } from "../components/ShuttleExplorer";
 import { SiteLayout } from "../components/SiteLayout";
-import { homeLinks, routes } from "../lib/site";
+import { asset, routes } from "../lib/site";
 
 export function ShuttlePage() {
   return (
@@ -13,7 +13,7 @@ export function ShuttlePage() {
       footerBackToTop="#"
     >
       <main>
-        <section className="hero hero--compact">
+        <section className="hero hero--compact hero--image hero--shuttle" style={{ "--hero-image": `url(${asset("img/hero/3.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Shared shuttle service</p>

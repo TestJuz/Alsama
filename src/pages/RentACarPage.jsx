@@ -1,7 +1,7 @@
 import { ContactForm } from "../components/ContactForm";
 import { RentACarRates } from "../components/RentACarRates";
 import { SiteLayout } from "../components/SiteLayout";
-import { routes } from "../lib/site";
+import { asset, routes } from "../lib/site";
 
 export function RentACarPage() {
   return (
@@ -12,7 +12,7 @@ export function RentACarPage() {
       footerBackToTop="#"
     >
       <main>
-        <section className="hero hero--compact">
+        <section className="hero hero--compact hero--image hero--rent" style={{ "--hero-image": `url(${asset("img/hero/2.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Independent travel support</p>

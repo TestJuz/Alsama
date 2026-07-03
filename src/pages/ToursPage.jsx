@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
 import { ImageGalleryModal } from "../components/ImageGalleryModal";
 import { SiteLayout } from "../components/SiteLayout";
+import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
-import { jacoTours, routes, sanJoseTours } from "../lib/site";
+import { asset, getAllTours, getTourDetailPath, routes } from "../lib/site";
 
 const origins = [
   { value: "all", label: "All departures" },
@@ -47,9 +49,12 @@ function TourCard({ item, onAdd, onOpenGallery }) {
           </div>
         </div>
 
-        <button className="btn btn--primary card__cta" type="button" onClick={() => onAdd(item)}>
-          Add to cart
-        </button>
+        <div className="card__actions">
+          <Link className="btn btn--ghost" to={getTourDetailPath(item)}>View details</Link>
+          <button className="btn btn--primary card__cta" type="button" onClick={() => onAdd(item)}>
+            Add to cart
+          </button>
+        </div>
       </div>
     </article>
   );
@@ -62,11 +67,9 @@ export function ToursPage() {
   const [difficulty, setDifficulty] = useState("");
   const [sort, setSort] = useState("featured");
   const [galleryState, setGalleryState] = useState(null);
+  const [tourRequest, setTourRequest] = useState(null);
 
-  const allTours = useMemo(() => [
-    ...sanJoseTours.map((tour) => ({ ...tour, origin: "san-jose", originLabel: "From San Jose" })),
-    ...jacoTours.map((tour) => ({ ...tour, origin: "jaco", originLabel: "From Jaco" }))
-  ], []);
+  const allTours = useMemo(() => getAllTours(), []);
 
   const filteredTours = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -93,15 +96,13 @@ export function ToursPage() {
     }))
     .filter((item) => origin === "all" ? item.tours.length : item.value === origin);
 
-  function addTourToCart(item) {
-    addItem({
-      id: `tour-${item.origin}-${item.title}`,
-      type: "Tour",
-      title: item.title,
-      subtitle: item.excerpt,
-      price: item.price,
-      meta: [item.originLabel, ...item.locations, item.difficulty, item.durationText].filter(Boolean)
-    });
+  function openTourRequest(item) {
+    setTourRequest(item);
+  }
+
+  function addTourToCart(cartItem) {
+    addItem(cartItem);
+    setTourRequest(null);
   }
 
   function openTourGallery(item) {
@@ -120,7 +121,7 @@ export function ToursPage() {
       footerBackToTop="#"
     >
       <main>
-        <section className="page-hero">
+        <section className="page-hero page-hero--image page-hero--tours" style={{ "--hero-image": `url(${asset("img/tours/sj/La-Paz-Waterfall-Gardens-2.webp")})` }}>
           <div className="container">
             <h1 className="page-title">Tours in Costa Rica</h1>
             <p className="muted">
@@ -221,7 +222,7 @@ export function ToursPage() {
                     <TourCard
                       key={`${item.origin}-${item.title}`}
                       item={item}
-                      onAdd={addTourToCart}
+                      onAdd={openTourRequest}
                       onOpenGallery={openTourGallery}
                     />
                   ))}
@@ -242,6 +243,14 @@ export function ToursPage() {
           text="Tell us your travel dates, departure area and the tours or services you want us to organize."
           placeholder="Tell us if you need tours from San Jose, tours from Jaco, transport, hotels, rent a car or a full package."
         />
+
+        {tourRequest ? (
+          <TourBookingModal
+            tour={tourRequest}
+            onClose={() => setTourRequest(null)}
+            onAdd={addTourToCart}
+          />
+        ) : null}
 
         {galleryState ? (
           <ImageGalleryModal

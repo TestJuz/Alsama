@@ -34,7 +34,7 @@ export function HomePage() {
       footerBackToTop="#home"
     >
       <main id="home">
-        <section className="hero">
+        <section className="hero hero--image hero--home" style={{ "--hero-image": `url(${homeHeroImages[0]})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Costa Rica travel services</p>

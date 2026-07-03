@@ -1,24 +1,17 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ImageGalleryModal } from "./ImageGalleryModal";
+import { TourBookingModal } from "./TourBookingModal";
 import { useCart } from "../context/CartContext";
+import { getAllTours, getTourDetailPath } from "../lib/site";
 
 function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
-function FeaturedCard({ item, onOpenGallery }) {
-  const { addItem } = useCart();
-
+function FeaturedCard({ item, origin, originLabel, onOpenGallery, onBook }) {
   function handleAddToCart() {
-    addItem({
-      id: `tour-${item.title}`,
-      type: "Tour",
-      title: item.title,
-      subtitle: item.summary,
-      price: item.price,
-      meta: [item.location, item.difficulty, item.duration].filter(Boolean)
-    });
+    onBook(item, origin, originLabel);
   }
 
   return (
@@ -41,7 +34,10 @@ function FeaturedCard({ item, onOpenGallery }) {
 
         <div className="card__priceRow">
           <span className="price">{formatUSD(item.price)}</span>
-          <button className="btn btn--ghost" type="button" onClick={handleAddToCart}>Add to cart</button>
+          <div className="card__actions card__actions--inline">
+            <Link className="btn btn--ghost" to={getTourDetailPath(item)}>View details</Link>
+            <button className="btn btn--ghost" type="button" onClick={handleAddToCart}>Add to cart</button>
+          </div>
         </div>
       </div>
     </article>
@@ -49,7 +45,10 @@ function FeaturedCard({ item, onOpenGallery }) {
 }
 
 export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jacoHref }) {
+  const { addItem } = useCart();
   const [galleryState, setGalleryState] = useState(null);
+  const [tourRequest, setTourRequest] = useState(null);
+  const allTours = useMemo(() => getAllTours(), []);
 
   function openGallery(item) {
     setGalleryState({
@@ -57,6 +56,23 @@ export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jac
       gallery: item.gallery || [item.image],
       index: 0
     });
+  }
+
+  function openTourRequest(item, origin, originLabel) {
+    const fullTour = allTours.find((tour) => tour.title === item.title && tour.origin === origin);
+    setTourRequest(fullTour || {
+      ...item,
+      origin,
+      originLabel,
+      excerpt: item.summary,
+      locations: item.location ? [item.location] : [],
+      durationText: item.duration
+    });
+  }
+
+  function addTourToCart(cartItem) {
+    addItem(cartItem);
+    setTourRequest(null);
   }
 
   return (
@@ -71,7 +87,16 @@ export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jac
         </div>
 
         <div className="cards" aria-live="polite">
-          {sanJoseTours.map((item) => <FeaturedCard key={item.title} item={item} onOpenGallery={openGallery} />)}
+          {sanJoseTours.map((item) => (
+            <FeaturedCard
+              key={item.title}
+              item={item}
+              origin="san-jose"
+              originLabel="From San Jose"
+              onOpenGallery={openGallery}
+              onBook={openTourRequest}
+            />
+          ))}
         </div>
 
         <hr className="divider" />
@@ -85,9 +110,26 @@ export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jac
         </div>
 
         <div className="cards" aria-live="polite">
-          {jacoTours.map((item) => <FeaturedCard key={item.title} item={item} onOpenGallery={openGallery} />)}
+          {jacoTours.map((item) => (
+            <FeaturedCard
+              key={item.title}
+              item={item}
+              origin="jaco"
+              originLabel="From Jaco"
+              onOpenGallery={openGallery}
+              onBook={openTourRequest}
+            />
+          ))}
         </div>
       </div>
+
+      {tourRequest ? (
+        <TourBookingModal
+          tour={tourRequest}
+          onClose={() => setTourRequest(null)}
+          onAdd={addTourToCart}
+        />
+      ) : null}
 
       {galleryState ? (
         <ImageGalleryModal

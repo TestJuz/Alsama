@@ -89,7 +89,7 @@ const destinationCoordinates = [
   ["Zooave", -84.2724, 10.0059],
   ["Ram Luna", -84.0902, 9.8469],
   ["Alajuela", -84.2142, 10.0162],
-  ["GAM", -84.0907, 9.9281],
+  ["San Jose", -84.0907, 9.9281],
   ["Ato", -84.2088, 9.9939],
   ["Volcán Irazú", -83.852, 9.9793],
   ["Volcán Poás", -84.2335, 10.198],
@@ -117,7 +117,7 @@ function findCoordinates(place, base) {
 }
 
 const rawPrivateTransportRates = {
-  GAM: [
+  SAN_JOSE: [
     { lugar: "Arenal", pax_1_5: 265, pax_6_mas: 331 },
     { lugar: "Arenal all day max 6 hrs espera", pax_1_5: 414, pax_6_mas: 463 },
     { lugar: "Atenas", pax_1_5: 83, pax_6_mas: 132 },
@@ -151,7 +151,7 @@ const rawPrivateTransportRates = {
     { lugar: "Irazu Volcan, V. Orosi y Lankaster", pax_1_5: 281, pax_6_mas: 331 },
     { lugar: "Irazu Volcan Tour y Hacienda Orosi", pax_1_5: 331, pax_6_mas: null },
     { lugar: "Jacó all day maximo 6 hrs espera", pax_1_5: 290, pax_6_mas: 331 },
-    { lugar: "Jaco GAM", pax_1_5: 199, pax_6_mas: 265 },
+    { lugar: "Jaco San Jose", pax_1_5: 199, pax_6_mas: 265 },
     { lugar: "Jaco Transfer In", pax_1_5: 165, pax_6_mas: 248 },
     { lugar: "Jaco Transfer Out", pax_1_5: 165, pax_6_mas: 248 },
     { lugar: "La Pavona (Muelle Tortuguero)", pax_1_5: 298, pax_6_mas: 364 },
@@ -202,8 +202,8 @@ const rawPrivateTransportRates = {
     { lugar: "San Luis Canopy", pax_1_5: 248, pax_6_mas: null },
     { lugar: "Tambor (Carretera)", pax_1_5: 662, pax_6_mas: 745 },
     { lugar: "Tambor (Ferry)", pax_1_5: 496, pax_6_mas: 579 },
-    { lugar: "Transfer In GAM", pax_1_5: 58, pax_6_mas: 74 },
-    { lugar: "Transfer Out GAM", pax_1_5: 50, pax_6_mas: 66 },
+    { lugar: "Transfer In San Jose", pax_1_5: 58, pax_6_mas: 74 },
+    { lugar: "Transfer Out San Jose", pax_1_5: 50, pax_6_mas: 66 },
     { lugar: "Tucan rescue ranch", pax_1_5: 165, pax_6_mas: 199 },
     { lugar: "Turrialba", pax_1_5: 248, pax_6_mas: 298 },
     { lugar: "Tiquicia Mirador (cena) desde Alajuela", pax_1_5: 215, pax_6_mas: 232 },
@@ -256,25 +256,25 @@ export const privateTransportRoutes = Object.entries(rawPrivateTransportRates).f
 );
 
 export function getPrivateTransportPrice(route, passengers) {
-  const pax = Math.max(1, Number(passengers) || 1);
+  const passengerCount = Math.max(1, Number(passengers) || 1);
 
   if (route.base === "JACO") {
     if (typeof route.pax_1_5 !== "number") return undefined;
-    if (pax <= 5) return route.pax_1_5;
-    return route.pax_1_5 + (pax - 5) * route.pax_extra;
+    if (passengerCount <= 5) return route.pax_1_5;
+    return route.pax_1_5 + (passengerCount - 5) * route.pax_extra;
   }
 
-  if (pax <= 5) return typeof route.pax_1_5 === "number" ? route.pax_1_5 : undefined;
+  if (passengerCount <= 5) return typeof route.pax_1_5 === "number" ? route.pax_1_5 : undefined;
   return typeof route.pax_6_mas === "number" ? route.pax_6_mas : undefined;
 }
 
 export function getPrivateTransportPriceLabel(route) {
   if (route.base === "JACO") {
     if (typeof route.pax_1_5 !== "number") return "Rate on request";
-    return `$${route.pax_1_5} / 1-5 pax + $${route.pax_extra} extra pax`;
+    return `$${route.pax_1_5} / 1-5 passengers + $${route.pax_extra} extra passenger`;
   }
 
   const small = typeof route.pax_1_5 === "number" ? `$${route.pax_1_5}` : "Request";
   const large = typeof route.pax_6_mas === "number" ? `$${route.pax_6_mas}` : "Request";
-  return `${small} / 1-5 pax · ${large} / 6+ pax`;
+  return `${small} / 1-5 passengers · ${large} / 6+ passengers`;
 }

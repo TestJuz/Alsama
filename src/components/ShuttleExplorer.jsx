@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Map,
   MapControls,
@@ -7,6 +8,7 @@ import {
   MarkerContent,
   MarkerPopup
 } from "@/components/ui/map";
+import { useCart } from "@/context/CartContext";
 import { getFallbackRouteCoordinates, shuttleRoutes } from "@/lib/shuttles";
 
 function parseTimeToMinutes(time) {
@@ -45,17 +47,28 @@ async function fetchRoadRoute(route) {
 }
 
 export function ShuttleExplorer() {
-  const [query, setQuery] = useState("");
+  const { addItem } = useCart();
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("query") || "");
   const [region, setRegion] = useState("");
   const [departure, setDeparture] = useState("");
   const [sort, setSort] = useState("featured");
-  const [expandedId, setExpandedId] = useState("");
+  const [expandedId, setExpandedId] = useState(searchParams.get("route") || "");
   const [viewport, setViewport] = useState(undefined);
   const [routeCoordinates, setRouteCoordinates] = useState(
     getFallbackRouteCoordinates(shuttleRoutes[0])
   );
   const [routeSourceLabel, setRouteSourceLabel] = useState("Approximate route");
   const requestRef = useRef(0);
+
+  useEffect(() => {
+    const nextQuery = searchParams.get("query") || "";
+    const nextRoute = searchParams.get("route") || "";
+    setQuery(nextQuery);
+    setRegion("");
+    setDeparture("");
+    setExpandedId(nextRoute);
+  }, [searchParams]);
 
   const regions = useMemo(
     () => [...new Set(shuttleRoutes.map((route) => route.region))],
@@ -100,6 +113,31 @@ export function ShuttleExplorer() {
 
   const selectedRoute =
     filteredRoutes.find((route) => route.id === expandedId) ?? null;
+
+  function addShuttleToCart(route) {
+    addItem({
+      id: `shuttle-${route.id}`,
+      type: "Shuttle",
+      title: route.service,
+      subtitle: route.summary,
+      price: route.price,
+      meta: [
+        route.region,
+        route.departurePeriod,
+        route.schedule,
+        `${route.stops.length} stops`,
+        formatUSD(route.price)
+      ].filter(Boolean),
+      details: {
+        routeId: route.id,
+        region: route.region,
+        schedule: route.schedule,
+        departureTime: route.departureTime,
+        departurePeriod: route.departurePeriod,
+        stops: route.stops.map((stop) => stop.name)
+      }
+    });
+  }
 
   useEffect(() => {
     if (!selectedRoute) return;
@@ -224,15 +262,24 @@ export function ShuttleExplorer() {
                         </div>
                       </dl>
 
-                      <button
-                        className="btn btn--ghost shuttle-card__button"
-                        type="button"
-                        onClick={() =>
-                          setExpandedId((current) => (current === route.id ? "" : route.id))
-                        }
-                      >
-                        {isActive ? "Hide route" : "View route"}
-                      </button>
+                      <div className="shuttle-card__actions">
+                        <button
+                          className="btn btn--primary"
+                          type="button"
+                          onClick={() => addShuttleToCart(route)}
+                        >
+                          Add to cart
+                        </button>
+                        <button
+                          className="btn btn--ghost shuttle-card__button"
+                          type="button"
+                          onClick={() =>
+                            setExpandedId((current) => (current === route.id ? "" : route.id))
+                          }
+                        >
+                          {isActive ? "Hide route" : "View route"}
+                        </button>
+                      </div>
 
                       {isActive ? (
                         <div className="shuttle-expanded">
@@ -259,6 +306,14 @@ export function ShuttleExplorer() {
                                 </span>
                               ))}
                             </div>
+
+                            <button
+                              className="btn btn--primary shuttle-card__button"
+                              type="button"
+                              onClick={() => addShuttleToCart(selectedRoute)}
+                            >
+                              Add shuttle to cart
+                            </button>
                           </div>
 
                           <div className="shuttle-mapCard">

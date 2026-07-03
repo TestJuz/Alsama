@@ -1,9 +1,9 @@
 import { Pencil, ShoppingCart, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { buildTourMeta, getTourBookingTotal } from "../lib/tourBooking";
 
 const coverageOptions = [
-  { value: "sin_seguro", label: "No insurance" },
   { value: "seguro_basico", label: "Basic insurance" },
   { value: "full_cover", label: "Full cover" }
 ];
@@ -13,17 +13,24 @@ function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
+function getHotelRoomPrice(room) {
+  if (!room) return undefined;
+  if (typeof room.alta === "number") return room.alta;
+  if (typeof room.verde === "number") return room.verde;
+  return undefined;
+}
+
 function getPrivateTransportPriceFromDetails(details, passengers) {
-  const pax = Math.max(1, Number(passengers) || 1);
+  const passengerCount = Math.max(1, Number(passengers) || 1);
   const rates = details?.rates || {};
 
   if (details?.base === "JACO") {
     if (typeof rates.pax_1_5 !== "number") return undefined;
-    if (pax <= 5) return rates.pax_1_5;
-    return rates.pax_1_5 + (pax - 5) * rates.pax_extra;
+    if (passengerCount <= 5) return rates.pax_1_5;
+    return rates.pax_1_5 + (passengerCount - 5) * rates.pax_extra;
   }
 
-  if (pax <= 5) return typeof rates.pax_1_5 === "number" ? rates.pax_1_5 : undefined;
+  if (passengerCount <= 5) return typeof rates.pax_1_5 === "number" ? rates.pax_1_5 : undefined;
   return typeof rates.pax_6_mas === "number" ? rates.pax_6_mas : undefined;
 }
 
@@ -113,7 +120,7 @@ export function CartWidget() {
     setEditingItem(item);
     setDraft({
       quantity: item.quantity,
-      coverage: item.details?.coverage || "full_cover",
+      coverage: coverageOptions.some((option) => option.value === item.details?.coverage) ? item.details.coverage : "full_cover",
       hotel: item.details?.hotel || "",
       deliveryType: item.details?.deliveryType || "delivery",
       startDateTime: item.details?.startDateTime || "",
@@ -124,7 +131,8 @@ export function CartWidget() {
       checkIn: item.details?.checkIn || "",
       checkOut: item.details?.checkOut || "",
       passengers: item.details?.passengers || 2,
-      departureDate: item.details?.departureDate || ""
+      departureDate: item.details?.departureDate || "",
+      tourDate: item.details?.tourDate || ""
     });
   }
 
@@ -148,7 +156,7 @@ export function CartWidget() {
       const nights = getHotelNights(draft.checkIn, draft.checkOut);
       if (!nights || hasPastHotelDate(draft.checkIn, draft.checkOut)) return;
 
-      const nightlyRate = room[editingItem.details.season];
+      const nightlyRate = getHotelRoomPrice(room);
       const total = typeof nightlyRate === "number" ? nightlyRate * nights : undefined;
       const adults = Number(draft.adults) || 1;
       const children = Number(draft.children) || 0;
@@ -171,7 +179,6 @@ export function CartWidget() {
         meta: [
           editingItem.details.zone,
           room.tipo,
-          editingItem.details.seasonLabel,
           `${nights} night${nights === 1 ? "" : "s"}`,
           `${adults} adult${adults === 1 ? "" : "s"}`,
           `${children} child${children === 1 ? "" : "ren"}`,
@@ -179,6 +186,31 @@ export function CartWidget() {
           `Check-out ${draft.checkOut}`,
           typeof total === "number" ? formatUSD(total) : "Rate on request"
         ].filter(Boolean)
+      });
+
+      closeEdit();
+      return;
+    }
+
+    if (editingItem.type === "Tour" && editingItem.details) {
+      if (!draft.tourDate || !draft.hotel.trim() || hasPastDate(draft.tourDate)) return;
+
+      const adults = Math.max(1, Number(draft.adults) || 1);
+      const children = Math.max(0, Number(draft.children) || 0);
+      const nextDetails = {
+        ...editingItem.details,
+        adults,
+        children,
+        tourDate: draft.tourDate,
+        hotel: draft.hotel
+      };
+      const total = getTourBookingTotal({ price: nextDetails.basePrice }, nextDetails);
+
+      updateItem(editingItem.id, {
+        quantity: 1,
+        price: total,
+        details: nextDetails,
+        meta: buildTourMeta(nextDetails)
       });
 
       closeEdit();
@@ -206,7 +238,7 @@ export function CartWidget() {
             `${passengers} passenger${passengers === 1 ? "" : "s"}`,
             draft.hotel,
             `Departure ${draft.departureDate}`,
-            editingItem.details.base === "JACO" ? "Jaco rate" : "GAM rate",
+            editingItem.details.base === "JACO" ? "Jaco rate" : "San Jose rate",
             typeof total === "number" ? formatUSD(total) : "Rate on request"
           ].filter(Boolean)
         });
@@ -271,12 +303,17 @@ export function CartWidget() {
     : null;
   const editHotelNights = editingItem?.type === "Hotel" && draft ? getHotelNights(draft.checkIn, draft.checkOut) : 0;
   const editHotelHasPastDate = editingItem?.type === "Hotel" && draft ? hasPastHotelDate(draft.checkIn, draft.checkOut) : false;
-  const editHotelPrice = editHotelRoom && editHotelNights && typeof editHotelRoom[editingItem.details.season] === "number"
-    ? editHotelRoom[editingItem.details.season] * editHotelNights
+  const editHotelNightlyRate = editHotelRoom ? getHotelRoomPrice(editHotelRoom) : undefined;
+  const editHotelPrice = editHotelRoom && editHotelNights && typeof editHotelNightlyRate === "number"
+    ? editHotelNightlyRate * editHotelNights
     : undefined;
   const editPrivateHasPastDate = editingItem?.type === "Private transport" && draft ? hasPastDate(draft.departureDate) : false;
   const editPrivatePrice = editingItem?.type === "Private transport" && editingItem?.details && draft
     ? getPrivateTransportPriceFromDetails(editingItem.details, draft.passengers)
+    : undefined;
+  const editTourHasPastDate = editingItem?.type === "Tour" && draft ? hasPastDate(draft.tourDate) : false;
+  const editTourPrice = editingItem?.type === "Tour" && editingItem?.details && draft
+    ? getTourBookingTotal({ price: editingItem.details.basePrice }, draft)
     : undefined;
 
   return (
@@ -357,15 +394,17 @@ export function CartWidget() {
               </button>
             </div>
 
-            <label className="control">
-              Quantity
-              <input
-                min="1"
-                type="number"
-                value={draft.quantity}
-                onChange={(event) => updateDraft("quantity", event.target.value)}
-              />
-            </label>
+            {editingItem.type !== "Tour" ? (
+              <label className="control">
+                Quantity
+                <input
+                  min="1"
+                  type="number"
+                  value={draft.quantity}
+                  onChange={(event) => updateDraft("quantity", event.target.value)}
+                />
+              </label>
+            ) : null}
 
             {editingItem.type === "Rent a car" && editingItem.details ? (
               <>
@@ -453,21 +492,14 @@ export function CartWidget() {
 
             {editingItem.type === "Hotel" && editingItem.details && Array.isArray(editingItem.details.rooms) ? (
               <>
-                <div className="rate-modal__grid">
-                  <label className="control">
-                    Room type
-                    <select value={draft.roomType} onChange={(event) => updateDraft("roomType", event.target.value)}>
-                      {editingItem.details.rooms.map((room) => (
-                        <option key={room.tipo} value={room.tipo}>{room.tipo}</option>
-                      ))}
-                    </select>
-                  </label>
-
-                  <label className="control">
-                    Season
-                    <input value={editingItem.details.seasonLabel} readOnly />
-                  </label>
-                </div>
+                <label className="control">
+                  Room type
+                  <select value={draft.roomType} onChange={(event) => updateDraft("roomType", event.target.value)}>
+                    {editingItem.details.rooms.map((room) => (
+                      <option key={room.tipo} value={room.tipo}>{room.tipo}</option>
+                    ))}
+                  </select>
+                </label>
 
                 <div className="rate-modal__grid">
                   <label className="control">
@@ -532,6 +564,73 @@ export function CartWidget() {
               </>
             ) : null}
 
+            {editingItem.type === "Tour" && editingItem.details ? (
+              <>
+                <div className="rate-modal__grid">
+                  <label className="control">
+                    Adults
+                    <input
+                      min="1"
+                      required
+                      type="number"
+                      value={draft.adults}
+                      onChange={(event) => updateDraft("adults", event.target.value)}
+                    />
+                  </label>
+
+                  <label className="control">
+                    Children
+                    <input
+                      min="0"
+                      required
+                      type="number"
+                      value={draft.children}
+                      onChange={(event) => updateDraft("children", event.target.value)}
+                    />
+                  </label>
+                </div>
+
+                <div className="rate-modal__grid">
+                  <label className="control">
+                    Tour date
+                    <input
+                      required
+                      type="date"
+                      min={toDateTimeInputValue(startOfToday()).slice(0, 10)}
+                      value={draft.tourDate}
+                      onChange={(event) => updateDraft("tourDate", event.target.value)}
+                    />
+                  </label>
+
+                  <label className="control">
+                    Hotel where you are staying
+                    <input
+                      required
+                      value={draft.hotel}
+                      onChange={(event) => updateDraft("hotel", event.target.value)}
+                    />
+                  </label>
+                </div>
+
+                <div className="rate-total">
+                  <div>
+                    <span className="rate-summary__label">Passengers</span>
+                    <strong>{Math.max(1, Number(draft.adults) || 1) + Math.max(0, Number(draft.children) || 0)}</strong>
+                  </div>
+                  <div>
+                    <span className="rate-summary__label">Base price</span>
+                    <strong>{formatUSD(editingItem.details.basePrice)}</strong>
+                  </div>
+                  <div>
+                    <span className="rate-summary__label">Estimated total</span>
+                    <strong>{typeof editTourPrice === "number" ? formatUSD(editTourPrice) : "-"}</strong>
+                  </div>
+                </div>
+
+                {editTourHasPastDate ? <p className="rate-modal__error" role="alert">Please select today or a future date.</p> : null}
+              </>
+            ) : null}
+
             {editingItem.type === "Private transport" && editingItem.details ? (
               <>
                 <div className="rate-modal__grid">
@@ -570,7 +669,7 @@ export function CartWidget() {
                 <div className="rate-total">
                   <div>
                     <span className="rate-summary__label">Route</span>
-                    <strong>{editingItem.details.base === "JACO" ? "From Jaco" : "From GAM"}</strong>
+                    <strong>{editingItem.details.base === "JACO" ? "From Jaco" : "From San Jose"}</strong>
                   </div>
                   <div>
                     <span className="rate-summary__label">Estimated total</span>
@@ -586,7 +685,7 @@ export function CartWidget() {
               <button
                 className="btn btn--primary"
                 type="submit"
-                disabled={Boolean(editPeriodError) || (editingItem.type === "Rent a car" && !editDays) || (editingItem.type === "Hotel" && (!editHotelNights || editHotelHasPastDate)) || (editingItem.type === "Private transport" && editPrivateHasPastDate)}
+                disabled={Boolean(editPeriodError) || (editingItem.type === "Rent a car" && !editDays) || (editingItem.type === "Hotel" && (!editHotelNights || editHotelHasPastDate)) || (editingItem.type === "Private transport" && editPrivateHasPastDate) || (editingItem.type === "Tour" && (!draft.tourDate || !draft.hotel.trim() || editTourHasPastDate))}
               >
                 Save changes
               </button>

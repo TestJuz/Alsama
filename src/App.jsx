@@ -9,6 +9,7 @@ const PrivateTransportPage = lazy(() =>
 );
 const RentACarPage = lazy(() => import("./pages/RentACarPage").then((module) => ({ default: module.RentACarPage })));
 const ToursPage = lazy(() => import("./pages/ToursPage").then((module) => ({ default: module.ToursPage })));
+const TourDetailPage = lazy(() => import("./pages/TourDetailPage").then((module) => ({ default: module.TourDetailPage })));
 const HotelsPage = lazy(() => import("./pages/HotelsPage").then((module) => ({ default: module.HotelsPage })));
 
 const routeTitles = [
@@ -17,6 +18,7 @@ const routeTitles = [
   { path: routes.privateTransport, title: "Private Transport | Alsama Tours" },
   { path: routes.rentACar, title: "Rent a Car | Alsama Tours" },
   { path: routes.tours, title: "Tours | Alsama Tours" },
+  { path: `${routes.tours}/:tourSlug`, title: "Tour Detail | Alsama Tours" },
   { path: routes.hotels, title: "Hotels | Alsama Tours" }
 ];
 
@@ -56,6 +58,7 @@ export function App() {
         <Route path={routes.privateTransport} element={<PrivateTransportPage />} />
         <Route path={routes.rentACar} element={<RentACarPage />} />
         <Route path={routes.tours} element={<ToursPage />} />
+        <Route path={`${routes.tours}/:tourSlug`} element={<TourDetailPage />} />
         <Route path={routes.hotels} element={<HotelsPage />} />
         <Route path={routes.toursSanJose} element={<Navigate replace to={`${routes.tours}#from-san-jose`} />} />
         <Route path={routes.toursJaco} element={<Navigate replace to={`${routes.tours}#from-jaco`} />} />

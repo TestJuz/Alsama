@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { rentACarRates } from "../lib/rentacarRates";
 
@@ -16,7 +17,6 @@ const sortOptions = [
 ];
 
 const coverageOptions = [
-  { value: "sin_seguro", label: "No insurance" },
   { value: "seguro_basico", label: "Basic insurance" },
   { value: "full_cover", label: "Full cover" }
 ];
@@ -52,9 +52,11 @@ function startOfToday() {
 
 export function RentACarRates() {
   const { addItem } = useCart();
-  const [period, setPeriod] = useState("diario");
-  const [query, setQuery] = useState("");
-  const [transmission, setTransmission] = useState("");
+  const [searchParams] = useSearchParams();
+  const initialPeriod = periods.some((item) => item.value === searchParams.get("period")) ? searchParams.get("period") : "diario";
+  const [period, setPeriod] = useState(initialPeriod);
+  const [query, setQuery] = useState(searchParams.get("query") || "");
+  const [transmission, setTransmission] = useState(searchParams.get("transmission") || "");
   const [sort, setSort] = useState("category");
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [requestDetails, setRequestDetails] = useState({
@@ -79,6 +81,14 @@ export function RentACarRates() {
     return [...values].sort();
   }, []);
 
+  useEffect(() => {
+    const nextPeriod = periods.some((item) => item.value === searchParams.get("period")) ? searchParams.get("period") : "diario";
+    const nextTransmission = searchParams.get("transmission") || "";
+    setPeriod(nextPeriod);
+    setQuery(searchParams.get("query") || "");
+    setTransmission(nextTransmission);
+  }, [searchParams]);
+
   const filteredRates = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
@@ -93,8 +103,8 @@ export function RentACarRates() {
     });
 
     return [...items].sort((a, b) => {
-      if (sort === "price_asc") return a.sin_seguro - b.sin_seguro;
-      if (sort === "price_desc") return b.sin_seguro - a.sin_seguro;
+      if (sort === "price_asc") return a.seguro_basico - b.seguro_basico;
+      if (sort === "price_desc") return b.seguro_basico - a.seguro_basico;
       if (sort === "full_asc") return a.full_cover - b.full_cover;
       return a.categoria.localeCompare(b.categoria);
     });
@@ -203,7 +213,6 @@ export function RentACarRates() {
         period,
         periodLabel,
         rates: {
-          sin_seguro: selectedVehicle.sin_seguro,
           seguro_basico: selectedVehicle.seguro_basico,
           full_cover: selectedVehicle.full_cover
         },
@@ -306,7 +315,7 @@ export function RentACarRates() {
             </div>
             <div>
               <span className="rate-summary__label">Lowest from</span>
-              <strong>{cheapest ? formatUSD(cheapest.sin_seguro) : "-"}</strong>
+              <strong>{cheapest ? formatUSD(cheapest.seguro_basico) : "-"}</strong>
             </div>
             <p className="muted">Prices are shown in USD and may vary by dates, availability and final rental conditions.</p>
           </div>
@@ -318,7 +327,6 @@ export function RentACarRates() {
                   <th>Category</th>
                   <th>Example</th>
                   <th>Transmission</th>
-                  <th>No insurance</th>
                   <th>Basic insurance</th>
                   <th>Full cover</th>
                   <th>Cart</th>
@@ -326,29 +334,28 @@ export function RentACarRates() {
               </thead>
               <tbody>
                 {filteredRates.map((item) => (
-                    <tr key={`${period}-${item.categoria}-${item.ejemplo}-${item.sin_seguro}`}>
-                      <td data-label="Category">
-                        <strong>{item.categoria}</strong>
-                      </td>
-                      <td data-label="Example">{item.ejemplo}</td>
-                      <td data-label="Transmission">
-                        <span className="rate-pill">{transmissionLabel(item.transmision)}</span>
-                      </td>
-                      <td data-label="No insurance">{formatUSD(item.sin_seguro)}</td>
-                      <td data-label="Basic insurance">{formatUSD(item.seguro_basico)}</td>
-                      <td data-label="Full cover">
-                        <strong>{formatUSD(item.full_cover)}</strong>
-                      </td>
-                      <td data-label="Cart">
-                        <button
-                          className="btn btn--ghost rate-addBtn"
-                          type="button"
-                          onClick={() => openRequestModal(item)}
-                        >
-                          Add
-                        </button>
-                      </td>
-                    </tr>
+                  <tr key={`${period}-${item.categoria}-${item.ejemplo}-${item.seguro_basico}`}>
+                    <td data-label="Category">
+                      <strong>{item.categoria}</strong>
+                    </td>
+                    <td data-label="Example">{item.ejemplo}</td>
+                    <td data-label="Transmission">
+                      <span className="rate-pill">{transmissionLabel(item.transmision)}</span>
+                    </td>
+                    <td data-label="Basic insurance">{formatUSD(item.seguro_basico)}</td>
+                    <td data-label="Full cover">
+                      <strong>{formatUSD(item.full_cover)}</strong>
+                    </td>
+                    <td data-label="Cart">
+                      <button
+                        className="btn btn--ghost rate-addBtn"
+                        type="button"
+                        onClick={() => openRequestModal(item)}
+                      >
+                        Add
+                      </button>
+                    </td>
+                  </tr>
                 ))}
               </tbody>
             </table>

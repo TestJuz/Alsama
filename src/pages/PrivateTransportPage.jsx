@@ -1,6 +1,6 @@
 import { Search, X } from "lucide-react";
-import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   Map,
   MapControls,
@@ -16,7 +16,7 @@ import {
   getPrivateTransportPriceLabel,
   privateTransportRoutes
 } from "../lib/privateTransportRates";
-import { routes } from "../lib/site";
+import { asset, routes } from "../lib/site";
 
 const naturalMapStyle = "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
 
@@ -40,14 +40,22 @@ function isPastDate(value) {
 
 export function PrivateTransportPage() {
   const { addItem } = useCart();
-  const [query, setQuery] = useState("");
-  const [base, setBase] = useState("ALL");
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("query") || "");
+  const [base, setBase] = useState(["SAN_JOSE", "JACO"].includes(searchParams.get("base")) ? searchParams.get("base") : "ALL");
   const [selectedRoute, setSelectedRoute] = useState(null);
   const [draft, setDraft] = useState({
     passengers: 2,
     hotel: "",
     departureDate: todayInputValue()
   });
+
+  useEffect(() => {
+    const nextQuery = searchParams.get("query") || "";
+    const nextBase = searchParams.get("base");
+    setQuery(nextQuery);
+    setBase(["SAN_JOSE", "JACO"].includes(nextBase) ? nextBase : "ALL");
+  }, [searchParams]);
 
   const filteredRoutes = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -95,13 +103,13 @@ export function PrivateTransportPage() {
       id: `private-transport-${selectedRoute.id}-${passengers}-${draft.departureDate}-${draft.hotel.trim().toLowerCase()}`,
       type: "Private transport",
       title: selectedRoute.lugar,
-      subtitle: selectedRoute.base === "JACO" ? "From Jaco" : "From GAM",
+      subtitle: selectedRoute.base === "JACO" ? "From Jaco" : "From San Jose",
       price,
       meta: [
         `${passengers} passenger${passengers === 1 ? "" : "s"}`,
         draft.hotel,
         `Departure ${draft.departureDate}`,
-        selectedRoute.base === "JACO" ? "Jaco rate" : "GAM rate",
+        selectedRoute.base === "JACO" ? "Jaco rate" : "San Jose rate",
         formatUSD(price)
       ].filter(Boolean),
       details: {
@@ -130,13 +138,13 @@ export function PrivateTransportPage() {
       footerBackToTop="#"
     >
       <main>
-        <section className="hero hero--compact">
+        <section className="hero hero--compact hero--image hero--private" style={{ "--hero-image": `url(${asset("img/tours/sj/Manuel-Antonio.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Private transportation</p>
               <h1 className="hero__title">Direct transport for families, groups and custom itineraries</h1>
               <p className="hero__subtitle">
-                Browse private transfers from GAM and Jaco, compare rates by group size and add the route to your trip cart.
+                Browse private transfers from San Jose and Jaco, compare rates by group size and add the route to your trip cart.
               </p>
 
               <div className="hero__actions">
@@ -154,7 +162,7 @@ export function PrivateTransportPage() {
               <div className="transport-highlight__card">
                 <p className="transport-highlight__eyebrow">Rates</p>
                 <h3>Based on route and passengers</h3>
-                <p className="muted">GAM uses 1-5 and 6+ passenger pricing. Jaco adds an extra passenger rate after 5 people.</p>
+                <p className="muted">San Jose uses 1-5 and 6+ passenger pricing. Jaco adds an extra passenger rate after 5 people.</p>
               </div>
             </div>
           </div>
@@ -189,7 +197,7 @@ export function PrivateTransportPage() {
                     From
                     <select value={base} onChange={(event) => setBase(event.target.value)}>
                       <option value="ALL">All</option>
-                      <option value="GAM">GAM</option>
+                      <option value="SAN_JOSE">San Jose</option>
                       <option value="JACO">Jaco</option>
                     </select>
                   </label>
@@ -203,14 +211,14 @@ export function PrivateTransportPage() {
                   {filteredRoutes.map((route) => (
                     <article className="private-rate-card" key={route.id}>
                       <div>
-                        <span className="transport-card__tag">{route.base === "JACO" ? "From Jaco" : "From GAM"}</span>
+                        <span className="transport-card__tag">{route.base === "JACO" ? "From Jaco" : "From San Jose"}</span>
                         <h3>{route.lugar}</h3>
                         <p className="muted">{getPrivateTransportPriceLabel(route)}</p>
                       </div>
 
                       <div className="private-rate-card__side">
                         <strong>{formatUSD(getPrivateTransportPrice(route, 2))}</strong>
-                        <span className="muted">Estimated for 2 pax</span>
+                        <span className="muted">Estimated for 2 passengers</span>
                         <button
                           className="btn btn--primary"
                           type="button"
@@ -229,6 +237,10 @@ export function PrivateTransportPage() {
                   <div>
                     <h3>Destination map</h3>
                     <p className="muted">All private transport destinations by selected base.</p>
+                    <div className="private-map-legend" aria-label="Map marker color legend">
+                      <span><i className="private-marker private-marker--jaco" /> Orange from Jaco</span>
+                      <span><i className="private-marker private-marker--san-jose" /> Teal from San Jose</span>
+                    </div>
                   </div>
                 </div>
 
@@ -248,12 +260,12 @@ export function PrivateTransportPage() {
                         latitude={route.coordinates.lat}
                       >
                         <MarkerContent>
-                          <div className={`private-marker private-marker--${route.base.toLowerCase()}`} />
+                          <div className={`private-marker private-marker--${route.base === "JACO" ? "jaco" : "san-jose"}`} />
                         </MarkerContent>
                         <MarkerPopup closeButton>
                           <div className="shuttle-popup">
                             <strong>{route.lugar}</strong>
-                            <p>{route.base === "JACO" ? "From Jaco" : "From GAM"}</p>
+                            <p>{route.base === "JACO" ? "From Jaco" : "From San Jose"}</p>
                             <p>{getPrivateTransportPriceLabel(route)}</p>
                           </div>
                         </MarkerPopup>
@@ -348,7 +360,7 @@ export function PrivateTransportPage() {
             <div className="rate-total">
               <div>
                 <span className="rate-summary__label">Route</span>
-                <strong>{selectedRoute.base === "JACO" ? "From Jaco" : "From GAM"}</strong>
+                <strong>{selectedRoute.base === "JACO" ? "From Jaco" : "From San Jose"}</strong>
               </div>
               <div>
                 <span className="rate-summary__label">Estimated total</span>

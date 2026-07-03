@@ -120,9 +120,9 @@ export const hotelZones = [
         coordinates: [-84.819, 10.315],
         image: asset("img/hotels/hotel-spa-poco-a-poco.webp"),
         habitaciones: [
-          { tipo: "Bromelia 4 pax", alta: 265.57, verde: 239.92 },
-          { tipo: "Quetzal 4 pax", alta: 310.25, verde: 281.29 },
-          { tipo: "Garden Family 5 pax", alta: 434.34, verde: 402.08 }
+          { tipo: "Bromelia 4 passengers", alta: 265.57, verde: 239.92 },
+          { tipo: "Quetzal 4 passengers", alta: 310.25, verde: 281.29 },
+          { tipo: "Garden Family 5 passengers", alta: 434.34, verde: 402.08 }
         ]
       },
       {
@@ -131,9 +131,9 @@ export const hotelZones = [
         coordinates: [-84.813, 10.321],
         image: asset("img/hotels/sibu-lodge.webp"),
         habitaciones: [
-          { tipo: "Lantana 4 pax", alta: 218.41, verde: 206.5 },
-          { tipo: "Guarias 5 pax", alta: 330.93, verde: 330.93 },
-          { tipo: "Forest Superior 3 pax", alta: 277.98, verde: 277.98 }
+          { tipo: "Lantana 4 passengers", alta: 218.41, verde: 206.5 },
+          { tipo: "Guarias 5 passengers", alta: 330.93, verde: 330.93 },
+          { tipo: "Forest Superior 3 passengers", alta: 277.98, verde: 277.98 }
         ]
       }
     ]
