@@ -1,51 +1,14 @@
 import { asset } from "./site";
 
-export const hotelZones = [
+const zoneConfigs = [
   {
     id: "manuel-antonio",
     name: "Quepos / Manuel Antonio",
     sourceName: "HOTELES QUEPOS/MANUEL ANTONIO",
     center: [-84.155, 9.409],
     zoom: 11.4,
-    image: asset("img/hotels/hotel-manuel-antonio.webp"),
-    description: "Beach, rainforest and national park access for travelers who want nature, ocean views and easy tour connections.",
-    hotels: [
-      {
-        hotel: "Hotel Manuel Antonio",
-        description: "A practical Manuel Antonio option close to the beach and national park area, useful for travelers prioritizing location.",
-        coordinates: [-84.159, 9.389],
-        image: asset("img/hotels/hotel-manuel-antonio.webp"),
-        habitaciones: [
-          { tipo: "Sencilla", alta: 193.59, verde: 163.81 },
-          { tipo: "Doble", alta: 211.79, verde: 182.01 },
-          { tipo: "Triple", alta: 230, verde: 200.21 },
-          { tipo: "Cuadruple", alta: 248.2, verde: 209.32 }
-        ]
-      },
-      {
-        hotel: "Plaza Yara",
-        description: "A comfortable boutique-style stay near Manuel Antonio, convenient for couples and relaxed beach itineraries.",
-        coordinates: [-84.147, 9.414],
-        image: asset("img/hotels/hotel-plaza-yara.webp"),
-        habitaciones: [
-          { tipo: "Doble", alta: 251.51, verde: 185.32 }
-        ]
-      },
-      {
-        hotel: "Costa Verde",
-        description: "A well-known Manuel Antonio stay with room styles for travelers who want forest atmosphere and coastal access.",
-        coordinates: [-84.158, 9.401],
-        image: asset("img/hotels/hotel-costa-verde.webp"),
-        habitaciones: [
-          { tipo: "Efficiency", alta: 176.5, verde: null },
-          { tipo: "Studio Bungalow", alta: 242.32, verde: null },
-          { tipo: "Studio CVII", alta: 272.24, verde: null },
-          { tipo: "Studio Plus", alta: 260.28, verde: null },
-          { tipo: "Studio Plus CVII", alta: 296.16, verde: null },
-          { tipo: "Penthouse", alta: 345.52, verde: null }
-        ]
-      }
-    ]
+    image: "img/hotels/Hotel_Manuel_Antonio.webp",
+    description: "Beach, rainforest and national park access for travelers who want nature, ocean views and easy tour connections."
   },
   {
     id: "arenal",
@@ -53,47 +16,8 @@ export const hotelZones = [
     sourceName: "HOTELES ARENAL",
     center: [-84.674, 10.469],
     zoom: 11.2,
-    image: asset("img/hotels/hotel-los-lagos.webp"),
-    description: "Volcano, hot springs and adventure tours around La Fortuna, ideal for families and nature-focused routes.",
-    hotels: [
-      {
-        hotel: "Hotel Los Lagos",
-        description: "A classic Arenal hotel option with thermal-style amenities and room types for couples, families and small groups.",
-        coordinates: [-84.705, 10.488],
-        image: asset("img/hotels/hotel-los-lagos.webp"),
-        habitaciones: [
-          { tipo: "Estandar Doble", alta: 237.21, verde: 177.18 },
-          { tipo: "Estandar Triple", alta: 279.68, verde: 219.64 },
-          { tipo: "Estandar Cuadruple", alta: 323.61, verde: 263.57 },
-          { tipo: "Superior Doble", alta: 288.46, verde: 232.82 },
-          { tipo: "Superior Triple", alta: 330.93, verde: 276.75 },
-          { tipo: "Superior Cuadruple", alta: 374.86, verde: 319.21 }
-        ]
-      },
-      {
-        hotel: "Paradise Hot Springs",
-        description: "A hot springs-focused stay in Arenal, suited for travelers who want comfort and relaxation after tours.",
-        coordinates: [-84.705, 10.477],
-        image: asset("img/hotels/paradise-hot-springs.webp"),
-        habitaciones: [
-          { tipo: "Double Deluxe King", alta: 307.5, verde: 265.04 },
-          { tipo: "Double Superior", alta: 316.29, verde: 269.43 },
-          { tipo: "Luxury Quadruple", alta: 480.29, verde: 430.5 },
-          { tipo: "Suite Deluxe", alta: 326.54, verde: 287 }
-        ]
-      },
-      {
-        hotel: "Aunty Arenal Lodge",
-        description: "A simpler Arenal lodging option for travelers who want a practical base near La Fortuna activities.",
-        coordinates: [-84.642, 10.468],
-        image: asset("img/hotels/aunty-arenal-lodge.webp"),
-        habitaciones: [
-          { tipo: "Sencilla/Doble", alta: 131.79, verde: 114.21 },
-          { tipo: "Triple", alta: 161.07, verde: 143.5 },
-          { tipo: "Cuadruple", alta: 197.68, verde: 175.71 }
-        ]
-      }
-    ]
+    image: "img/hotels/ARENAL_MANOA.webp",
+    description: "Volcano, hot springs and adventure tours around La Fortuna, ideal for families and nature-focused routes."
   },
   {
     id: "monteverde",
@@ -101,42 +25,8 @@ export const hotelZones = [
     sourceName: "HOTELES MONTEVERDE",
     center: [-84.825, 10.316],
     zoom: 12,
-    image: asset("img/hotels/monteverde-country-lodge.webp"),
-    description: "Cloud forest stays for wildlife, hanging bridges, cool weather and scenic mountain experiences.",
-    hotels: [
-      {
-        hotel: "Country Lodge",
-        description: "A cozy Monteverde base with simple room types for travelers exploring the cloud forest area.",
-        coordinates: [-84.823, 10.317],
-        image: asset("img/hotels/monteverde-country-lodge.webp"),
-        habitaciones: [
-          { tipo: "Sencilla/Doble", alta: 148.92, verde: 142.3 },
-          { tipo: "Triple", alta: 204.76, verde: 193.59 }
-        ]
-      },
-      {
-        hotel: "Poco a Poco",
-        description: "A polished Monteverde hotel option for travelers wanting comfort near town and nature activities.",
-        coordinates: [-84.819, 10.315],
-        image: asset("img/hotels/hotel-spa-poco-a-poco.webp"),
-        habitaciones: [
-          { tipo: "Bromelia 4 passengers", alta: 265.57, verde: 239.92 },
-          { tipo: "Quetzal 4 passengers", alta: 310.25, verde: 281.29 },
-          { tipo: "Garden Family 5 passengers", alta: 434.34, verde: 402.08 }
-        ]
-      },
-      {
-        hotel: "Sibu Lodge",
-        description: "A Monteverde lodge-style stay with family and forest-facing room options.",
-        coordinates: [-84.813, 10.321],
-        image: asset("img/hotels/sibu-lodge.webp"),
-        habitaciones: [
-          { tipo: "Lantana 4 passengers", alta: 218.41, verde: 206.5 },
-          { tipo: "Guarias 5 passengers", alta: 330.93, verde: 330.93 },
-          { tipo: "Forest Superior 3 passengers", alta: 277.98, verde: 277.98 }
-        ]
-      }
-    ]
+    image: "img/hotels/Country_Lodge.webp",
+    description: "Cloud forest stays for wildlife, hanging bridges, cool weather and scenic mountain experiences."
   },
   {
     id: "sjo",
@@ -144,68 +34,209 @@ export const hotelZones = [
     sourceName: "HOTELES SJO",
     center: [-84.09, 9.934],
     zoom: 11.3,
-    image: asset("img/hotels/irazu-hotel-studios.webp"),
-    description: "City hotels for arrivals, departures, business stays and connections with airport transfers or day tours.",
-    hotels: [
-      {
-        hotel: "Irazu Hotel & Studios",
-        description: "A San Jose city hotel option useful before or after flights and for short urban stays.",
-        coordinates: [-84.115, 9.947],
-        image: asset("img/hotels/irazu-hotel-studios.webp"),
-        habitaciones: [
-          { tipo: "Sencilla/Doble", alta: 115.83, verde: null }
-        ]
-      },
-      {
-        hotel: "Real Intercontinental",
-        description: "A premium San Jose hotel option near shopping and city services, ideal for a more upscale stopover.",
-        coordinates: [-84.150, 9.932],
-        image: asset("img/hotels/real-intercontinental-hotel.webp"),
-        habitaciones: [
-          { tipo: "Clasica SGL/DBL", alta: 289.56, verde: 273.02 },
-          { tipo: "Premium SGL/DBL", alta: 388.84, verde: 372.29 }
-        ]
-      },
-      {
-        hotel: "Fleur de Lys",
-        description: "A central San Jose hotel with multiple room styles for travelers who want city access and character.",
-        coordinates: [-84.072, 9.932],
-        image: asset("img/hotels/hotel-fleur-de-lys.webp"),
-        habitaciones: [
-          { tipo: "Estandar Sencilla", alta: 84, verde: 78 },
-          { tipo: "Estandar Doble/Twin", alta: 91, verde: 88 },
-          { tipo: "Superior", alta: 99, verde: 99 },
-          { tipo: "Deluxe Balcon", alta: 124, verde: 124 },
-          { tipo: "Suite A/C Doble", alta: 124, verde: 124 },
-          { tipo: "Suite A/C Triple", alta: 146, verde: 146 },
-          { tipo: "Suite A/C Cuadruple", alta: 165, verde: 165 },
-          { tipo: "Master Suite Doble", alta: 149, verde: 149 },
-          { tipo: "Master Suite Triple", alta: 161, verde: 161 }
-        ]
-      }
-    ]
+    image: "img/hotels/Irazu_Hotel_and_Studios.webp",
+    description: "City hotels for arrivals, departures, business stays and connections with airport transfers or day tours."
+  },
+  {
+    id: "alajuela",
+    name: "Alajuela",
+    sourceName: "HOTELES ALAJUELA",
+    center: [-84.21, 10],
+    zoom: 11.2,
+    image: "img/hotels/HAMPTON_BY__HILTON.webp",
+    description: "Airport-area hotels for SJO arrivals, departures, layovers and Central Valley connections."
   },
   {
     id: "guanacaste",
     name: "Guanacaste",
     sourceName: "HOTELES GUANACASTE",
-    center: [-85.652, 9.978],
-    zoom: 9.6,
-    image: asset("img/hotels/villas-verdes-samara.webp"),
-    description: "Beach-region stays for warm weather, surf towns, family vacations and longer coastal routes.",
-    hotels: [
-      {
-        hotel: "Villas Verdes",
-        description: "A Guanacaste villa-style option with bedroom configurations for couples, families and small groups.",
-        coordinates: [-85.652, 9.978],
-        image: asset("img/hotels/villas-verdes-samara.webp"),
-        habitaciones: [
-          { tipo: "Villa 1 Bedroom", alta: 190.28, verde: 140.64 },
-          { tipo: "Villa 2 Bedroom", alta: 215.1, verde: 182.01 },
-          { tipo: "Villa 3 Bedroom", alta: 239.92, verde: 223.38 },
-          { tipo: "Cottage 1 Bedroom", alta: 132.37, verde: 125.75 }
-        ]
-      }
-    ]
+    center: [-85.55, 10.38],
+    zoom: 8.3,
+    image: "img/hotels/Wyndham_Tamarindo.webp",
+    description: "Beach-region and airport stays for warm weather, surf towns, family vacations and longer coastal routes."
+  },
+  {
+    id: "jaco",
+    name: "Jaco",
+    sourceName: "HOTELES JACO",
+    center: [-84.63, 9.62],
+    zoom: 11,
+    image: "img/hotels/Best_Western_Jaco_Beach_(edificio_A).webp",
+    description: "Central Pacific beach hotels for Jaco, Playa Hermosa, Punta Leona and nearby coastal routes."
+  },
+  {
+    id: "osa",
+    name: "Osa / Puerto Jimenez / Golfito",
+    sourceName: "HOTELES OSA PUERTO JIMENEZ GOLFITO",
+    center: [-83.38, 8.55],
+    zoom: 8.7,
+    image: "img/hotels/Danta_Corcovado_Lodge.webp",
+    description: "Southern Pacific hotels and lodges for Osa, Puerto Jimenez, Golfito and Corcovado-focused itineraries."
+  },
+  {
+    id: "caribe",
+    name: "Caribe",
+    sourceName: "HOTELES CARIBE",
+    center: [-82.72, 9.65],
+    zoom: 11,
+    image: "img/hotels/Hotel_Cariblue_Beach_&_Jungle _Resort.webp",
+    description: "Caribbean coast stays for Puerto Viejo, beach, jungle and relaxed coastal itineraries."
   }
 ];
+
+const hotelImages = {
+  "Hotel Manuel Antonio": "img/hotels/Hotel_Manuel_Antonio.webp",
+  Divisamar: "img/hotels/Divisamar.webp",
+  "Kamuk BW": "img/hotels/Kamuk_BW.webp",
+  "Hotel Manuel Antonio Park": "img/hotels/Hotel_Manuel_Antonio_Park.webp",
+  "La Vela Hotel": "img/hotels/La_Vela_Hotel.webp",
+  "Hotel Parador": "img/hotels/Hotel_Parador.webp",
+  "Arenal Manoa": "img/hotels/ARENAL_MANOA.webp",
+  "Las Colinas": "img/hotels/Las_Colinas.webp",
+  "La Fortuna Lodge": "img/hotels/LA_FORTUNA_LODGE.webp",
+  "Arenal Springs Resort & Spa": "img/hotels/ARENAL_SPRINGS_RESORT_&_SPA.webp",
+  "Montana de Fuego": "img/hotels/Montaña_de_Fuego.webp",
+  "San Bosco Inn": "img/hotels/San_Bosco_Inn.webp",
+  "Country Lodge": "img/hotels/Country_Lodge.webp",
+  "Poco a Poco": "img/hotels/Hotel_Spa_Poco_a_Poco.webp",
+  "Sibu Lodge": "img/hotels/Sibu_Lodge.webp",
+  "El Establo": "img/hotels/El_Establo.webp",
+  "Irazu Hotel & Studios": "img/hotels/Irazu_Hotel_and_Studios.webp",
+  "Holiday Inn SJ La Sabana by IHG": "img/hotels/Holiday_Inn_SJ_La_Sabana_by_IHG.webp",
+  "Hampton by Hilton": "img/hotels/HAMPTON_BY__HILTON.webp",
+  "Holiday Inn Express de IHG": "img/hotels/Holiday_Inn_Express_de_IHG.webp",
+  "Hilton Garden Inn Aeropuerto": "img/hotels/HILTON_GARDENN_IN_AEROPUERTO.webp",
+  "Hotel Martino Resort & Spa": "img/hotels/Hotel_Martino_Resort_&_Spa.webp",
+  "Hilton Garden Inn Aeropuerto Liberia": "img/hotels/HILTON_GARDENN_IN_AEROPUERTO_LIBERIA.webp",
+  "Hampton by Hilton Guanacaste Airport": "img/hotels/Hampton_by_Hilton_Guanacaste_Airport.webp",
+  "Wyndham Tamarindo": "img/hotels/Wyndham_Tamarindo.webp",
+  "Best Western El Sitio": "img/hotels/Best_Western_El_Sitio.webp",
+  Boyeros: "img/hotels/Boyeros.webp",
+  "Best Western Jaco Beach (edificio A)": "img/hotels/Best_Western_Jaco_Beach_(edificio_A).webp",
+  "Terrazas del Pacifico": "img/hotels/Terrazas_del_Pacifico.webp",
+  "Arenas, Punta Leona": "img/hotels/Arenas_Punta_Leona.webp",
+  "Danta Corcovado Lodge": "img/hotels/Danta_Corcovado_Lodge.webp",
+  "Peninsula Curio Collection by Hilton": "img/hotels/Hotel_Botanika_Osa_Peninsula_Curio_Collection_by_Hilton.webp",
+  "Hotel Cariblue Beach & Jungle Resort": "img/hotels/Hotel_Cariblue_Beach_&_Jungle _Resort.webp",
+  "La Kukula": "img/hotels/La_Kukula.webp"
+};
+
+const coordinates = {
+  "Hotel Manuel Antonio": [-84.159, 9.389],
+  Divisamar: [-84.158, 9.402],
+  "Kamuk BW": [-84.162, 9.431],
+  "Hotel Manuel Antonio Park": [-84.159, 9.389],
+  "La Vela Hotel": [-84.158, 9.39],
+  "Hotel Parador": [-84.167, 9.403],
+  "Arenal Manoa": [-84.718, 10.491],
+  "Las Colinas": [-84.644, 10.47],
+  "La Fortuna Lodge": [-84.641, 10.47],
+  "Arenal Springs Resort & Spa": [-84.709, 10.495],
+  "Montana de Fuego": [-84.733, 10.484],
+  "San Bosco Inn": [-84.644, 10.47],
+  "Country Lodge": [-84.823, 10.317],
+  "Poco a Poco": [-84.819, 10.315],
+  "Sibu Lodge": [-84.813, 10.321],
+  "El Establo": [-84.827, 10.31],
+  "Irazu Hotel & Studios": [-84.115, 9.947],
+  "Holiday Inn SJ La Sabana by IHG": [-84.107, 9.936],
+  "Hampton by Hilton": [-84.204, 9.999],
+  "Holiday Inn Express de IHG": [-84.204, 9.996],
+  "Hilton Garden Inn Aeropuerto": [-84.208, 10],
+  "Hotel Martino Resort & Spa": [-84.244, 10.015],
+  "Hilton Garden Inn Aeropuerto Liberia": [-85.538, 10.595],
+  "Hampton by Hilton Guanacaste Airport": [-85.545, 10.596],
+  "Wyndham Tamarindo": [-85.83, 10.304],
+  "Best Western El Sitio": [-85.437, 10.631],
+  Boyeros: [-85.438, 10.635],
+  "Best Western Jaco Beach (edificio A)": [-84.635, 9.618],
+  "Terrazas del Pacifico": [-84.598, 9.572],
+  "Arenas, Punta Leona": [-84.663, 9.696],
+  "Danta Corcovado Lodge": [-83.443, 8.57],
+  "Peninsula Curio Collection by Hilton": [-83.301, 8.535],
+  "Hotel Cariblue Beach & Jungle Resort": [-82.737, 9.655],
+  "La Kukula": [-82.71, 9.641]
+};
+
+const descriptions = {
+  "Hotel Manuel Antonio": "A practical Manuel Antonio option close to the beach and national park area, useful for travelers prioritizing location.",
+  "Country Lodge": "A cozy Monteverde base with room types for travelers exploring the cloud forest area.",
+  "Poco a Poco": "A polished Monteverde hotel option for travelers wanting comfort near town and nature activities.",
+  "Sibu Lodge": "A Monteverde lodge-style stay with family and forest-facing room options.",
+  "Irazu Hotel & Studios": "A San Jose city hotel option useful before or after flights and for short urban stays.",
+};
+
+const hotelRows = {
+  "manuel-antonio": [
+    ["Hotel Manuel Antonio", [["Sencilla", 193.59, 163.81], ["Doble", 211.79, 182.01], ["Triple", 230, 200.21], ["Cuadruple", 248.2, 209.31]]],
+    ["Divisamar", [["Sencilla", 194.75]]],
+    ["Kamuk BW", [["Standard", 168.77, 158.85], ["Superior", 311.07, 206.83]]],
+    ["Hotel Manuel Antonio Park", [["Habitacion Deluxe cama King", 297.84, 215.1], ["Habitacion Deluxe dos camas twin", 297.84, 215.1], ["Habitacion Deluxe dos camas triple", 364.02, 231.65]]],
+    ["La Vela Hotel", [["Sencilla", null]]],
+    ["Hotel Parador", [["Sencilla", null]]]
+  ],
+  arenal: [
+    ["Arenal Manoa", [["Superior", 531.14, 208.49], ["Premium", 557.61, 208.49], ["Chato Suites", 1158.25, 208.49]]],
+    ["Las Colinas", [["Single estandar terraza", 198.84, 109.12], ["Single estandar balcon privado", 207.33, 116.4], ["Single estandar 1er nivel", 186.71, 96.99], ["Doble estandar terraza", 147.92, 122.46], ["Doble estandar balcon privado", 156.4, 128.52], ["Doble estandar 1er nivel", 135.8, 110.33]]],
+    ["La Fortuna Lodge", [["Superior queen", 198.56], ["Superior twin", 244.89], ["Superior", 185.32, 152.23], ["Premium", 218.41, 185.32]]],
+    ["Arenal Springs Resort & Spa", [["Master Suite hasta 10 personas", 1222.37, 1129.29]]],
+    ["Montana de Fuego", [["Estandar Sencilla", 194.75], ["Doble", 287, 194.75], ["Superior Sencilla", 219.64], ["Deluxe Jardin Sencilla", 266.5]]],
+    ["San Bosco Inn", [["Estandar Sencilla", 108.36, 79.07], ["Doble", 131.79, 92.25]]]
+  ],
+  monteverde: [
+    ["Country Lodge", [["Clasica queen", 194.59], ["Clasica twin", 250.18], ["Superior", 187.97, 178.7], ["Premium", 239.59, 232.97]]],
+    ["Poco a Poco", [["Bromelia", 397.11, 330.93], ["Quetzal", 463.3, 383.88], ["Garden Family", 595.67, 529.49], ["Forest Deluxe con Jacuzzi", 701.57], ["Garden Superior", 701.57, 602.29], ["Forest Deluxe", 655.24, 602.29]]],
+    ["Sibu Lodge", [["Lantana", 264.74, 238.27], ["Guaria", 397.11, 344.17], ["Forest Superior", 383.88, 330.93]]],
+    ["El Establo", [["Deluxe single o doble", 351.43, 256.25], ["Familiar single o doble", 497.86, 402.68]]]
+  ],
+  sjo: [
+    ["Irazu Hotel & Studios", [["Estandar Sencilla", 147.26], ["Estandar Doble", 147.26]]],
+    ["Holiday Inn SJ La Sabana by IHG", [["Estandar Sencilla", 163.81], ["Estandar Doble", 163.81]]],
+  ],
+  alajuela: [
+    ["Hampton by Hilton", [["Estandar Sencilla", 190.28], ["Estandar Doble", 190.28], ["Estandar Triple", 206.83], ["Estandar Cuadruple", 223.38], ["Studio Sencillo", 206.83], ["Studio Doble", 206.83]]],
+    ["Holiday Inn Express de IHG", [["Estandar Sencilla", null], ["Estandar Doble", null], ["Estandar Triple", null], ["Estandar Cuadruple", null], ["Studio Sencillo", null], ["Studio Doble", null]]],
+    ["Hilton Garden Inn Aeropuerto", [["Habitacion Estandar", 203.52, 196.9], ["Triple", 16.55], ["Cuadruple", 33.09]]],
+    ["Hotel Martino Resort & Spa", [["Deluxe Suite", 205], ["Estandar sencilla", null]]]
+  ],
+  guanacaste: [
+    ["Hilton Garden Inn Aeropuerto Liberia", [["Estandar single", 206.83], ["Estandar Doble", 231.65], ["Triple", 256.47], ["Cuadruple", 281.29]]],
+    ["Hampton by Hilton Guanacaste Airport", [["Estandar single", 173.74], ["Estandar Doble", 173.74], ["Triple", 190.28], ["Cuadruple", 206.83]]],
+    ["Wyndham Tamarindo", [["Standard Ocean View", 388.84, 213.45]]],
+    ["Best Western El Sitio", [["Estandar single", 140.57], ["Estandar Doble", 180.11], ["Triple", 225.5], ["Cuadruple", 263.57]]],
+    ["Boyeros", [["Estandar single", 130.69], ["Estandar Doble", 148.11], ["Triple", 189.19, 180.47], ["Cuadruple", 226.53, 219.06], ["Quintuple", 261.38, 253.91], ["Sencilla", 121.98], ["Doble", 139.4]]]
+  ],
+  jaco: [
+    ["Best Western Jaco Beach (edificio A)", [["Single", 225.5, 210.86], ["Doble", 383.64, 354.36], ["Triple", 553.5, 524.21], ["Cuadruple", 723.36, 694.07], ["Single fin de semana", 188.89, 165.46], ["Doble fin de semana", 328, 269.43], ["Triple fin de semana", 470.04, 396.82], ["Cuadruple fin de semana", 612.07, 524.21]]],
+    ["Terrazas del Pacifico", [["Estandar Sencilla", 190.94, 125.34], ["Estandar Doble", 190.94, 125.34], ["Estandar Triple", 243.66, 178.06], ["Estandar Cuadruple", 296.37, 230.77], ["Superior Sencilla", 214.37, 155.8], ["Superior Doble", 214.37, 155.8], ["Superior Triple", 267.09, 208.51], ["Superior Cuadruple", 319.8, 261.23]]],
+    ["Arenas, Punta Leona", [["Sencilla", 256.25, 174.25], ["Doble", 297.25, 202.07], ["Triple", 373.39, 253.32], ["Superior Sencilla", 284.07, 202.07], ["Superior Doble", 351.43, 197.68], ["Superior Triple", 455.39, 333.86]]]
+  ],
+  osa: [
+    ["Danta Corcovado Lodge", [["Doble o sencilla", 209.39, 153.75]]],
+    ["Peninsula Curio Collection by Hilton", [["Doble o sencilla", 1401.48, 339.2], ["Triple", 1444.5, 378.91], ["Cuadruple", 1485.87, 418.62]]]
+  ],
+  caribe: [
+    ["Hotel Cariblue Beach & Jungle Resort", [["Habitacion max 1 pax", 135.35, 102.59], ["Habitacion 3 pax", 140.64], ["Maximo dos habitaciones 4 pax", 167.12]]],
+    ["La Kukula", [["Standard Doble", 253.16, 190.28], ["Standard Triple", 256.47, 206.83]]]
+  ]
+};
+
+function toRoom([tipo, alta, verde = null]) {
+  return { tipo, alta, verde };
+}
+
+function describeHotel(zoneName, hotelName) {
+  return descriptions[hotelName] || `${hotelName} hotel option in ${zoneName} with listed room rates for trip planning.`;
+}
+
+export const hotelZones = zoneConfigs.map((zone) => ({
+  ...zone,
+  image: asset(zone.image),
+  hotels: hotelRows[zone.id].map(([hotel, rooms]) => ({
+    hotel,
+    description: describeHotel(zone.name, hotel),
+    coordinates: coordinates[hotel],
+    image: asset(hotelImages[hotel] || zone.image),
+    habitaciones: rooms.map(toRoom)
+  }))
+}));

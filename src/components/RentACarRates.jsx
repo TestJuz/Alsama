@@ -94,7 +94,7 @@ export function RentACarRates() {
 
     const items = rentACarRates[period].filter((item) => {
       const vehicleTransmission = transmissionLabel(item.transmision);
-      const haystack = `${item.categoria} ${item.ejemplo} ${vehicleTransmission}`.toLowerCase();
+      const haystack = `${item.categoria} ${vehicleTransmission}`.toLowerCase();
 
       if (normalizedQuery && !haystack.includes(normalizedQuery)) return false;
       if (!matchesTransmission(item.transmision, transmission)) return false;
@@ -204,10 +204,10 @@ export function RentACarRates() {
       : "Pickup at nearest point";
 
     addItem({
-      id: `rent-${period}-${selectedVehicle.categoria}-${selectedVehicle.ejemplo}-${requestDetails.coverage}-${requestDetails.startDateTime}-${requestDetails.endDateTime}-${requestDetails.deliveryType}`,
+      id: `rent-${period}-${selectedVehicle.categoria}-${transmissionLabel(selectedVehicle.transmision)}-${requestDetails.coverage}-${requestDetails.startDateTime}-${requestDetails.endDateTime}-${requestDetails.deliveryType}`,
       type: "Rent a car",
       title: selectedVehicle.categoria,
-      subtitle: selectedVehicle.ejemplo,
+      subtitle: transmissionLabel(selectedVehicle.transmision),
       price: total,
       details: {
         period,
@@ -282,7 +282,7 @@ export function RentACarRates() {
               Search vehicle
               <input
                 type="search"
-                placeholder="Category or model..."
+                placeholder="Category or transmission..."
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />
@@ -325,7 +325,6 @@ export function RentACarRates() {
               <thead>
                 <tr>
                   <th>Category</th>
-                  <th>Example</th>
                   <th>Transmission</th>
                   <th>Basic insurance</th>
                   <th>Full cover</th>
@@ -334,11 +333,10 @@ export function RentACarRates() {
               </thead>
               <tbody>
                 {filteredRates.map((item) => (
-                  <tr key={`${period}-${item.categoria}-${item.ejemplo}-${item.seguro_basico}`}>
+                  <tr key={`${period}-${item.categoria}-${transmissionLabel(item.transmision)}-${item.seguro_basico}`}>
                     <td data-label="Category">
                       <strong>{item.categoria}</strong>
                     </td>
-                    <td data-label="Example">{item.ejemplo}</td>
                     <td data-label="Transmission">
                       <span className="rate-pill">{transmissionLabel(item.transmision)}</span>
                     </td>
@@ -378,7 +376,7 @@ export function RentACarRates() {
               <div>
                 <p className="rent-card__tag">Rent a car</p>
                 <h3 id="rateModalTitle">{selectedVehicle.categoria}</h3>
-                <p className="muted">{selectedVehicle.ejemplo} | {transmissionLabel(selectedVehicle.transmision)}</p>
+                <p className="muted">{transmissionLabel(selectedVehicle.transmision)}</p>
               </div>
               <button className="rate-modal__close" type="button" aria-label="Close" onClick={closeRequestModal}>x</button>
             </div>

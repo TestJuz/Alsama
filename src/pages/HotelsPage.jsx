@@ -278,6 +278,9 @@ export function HotelsPage() {
     setZoneId(nextZoneId);
     setMapZoneId(nextZoneId);
     setSelectedHotel("");
+    if (nextZoneId === "all") {
+      setQuery("");
+    }
   }
 
   function openHotelRequest(zone, hotel, room) {
@@ -359,7 +362,7 @@ export function HotelsPage() {
       footerBackToTop="#"
     >
       <main>
-        <section className="page-hero page-hero--image page-hero--hotels" style={{ "--hero-image": `url(${asset("img/hotels/hotel-manuel-antonio.webp")})` }}>
+        <section className="page-hero page-hero--image page-hero--hotels" style={{ "--hero-image": `url(${asset("img/hotels/Hotel_Manuel_Antonio.webp")})` }}>
           <div className="container">
             <h1 className="page-title">Hotels in Costa Rica</h1>
             <p className="muted">
@@ -539,4 +542,3 @@ export function HotelsPage() {
     </SiteLayout>
   );
 }
-
