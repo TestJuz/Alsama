@@ -2,14 +2,71 @@ import { useState } from "react";
 import { Mail, MessageSquareText, Send, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
 
+const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
+const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+function formatCartItems(items) {
+  if (!items.length) return "No selected items.";
+
+  return items
+    .map((item) => {
+      const meta = item.meta?.length ? ` (${item.meta.join(" | ")})` : "";
+      return `${item.type}: ${item.title}${meta}`;
+    })
+    .join("\n");
+}
+
 export function ContactForm({ title = "Contact", text, placeholder, buttonLabel = "Send" }) {
   const [hint, setHint] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const { items, count, clearCart } = useCart();
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    setHint(count ? "Request prepared with your selected cart items." : "Message prepared. Connect this form to your backend or email service.");
-    event.currentTarget.reset();
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    if (data.get("_honey")) return;
+
+    const name = String(data.get("name") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const message = String(data.get("message") || "").trim();
+    const selectedItems = formatCartItems(items);
+
+    setIsSending(true);
+    setHint("Sending your request...");
+
+    try {
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          selected_items: selectedItems,
+          _replyto: email,
+          _subject: `New Alsama Tours request from ${name || "website"}`,
+          _template: "table",
+          _captcha: "false"
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Form submission failed");
+      }
+
+      setHint("Thanks. Your request was sent to Alsama Tours.");
+      form.reset();
+      if (count) clearCart();
+    } catch (error) {
+      setHint("We could not send the message. Please email jeaustin.rdz@gmail.com or try again.");
+    } finally {
+      setIsSending(false);
+    }
   }
 
   return (
@@ -28,6 +85,8 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
         </div>
 
         <form className="form" onSubmit={handleSubmit}>
+          <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
+
           <label className="form__field">
             <span>Name</span>
             <div className="form__control">
@@ -67,8 +126,8 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
             </div>
           ) : null}
 
-          <button className="btn btn--primary form__submit" type="submit">
-            {buttonLabel}
+          <button className="btn btn--primary form__submit" type="submit" disabled={isSending}>
+            {isSending ? "Sending..." : buttonLabel}
             <Send size={17} aria-hidden="true" />
           </button>
           <p className="form__hint muted" role="status">{hint}</p>

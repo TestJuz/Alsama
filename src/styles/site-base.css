@@ -221,30 +221,51 @@ img{ max-width:100%; display:block; }
 .features{
   margin-top: 18px;
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .feature{
+  min-height:100%;
   border:1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 16px;
   background: white;
-  padding: 16px;
+  box-shadow: 0 14px 34px rgba(31,42,48,.08);
+}
+
+.feature__media{
+  width:100%;
+  height:210px;
+  object-fit:cover;
+  background:var(--panel2);
+}
+
+.feature__body{
+  display:grid;
+  gap:9px;
+  padding:18px;
+}
+
+.feature h3,
+.feature p{
+  margin:0;
 }
 
 .feature__icon{
   min-width:36px;
   width:max-content;
-  height:36px;
-  display:grid;
-  place-items:center;
+  min-height:30px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
   padding: 0 10px;
   border-radius: 999px;
-  background: var(--panel2);
-  margin-bottom: 8px;
+  background: rgba(68,166,171,.12);
   color: var(--brand);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
 }
 
 .sectionHead{
@@ -258,34 +279,86 @@ img{ max-width:100%; display:block; }
 .services-grid{
   margin-top: 16px;
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .service-card{
+  overflow:hidden;
   border:1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   background: white;
-  padding: 18px;
-  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  box-shadow: 0 14px 34px rgba(31,42,48,.08);
 }
 
-.service-card h3{
-  margin: 0 0 8px;
+.service-card--image{
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+}
+
+.service-card__media{
+  position:relative;
+  height:210px;
+  overflow:hidden;
+  background:var(--panel2);
+}
+
+.service-card__media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition: transform .35s ease;
+}
+
+.service-card:hover .service-card__media img{
+  transform:scale(1.05);
+}
+
+.service-card__media span{
+  position:absolute;
+  left:12px;
+  bottom:12px;
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  border-radius:999px;
+  background:rgba(255,255,255,.9);
+  color:#247e82;
+  padding:0 10px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  box-shadow:0 10px 22px rgba(31,42,48,.18);
+}
+
+.service-card__body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  padding:18px;
+}
+
+.service-card h3,
+.service-card p{
+  margin:0;
 }
 
 .service-card__link{
   display:inline-flex;
-  margin-top: 10px;
+  align-self:flex-start;
+  margin-top:auto;
   color: var(--brand);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .rent-grid{
   margin-top: 16px;
   display:grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .rent-card,
@@ -293,9 +366,38 @@ img{ max-width:100%; display:block; }
 .requirement-box,
 .rent-highlight__card{
   border:1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   background: white;
-  padding: 18px;
+  padding: 20px;
+}
+
+.rent-card--image{
+  overflow:hidden;
+  padding:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.rent-card__media{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  object-position:center;
+  background:var(--panel2);
+  border-bottom:1px solid var(--line);
+}
+
+.rent-card__media--economy{
+  object-position:center 58%;
+}
+
+.rent-card__media--suv{
+  object-position:center 72%;
+}
+
+.rent-card__body{
+  flex:1;
+  padding:18px 20px 20px;
 }
 
 .rent-card h3,
@@ -521,13 +623,13 @@ img{ max-width:100%; display:block; }
 
 .rate-modal__grid{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
 }
 
 .rate-choice{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -636,8 +738,8 @@ img{ max-width:100%; display:block; }
 .transport-grid{
   margin-top: 16px;
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .transport-grid--single{
@@ -647,9 +749,9 @@ img{ max-width:100%; display:block; }
 .transport-card,
 .transport-highlight__card{
   border:1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   background: white;
-  padding: 18px;
+  padding: 20px;
 }
 
 .transport-card h3,
@@ -683,27 +785,29 @@ img{ max-width:100%; display:block; }
 
 .transport-highlight{
   display:grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 .cards{
-  margin-top: 14px;
+  margin-top: 18px;
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .card{
   border:1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 16px;
   background: white;
   overflow:hidden;
   display:flex;
   flex-direction:column;
+  min-height:100%;
+  box-shadow: 0 10px 26px rgba(31,42,48,.06);
 }
 
 .card__media{
-  height:180px;
+  height: clamp(230px, 18vw, 285px);
   overflow:hidden;
   background: var(--panel2);
   border-bottom:1px solid var(--line);
@@ -727,13 +831,14 @@ img{ max-width:100%; display:block; }
 }
 
 .card:hover .card__media img{
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 .card__body{
-  padding: 14px;
+  flex:1;
+  padding: 18px;
   display:grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .card__meta{
@@ -1166,15 +1271,15 @@ input:focus, textarea:focus{
 
 .shuttle-list{
   display:grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 .shuttle-card,
 .shuttle-mapCard{
   border:1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   background: white;
-  padding: 18px;
+  padding: 20px;
 }
 
 .shuttle-card--active{
@@ -1235,7 +1340,7 @@ input:focus, textarea:focus{
 
 .shuttle-selected__meta{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin: 16px 0;
 }
@@ -1315,7 +1420,7 @@ input:focus, textarea:focus{
 .private-search span{
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:10px;
   border:1px solid var(--line);
   border-radius:12px;
   background:white;
@@ -1344,13 +1449,13 @@ input:focus, textarea:focus{
 
 .private-rate-list{
   display:grid;
-  gap:12px;
+  gap: 16px;
 }
 
 .private-rate-card,
 .private-map-card{
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:16px;
   background:white;
   box-shadow:var(--shadow-soft);
 }
@@ -1358,9 +1463,9 @@ input:focus, textarea:focus{
 .private-rate-card{
   display:grid;
   grid-template-columns:minmax(0, 1fr) auto;
-  gap:16px;
+  gap: 16px;
   align-items:center;
-  padding:16px;
+  padding:20px;
 }
 
 .private-rate-card h3{
@@ -1383,7 +1488,7 @@ input:focus, textarea:focus{
 .private-map-card{
   position:sticky;
   top:92px;
-  padding:16px;
+  padding:18px;
 }
 
 .private-map-canvas{
@@ -1486,6 +1591,12 @@ input:focus, textarea:focus{
 }
 
 @media (max-width: 760px){
+  .feature__media,
+  .service-card__media,
+  .rent-card__media{
+    height:210px;
+  }
+
   .rate-panel{
     padding: 12px;
   }
@@ -1883,7 +1994,7 @@ input:focus, textarea:focus{
 .assistant-tabs{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:8px;
+  gap:10px;
   padding:10px 16px;
   border-bottom:1px solid var(--line);
 }
@@ -1952,7 +2063,7 @@ input:focus, textarea:focus{
 .assistant-message__results,
 .assistant-catalog__list{
   display:grid;
-  gap:8px;
+  gap:10px;
 }
 
 .assistant-result{
@@ -1988,7 +2099,7 @@ input:focus, textarea:focus{
 
 .assistant-result__side{
   display:grid;
-  gap:8px;
+  gap:10px;
   justify-items:end;
   text-align:right;
   min-width:82px;
@@ -2053,7 +2164,7 @@ input:focus, textarea:focus{
 .assistant-form{
   display:grid;
   grid-template-columns:1fr auto;
-  gap:8px;
+  gap:10px;
   padding:12px 16px 16px;
   border-top:1px solid var(--line);
 }
@@ -2066,7 +2177,7 @@ input:focus, textarea:focus{
   display:grid;
   grid-template-columns:auto 1fr;
   align-items:center;
-  gap:8px;
+  gap:10px;
   border:1px solid var(--line);
   border-radius:12px;
   background:#f9fbfc;

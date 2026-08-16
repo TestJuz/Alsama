@@ -201,15 +201,15 @@ input:focus, select:focus, textarea:focus{
 
 .summary-grid{
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .summary-card{
   border:1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 16px;
   background: white;
-  padding: 18px;
+  padding: 20px;
 }
 
 .summary-card h3{
@@ -231,24 +231,26 @@ input:focus, select:focus, textarea:focus{
 }
 
 .cards{
-  margin-top: 14px;
+  margin-top: 18px;
   display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .card{
   border:1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 16px;
   background: white;
   overflow:hidden;
   display:flex;
   flex-direction:column;
-  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  min-height:100%;
+  box-shadow: 0 10px 26px rgba(31,42,48,.06);
 }
 
 .card__media{
-  height: 150px;
+  height: clamp(230px, 18vw, 285px);
+  overflow:hidden;
   background: var(--panel2);
   border-bottom:1px solid var(--line);
 }
@@ -267,10 +269,16 @@ input:focus, select:focus, textarea:focus{
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform .3s ease;
+}
+
+.card:hover .card__media img{
+  transform: scale(1.03);
 }
 
 .card__body{
-  padding: 14px;
+  flex:1;
+  padding: 18px;
   display:grid;
   gap: 10px;
 }
@@ -597,16 +605,16 @@ input:focus, select:focus, textarea:focus{
 
 .hotel-grid{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .hotel-card{
   overflow:hidden;
   border:1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 16px;
   background:white;
-  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  box-shadow: 0 10px 26px rgba(31,42,48,.06);
 }
 
 .hotel-card--active{
@@ -616,7 +624,7 @@ input:focus, select:focus, textarea:focus{
 
 .hotel-card__media{
   position:relative;
-  height: 190px;
+  height: 215px;
   background: var(--panel2);
 }
 
@@ -653,7 +661,7 @@ input:focus, select:focus, textarea:focus{
 }
 
 .hotel-card__body{
-  padding: 16px;
+  padding: 18px;
   display:grid;
   gap: 12px;
 }

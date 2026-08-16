@@ -4,6 +4,7 @@ import { ContactForm } from "../components/ContactForm";
 import { FeaturedToursSection } from "../components/FeaturedToursSection";
 import { SiteLayout } from "../components/SiteLayout";
 import {
+  asset,
   homeLinks,
   homeGalleryImages,
   homeHeroImages,
@@ -23,6 +24,77 @@ function GalleryLightbox({ image, onClose }) {
   );
 }
 
+const travelSupportHighlights = [
+  {
+    tag: "Local",
+    title: "One local team",
+    text: "Hotels, transfers and activities coordinated as one easy trip."
+  },
+  {
+    tag: "Flex",
+    title: "Travel your way",
+    text: "Start with a pickup, add hotels, or build a full vacation plan."
+  },
+  {
+    tag: "Care",
+    title: "Support on the road",
+    text: "Clear help before arrival, between destinations and during your stay."
+  }
+];
+
+const travelServices = [
+  {
+    title: "Private transportation",
+    text: "Direct airport, hotel, beach and national park transfers.",
+    image: asset("img/gallery/Buseta.webp"),
+    alt: "Private transportation in Costa Rica",
+    to: routes.privateTransport,
+    cta: "View private transport",
+    tag: "Door to door"
+  },
+  {
+    title: "Shared shuttles",
+    text: "Scheduled routes between Costa Rica's most visited destinations.",
+    image: asset("img/gallery/Private.webp"),
+    alt: "Shared shuttle travel in Costa Rica",
+    to: routes.shuttle,
+    cta: "View shuttle service",
+    tag: "Popular routes"
+  },
+  {
+    title: "Rent a car",
+    text: "Vehicle options for independent beach, city and mountain travel.",
+    image: asset("img/gallery/RentACar.webp"),
+    imagePosition: "center 35%",
+    alt: "Road trip route in Costa Rica",
+    to: routes.rentACar,
+    cta: "View rent a car options",
+    tag: "Independent"
+  },
+  {
+    title: "Vacation packages",
+    text: "Hotels, transport and experiences arranged around your route.",
+    image: asset("img/gallery/Vacation_packages.webp"),
+    alt: "Costa Rica vacation package scenery",
+    tag: "Multi-day"
+  },
+  {
+    title: "Hotels and stays",
+    text: "Lodging matched to your route, budget and travel style.",
+    image: asset("img/hotels/Hotel_Manuel_Antonio.webp"),
+    alt: "Hotel stay in Costa Rica",
+    to: routes.hotels,
+    cta: "View hotel options",
+    tag: "Stays"
+  },
+  {
+    title: "Day tours",
+    text: "Beach, wildlife, rainforest and adventure days from key areas.",
+    image: asset("img/gallery/Day_Tour.webp"),
+    alt: "Tortuga Island day tour in Costa Rica",
+    tag: "Experiences"
+  }
+];
 export function HomePage() {
   const [lightboxImage, setLightboxImage] = useState("");
 
@@ -90,27 +162,24 @@ export function HomePage() {
 
         <section className="section">
           <div className="container">
-            <h2>Travel support beyond day tours</h2>
-            <p className="muted">Flexible logistics, trusted partners and one point of contact for your trip.</p>
+            <div className="sectionHead sectionHead--visual">
+              <div>
+                <h2>Travel support beyond day tours</h2>
+                <p className="muted">Local logistics with the warmth of a real Costa Rica vacation.</p>
+              </div>
+              <a className="btn btn--ghost" href="#contact">Plan my route</a>
+            </div>
 
             <div className="features">
-              <article className="feature">
-                <div className="feature__icon" aria-hidden="true">Local</div>
-                <h3>Local coordination</h3>
-                <p className="muted">We help organize transportation, lodging and activities in one itinerary.</p>
-              </article>
-
-              <article className="feature">
-                <div className="feature__icon" aria-hidden="true">Flex</div>
-                <h3>Flexible service mix</h3>
-                <p className="muted">Book only what you need, from an airport pickup to a complete vacation package.</p>
-              </article>
-
-              <article className="feature">
-                <div className="feature__icon" aria-hidden="true">Care</div>
-                <h3>Reliable assistance</h3>
-                <p className="muted">Clear communication before arrival, during transfers and throughout your stay.</p>
-              </article>
+              {travelSupportHighlights.map((item) => (
+                <article className="feature" key={item.title}>
+                  <div className="feature__body">
+                    <span className="feature__icon" aria-hidden="true">{item.tag}</span>
+                    <h3>{item.title}</h3>
+                    <p className="muted">{item.text}</p>
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -125,34 +194,21 @@ export function HomePage() {
             </div>
 
             <div className="services-grid">
-              <article className="service-card">
-                <h3>Private transportation</h3>
-                <p className="muted">Point-to-point transfers between airports, hotels, beaches and national parks.</p>
-                <Link className="service-card__link" to={routes.privateTransport}>View private transport</Link>
-              </article>
-              <article className="service-card">
-                <h3>Shared shuttles</h3>
-                <p className="muted">Comfortable scheduled routes for travelers moving between the most popular destinations.</p>
-                <Link className="service-card__link" to={routes.shuttle}>View shuttle service</Link>
-              </article>
-              <article className="service-card" id="rent">
-                <h3>Rent a car</h3>
-                <p className="muted">Vehicle options for independent travel with support on delivery and trip planning.</p>
-                <Link className="service-card__link" to={routes.rentACar}>View rent a car options</Link>
-              </article>
-              <article className="service-card">
-                <h3>Vacation packages</h3>
-                <p className="muted">Combine hotels, transportation and experiences into one organized itinerary.</p>
-              </article>
-              <article className="service-card">
-                <h3>Hotels and stays</h3>
-                <p className="muted">Lodging recommendations and reservations matched to your route and budget.</p>
-                <Link className="service-card__link" to={routes.hotels}>View hotel options</Link>
-              </article>
-              <article className="service-card">
-                <h3>Day tours</h3>
-                <p className="muted">Curated activities departing from San Jose, Jaco and other key areas.</p>
-              </article>
+              {travelServices.map((service) => (
+                <article className="service-card service-card--image" id={service.title === "Rent a car" ? "rent" : undefined} key={service.title}>
+                  <div className="service-card__media">
+                    <img src={service.image} alt={service.alt} style={service.imagePosition ? { objectPosition: service.imagePosition } : undefined} />
+                    <span>{service.tag}</span>
+                  </div>
+                  <div className="service-card__body">
+                    <h3>{service.title}</h3>
+                    <p className="muted">{service.text}</p>
+                    {service.to ? (
+                      <Link className="service-card__link" to={service.to}>{service.cta}</Link>
+                    ) : null}
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -204,45 +260,57 @@ export function HomePage() {
             </div>
 
             <div className="rent-grid">
-              <article className="rent-card">
-                <span className="rent-card__tag">Economy</span>
-                <h3>Compact city option</h3>
-                <p className="muted">Ideal for couples or solo travelers moving between San Jose, beaches and nearby towns.</p>
-                <ul className="rent-list">
-                  <li>Fuel efficient</li>
-                  <li>Easy parking</li>
-                  <li>Best for paved routes</li>
-                </ul>
+              <article className="rent-card rent-card--image">
+                <img className="rent-card__media rent-card__media--economy" src={asset("img/gallery/Economy.webp")} alt="Economy rent a car option in Costa Rica" />
+                <div className="rent-card__body">
+                  <span className="rent-card__tag">Economy</span>
+                  <h3>Compact city option</h3>
+                  <p className="muted">Ideal for couples or solo travelers moving between San Jose, beaches and nearby towns.</p>
+                  <ul className="rent-list">
+                    <li>Fuel efficient</li>
+                    <li>Easy parking</li>
+                    <li>Best for paved routes</li>
+                  </ul>
+                </div>
               </article>
-              <article className="rent-card">
-                <span className="rent-card__tag">SUV</span>
-                <h3>More space and comfort</h3>
-                <p className="muted">Recommended for families, luggage-heavy itineraries and longer transfers between destinations.</p>
-                <ul className="rent-list">
-                  <li>More room for luggage</li>
-                  <li>Comfort for long drives</li>
-                  <li>Good all-around choice</li>
-                </ul>
+              <article className="rent-card rent-card--image">
+                <img className="rent-card__media rent-card__media--suv" src={asset("img/gallery/Suv.webp")} alt="SUV rent a car option in Costa Rica" />
+                <div className="rent-card__body">
+                  <span className="rent-card__tag">SUV</span>
+                  <h3>More space and comfort</h3>
+                  <p className="muted">Recommended for families, luggage-heavy itineraries and longer transfers between destinations.</p>
+                  <ul className="rent-list">
+                    <li>More room for luggage</li>
+                    <li>Comfort for long drives</li>
+                    <li>Good all-around choice</li>
+                  </ul>
+                </div>
               </article>
-              <article className="rent-card">
-                <span className="rent-card__tag">4x4</span>
-                <h3>Adventure-ready vehicle</h3>
-                <p className="muted">For routes that demand extra confidence during mountain, rain-season or rural travel.</p>
-                <ul className="rent-list">
-                  <li>Better road clearance</li>
-                  <li>Useful for remote areas</li>
-                  <li>Great for flexible routes</li>
-                </ul>
+              <article className="rent-card rent-card--image">
+                <img className="rent-card__media" src={asset("img/gallery/4x4.webp")} alt="4x4 rent a car option in Costa Rica" />
+                <div className="rent-card__body">
+                  <span className="rent-card__tag">4x4</span>
+                  <h3>Adventure-ready vehicle</h3>
+                  <p className="muted">For routes that demand extra confidence during mountain, rain-season or rural travel.</p>
+                  <ul className="rent-list">
+                    <li>Better road clearance</li>
+                    <li>Useful for remote areas</li>
+                    <li>Great for flexible routes</li>
+                  </ul>
+                </div>
               </article>
-              <article className="rent-card">
-                <span className="rent-card__tag">Van</span>
-                <h3>Group transportation</h3>
-                <p className="muted">A practical option for large families, private groups and vacation packages with extra luggage.</p>
-                <ul className="rent-list">
-                  <li>More passenger capacity</li>
-                  <li>Better for group trips</li>
-                  <li>Fits shared itineraries</li>
-                </ul>
+              <article className="rent-card rent-card--image">
+                <img className="rent-card__media" src={asset("img/gallery/van.webp")} alt="Van rent a car option in Costa Rica" />
+                <div className="rent-card__body">
+                  <span className="rent-card__tag">Van</span>
+                  <h3>Group transportation</h3>
+                  <p className="muted">A practical option for large families, private groups and vacation packages with extra luggage.</p>
+                  <ul className="rent-list">
+                    <li>More passenger capacity</li>
+                    <li>Better for group trips</li>
+                    <li>Fits shared itineraries</li>
+                  </ul>
+                </div>
               </article>
             </div>
           </div>

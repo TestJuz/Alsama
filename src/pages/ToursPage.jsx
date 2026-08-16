@@ -22,7 +22,7 @@ function TourCard({ item, onAdd, onOpenGallery }) {
     <article className="card">
       <div className="card__media">
         <button type="button" aria-label={`View ${item.title} image`} onClick={() => onOpenGallery(item)}>
-          <img src={item.image} alt={item.title} loading="lazy" />
+          <img src={item.image} alt={item.title} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
         </button>
       </div>
       <div className="card__body">

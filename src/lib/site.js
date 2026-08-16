@@ -47,7 +47,8 @@ export const sanJoseFeaturedTours = [
     people: "2 People",
     duration: "13 Hours",
     price: 153.93,
-    image: asset("img/tours/sj/Manuel-Antonio.webp")
+    image: asset("img/tours/sj/Manuel-Antonio.webp"),
+    imagePosition: "center 52%"
   },
   {
     title: "Beach Day",
@@ -57,7 +58,8 @@ export const sanJoseFeaturedTours = [
     people: "",
     duration: "10 Hours",
     price: 175.71,
-    image: asset("img/tours/sj/beach-day.webp")
+    image: asset("img/tours/sj/beach-day.webp"),
+    imagePosition: "center 48%"
   },
   {
     title: "Nature Combo",
@@ -67,7 +69,8 @@ export const sanJoseFeaturedTours = [
     people: "",
     duration: "12 Hours",
     price: 183.45,
-    image: asset("img/tours/sj/La-Paz-Waterfall-Gardens-2.webp")
+    image: asset("img/tours/sj/La-Paz-Waterfall-Gardens-2.webp"),
+    imagePosition: "center 44%"
   }
 ];
 
@@ -80,7 +83,8 @@ export const jacoFeaturedTours = [
     people: "",
     duration: "1 Day",
     price: 210.0,
-    image: asset("img/tours/jaco/Rafting-1.webp")
+    image: asset("img/tours/jaco/Rafting-1.webp"),
+    imagePosition: "center 42%"
   },
   {
     title: "Tortuga Island Tour",
@@ -90,7 +94,8 @@ export const jacoFeaturedTours = [
     people: "",
     duration: "4 Hours",
     price: 161.07,
-    image: asset("img/tours/jaco/Tortuga-7.webp")
+    image: asset("img/tours/jaco/Tortuga-7.webp"),
+    imagePosition: "center 44%"
   },
   {
     title: "Monkey Mangrove Tour",
@@ -100,7 +105,8 @@ export const jacoFeaturedTours = [
     people: "",
     duration: "3 Hours",
     price: 80.54,
-    image: asset("img/tours/jaco/Monkey-Tour-9-1.webp")
+    image: asset("img/tours/jaco/Monkey-Tour-9-1.webp"),
+    imagePosition: "center 38%"
   }
 ];
 
@@ -109,6 +115,7 @@ export const sanJoseTours = [
     title: "Manuel Antonio",
     excerpt: "A signature nature day trip from San Jose that fits well inside a broader vacation package.",
     image: asset("img/tours/sj/Manuel-Antonio.webp"),
+    imagePosition: "center 52%",
     locations: ["Manuel Antonio"],
     difficulty: "Easy",
     people: "2 People",
@@ -126,6 +133,7 @@ export const sanJoseTours = [
     title: "Beach Day",
     excerpt: "A full-day beach option with city pickup, ideal for travelers also needing transport and hotel support.",
     image: asset("img/tours/sj/beach-day.webp"),
+    imagePosition: "center 48%",
     locations: ["Jaco"],
     difficulty: "Easy",
     people: "",
@@ -143,6 +151,7 @@ export const sanJoseTours = [
     title: "Nature Combo",
     excerpt: "Coffee, waterfalls and scenic stops in a route that can connect with hotels and onward transfers.",
     image: asset("img/tours/sj/La-Paz-Waterfall-Gardens-2.webp"),
+    imagePosition: "center 44%",
     locations: ["Alajuela"],
     difficulty: "Easy",
     people: "",
@@ -163,6 +172,7 @@ export const jacoTours = [
     title: "White Water Rafting",
     excerpt: "Full-day adventure from Jaco that can be matched with transfers, lodging and broader trip planning.",
     image: asset("img/tours/jaco/Rafting-1.webp"),
+    imagePosition: "center 42%",
     locations: ["Jaco"],
     difficulty: "Medium",
     people: "",
@@ -180,6 +190,7 @@ export const jacoTours = [
     title: "Tortuga Island Tour",
     excerpt: "Island getaway with beach time, ideal to combine with hotel reservations and coastal transport.",
     image: asset("img/tours/jaco/Tortuga-7.webp"),
+    imagePosition: "center 44%",
     locations: ["Jaco"],
     difficulty: "Medium",
     people: "",
@@ -197,6 +208,7 @@ export const jacoTours = [
     title: "Monkey Mangrove Tour",
     excerpt: "Easy wildlife option near Jaco with support for pickup logistics and nearby accommodations.",
     image: asset("img/tours/jaco/Monkey-Tour-9-1.webp"),
+    imagePosition: "center 38%",
     locations: ["Jaco"],
     difficulty: "Easy",
     people: "",
