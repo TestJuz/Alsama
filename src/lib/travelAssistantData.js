@@ -209,36 +209,61 @@ const searchTermAliases = {
 };
 
 const spanishSignals = [
-  "alquiler",
-  "alquilar",
   "aeropuerto",
   "alojamiento",
+  "alquiler",
+  "alquilar",
+  "ayuda",
   "automatico",
+  "buenas",
+  "buenos",
   "catarata",
   "cataratas",
   "compartido",
   "como",
-  "llego",
-  "llegar",
   "cuanto",
   "cuesta",
-  "de ",
-  " en ",
+  "donde",
+  "espanol",
+  "espaniol",
+  "gracias",
+  "habitacion",
+  "habitaciones",
   "hacer",
+  "hola",
   "hoteles",
+  "llego",
+  "llegar",
   "manual antonio",
   "manuel antonio",
+  "necesito",
   "naturaleza",
   "playa",
   "playas",
   "privado",
   "puedes",
+  "quiero",
+  "quisiera",
   "recomienda",
   "recomendame",
   "recomiendame",
-  "quiero",
   "transporte",
   "traslado"
+];
+
+const spanishSignalPhrases = [
+  " a ",
+  " de ",
+  " del ",
+  " desde ",
+  " en ",
+  " para ",
+  " por ",
+  " que ",
+  " me ",
+  " mi ",
+  " una ",
+  " un "
 ];
 
 const assistantCopy = {
@@ -430,9 +455,9 @@ function searchTransportItems(query, limit = 8) {
   return [...privateItems.slice(0, limit), ...shuttleItems].slice(0, limit);
 }
 
-function getQuestionLanguage(query) {
+export function getQuestionLanguage(query) {
   const text = ` ${normalize(query)} `;
-  return includesAny(text, spanishSignals) ? "es" : "en";
+  return includesAnyWholeTerm(text, spanishSignals) || includesAny(text, spanishSignalPhrases) ? "es" : "en";
 }
 function roomPrice(room) {
   if (typeof room.alta === "number") return room.alta;

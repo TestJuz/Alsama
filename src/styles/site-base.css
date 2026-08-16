@@ -2008,6 +2008,27 @@ input:focus, textarea:focus{
   font-weight:800;
 }
 
+.assistant-contact{
+  display:grid;
+  gap:3px;
+  border:1px solid rgba(37,211,102,.32);
+  border-radius:12px;
+  background:#f1fff6;
+  color:#147a3e;
+  padding:10px;
+  text-decoration:none;
+}
+
+.assistant-contact strong{
+  font-size:13px;
+}
+
+.assistant-contact span{
+  color:#2f7f52;
+  font-size:12px;
+  line-height:1.35;
+}
+
 .assistant-suggestions{
   display:flex;
   gap:7px;
@@ -2551,4 +2572,3 @@ input:focus, textarea:focus{
     width:calc(100vw - (var(--page-gutter) * 2));
   }
 }
-

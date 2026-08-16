@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   answerTravelQuestion,
+  getQuestionLanguage,
   searchTravelAssistantItems,
   travelAssistantCategories,
   travelAssistantStats
@@ -11,6 +12,20 @@ import { asset } from "../lib/site";
 
 const TYPING_STEP_MS = 18;
 const TYPING_CHARS_PER_STEP = 3;
+const WHATSAPP_AGENT_URL = "https://wa.me/50661672539";
+
+function buildAgentContact(question, language) {
+  const isSpanish = language === "es";
+  const text = isSpanish
+    ? `Hola, necesito ayuda de un agente de Alsama. Mi pregunta fue: ${question}`
+    : `Hello, I need help from an Alsama agent. My question was: ${question}`;
+
+  return {
+    href: `${WHATSAPP_AGENT_URL}?text=${encodeURIComponent(text)}`,
+    label: isSpanish ? "Ponte en contacto con un agente" : "Contact an agent",
+    description: isSpanish ? "Enviar esta pregunta por WhatsApp" : "Send this question on WhatsApp"
+  };
+}
 
 const suggestions = [
   "Tours de playa",
@@ -34,6 +49,17 @@ function AssistantResult({ item, onNavigate }) {
         <Link to={item.href} onClick={onNavigate}>View more / Ver mas</Link>
       </div>
     </article>
+  );
+}
+
+function AssistantContact({ contact }) {
+  if (!contact) return null;
+
+  return (
+    <a className="assistant-contact" href={contact.href} target="_blank" rel="noreferrer">
+      <strong>{contact.label}</strong>
+      <span>{contact.description}</span>
+    </a>
   );
 }
 
@@ -110,9 +136,19 @@ export function TravelAssistant() {
       window.clearTimeout(typingTimeoutRef.current);
     }
 
-    const answer = answerTravelQuestion(value);
+    const language = getQuestionLanguage(value);
+    const baseAnswer = answerTravelQuestion(value);
+    const answer = baseAnswer.items?.length
+      ? baseAnswer
+      : { ...baseAnswer, contact: buildAgentContact(value, language) };
     setMessages((current) => [...current, { role: "user", body: value }]);
-    setTyping({ role: "assistant", title: "Alsama is checking / buscando", body: "", items: [], done: false });
+    setTyping({
+      role: "assistant",
+      title: language === "es" ? "Alsama esta buscando" : "Alsama is checking",
+      body: "",
+      items: [],
+      done: false
+    });
     setQuestion("");
     setActiveTab("chat");
 
@@ -186,6 +222,7 @@ export function TravelAssistant() {
                         ))}
                       </div>
                     ) : null}
+                    <AssistantContact contact={message.contact} />
                   </div>
                 ))}
 
@@ -204,6 +241,7 @@ export function TravelAssistant() {
                         ))}
                       </div>
                     ) : null}
+                    {typing.done ? <AssistantContact contact={typing.contact} /> : null}
                   </div>
                 ) : null}
               </div>
