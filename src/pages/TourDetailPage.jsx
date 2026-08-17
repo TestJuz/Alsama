@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
+import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
+import { ImageGalleryModal } from "../components/ImageGalleryModal";
 import { SiteLayout } from "../components/SiteLayout";
 import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
@@ -19,6 +25,7 @@ export function TourDetailPage() {
   const { tourSlug } = useParams();
   const { addItem } = useCart();
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(null);
   const tour = findTourBySlug(tourSlug);
 
   useEffect(() => {
@@ -37,7 +44,7 @@ export function TourDetailPage() {
     .slice(0, 3);
   const fallbackRelated = getAllTours().filter((item) => item.slug !== tour.slug).slice(0, 3);
   const related = relatedTours.length ? relatedTours : fallbackRelated;
-  const gallery = uniqueImages([tour.image, ...(tour.gallery || []), ...related.map((item) => item.image)]).slice(0, 4);
+  const gallery = uniqueImages(tour.gallery?.length ? tour.gallery : [tour.image]);
   const detail = tour.detail;
 
   function addTourToCart(cartItem) {
@@ -76,9 +83,25 @@ export function TourDetailPage() {
           <div className="container tour-detail-layout">
             <article className="tour-detail-main">
               <div className="tour-detail-gallery" aria-label={`${tour.title} gallery`}>
-                {gallery.map((image, index) => (
-                  <img key={image} src={image} alt={`${tour.title} gallery ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
-                ))}
+                <Swiper
+                  modules={[A11y, Autoplay, Navigation, Pagination]}
+                  className="tour-gallery-carousel"
+                  slidesPerView={1}
+                  spaceBetween={16}
+                  loop={gallery.length > 1}
+                  navigation={gallery.length > 1}
+                  pagination={gallery.length > 1 ? { clickable: true } : false}
+                  autoplay={gallery.length > 1 ? { delay: 4200, disableOnInteraction: false, pauseOnMouseEnter: true } : false}
+                  a11y={{ prevSlideMessage: "Previous tour image", nextSlideMessage: "Next tour image" }}
+                >
+                  {gallery.map((image, index) => (
+                    <SwiperSlide key={image}>
+                      <button className="tour-gallery-carousel__zoom" type="button" style={{ "--tour-slide-image": `url(${image})` }} aria-label={`Open ${tour.title} image ${index + 1}`} onClick={() => setGalleryIndex(index)}>
+                        <img src={image} alt={`${tour.title} gallery ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
+                      </button>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
 
               <nav className="tour-detail-tabs" aria-label="Tour sections">
@@ -192,6 +215,16 @@ export function TourDetailPage() {
             tour={tour}
             onClose={() => setBookingOpen(false)}
             onAdd={addTourToCart}
+          />
+        ) : null}
+
+        {galleryIndex !== null ? (
+          <ImageGalleryModal
+            title={tour.title}
+            gallery={gallery}
+            index={galleryIndex}
+            onChangeIndex={setGalleryIndex}
+            onClose={() => setGalleryIndex(null)}
           />
         ) : null}
 

@@ -1,8 +1,11 @@
-import { Pencil, ShoppingCart, Trash2, X } from "lucide-react";
+import { Mail, Pencil, Phone, Send, ShoppingCart, Trash2, User, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { buildTourMeta, getTourBookingTotal } from "../lib/tourBooking";
 
+const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
+const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+const SERVICE_REQUEST_SUBJECT = "Service Request from Website";
 const coverageOptions = [
   { value: "seguro_basico", label: "Basic insurance" },
   { value: "full_cover", label: "Full cover" }
@@ -13,6 +16,19 @@ function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
+
+function formatCartItems(items) {
+  if (!items.length) return "No selected items.";
+
+  return items
+    .map((item) => {
+      const quantity = item.quantity > 1 ? ` x${item.quantity}` : "";
+      const price = typeof item.price === "number" ? ` - ${formatUSD(item.price)}` : "";
+      const meta = item.meta?.length ? `\n  Details: ${item.meta.join(" | ")}` : "";
+      return `${item.type}: ${item.title}${quantity}${price}${meta}`;
+    })
+    .join("\n\n");
+}
 function getHotelRoomPrice(room) {
   if (!room) return undefined;
   if (typeof room.alta === "number") return room.alta;
@@ -114,7 +130,74 @@ export function CartWidget() {
   const [open, setOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [draft, setDraft] = useState(null);
+  const [requestOpen, setRequestOpen] = useState(false);
+  const [requestHint, setRequestHint] = useState("");
+  const [requestSending, setRequestSending] = useState(false);
   const minDateTime = toDateTimeInputValue(startOfToday());
+
+  function openRequest() {
+    setOpen(false);
+    setRequestOpen(true);
+    setRequestHint("");
+  }
+
+  function closeRequest() {
+    if (requestSending) return;
+    setRequestOpen(false);
+    setRequestHint("");
+  }
+
+  async function submitRequest(event) {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    if (data.get("_honey")) return;
+
+    const fullName = String(data.get("fullName") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const phone = String(data.get("phone") || "").trim();
+
+    setRequestSending(true);
+    setRequestHint("Sending your service request...");
+
+    try {
+      const response = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          full_name: fullName,
+          email,
+          phone,
+          selected_items: formatCartItems(items),
+          _replyto: email,
+          _subject: SERVICE_REQUEST_SUBJECT,
+          _template: "table",
+          _captcha: "false"
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Cart request submission failed");
+      }
+
+      setRequestHint("Thanks. Your service request was sent to Alsama Tours.");
+      form.reset();
+      clearCart();
+      window.setTimeout(() => {
+        setRequestOpen(false);
+        setRequestHint("");
+      }, 1400);
+    } catch (error) {
+      setRequestHint(`We could not send the request. Please email ${CONTACT_EMAIL} or try again.`);
+    } finally {
+      setRequestSending(false);
+    }
+  }
 
   function openEdit(item) {
     setEditingItem(item);
@@ -370,7 +453,7 @@ export function CartWidget() {
               </div>
 
               <div className="cart-panel__actions">
-                <a className="btn btn--primary" href="#contact" onClick={() => setOpen(false)}>Request all</a>
+                <button className="btn btn--primary" type="button" onClick={openRequest}>Request all</button>
                 <button className="btn btn--ghost" type="button" onClick={clearCart}>Clear cart</button>
               </div>
             </>
@@ -380,6 +463,72 @@ export function CartWidget() {
         </div>
       ) : null}
 
+
+      {requestOpen ? (
+        <div className="cart-edit" role="dialog" aria-modal="true" aria-labelledby="cartRequestTitle">
+          <div className="cart-edit__backdrop" onClick={closeRequest} />
+          <form className="cart-edit__card cart-request" onSubmit={submitRequest}>
+            <div className="cart-panel__head">
+              <div>
+                <h3 id="cartRequestTitle">Service request</h3>
+                <p className="muted">{count} selected item{count === 1 ? "" : "s"}</p>
+              </div>
+              <button className="cart-panel__iconBtn" type="button" aria-label="Close request" onClick={closeRequest} disabled={requestSending}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
+
+            <div className="cart-request__fields">
+              <label className="form__field">
+                <span>Full name</span>
+                <div className="form__control">
+                  <User size={18} aria-hidden="true" />
+                  <input name="fullName" required placeholder="Your full name" autoComplete="name" />
+                </div>
+              </label>
+
+              <label className="form__field">
+                <span>Email</span>
+                <div className="form__control">
+                  <Mail size={18} aria-hidden="true" />
+                  <input name="email" type="email" required placeholder="you@email.com" autoComplete="email" />
+                </div>
+              </label>
+
+              <label className="form__field">
+                <span>Phone number</span>
+                <div className="form__control">
+                  <Phone size={18} aria-hidden="true" />
+                  <input name="phone" type="tel" required placeholder="Phone number" autoComplete="tel" />
+                </div>
+              </label>
+            </div>
+
+            <div className="cart-request__summary">
+              <strong>Selected services</strong>
+              <ul>
+                {items.map((item) => (
+                  <li key={item.id}>
+                    <span>{item.type}: {item.title}</span>
+                    <small>{item.meta?.join(" | ")}</small>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="rate-modal__actions">
+              <button className="btn btn--primary" type="submit" disabled={requestSending || !items.length}>
+                {requestSending ? "Sending..." : "Send request"}
+                <Send size={17} aria-hidden="true" />
+              </button>
+              <button className="btn btn--ghost" type="button" onClick={closeRequest} disabled={requestSending}>Cancel</button>
+            </div>
+            <p className="form__hint muted" role="status">{requestHint}</p>
+          </form>
+        </div>
+      ) : null}
       {editingItem && draft ? (
         <div className="cart-edit" role="dialog" aria-modal="true" aria-labelledby="cartEditTitle">
           <div className="cart-edit__backdrop" onClick={closeEdit} />

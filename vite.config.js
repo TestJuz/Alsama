@@ -9,5 +9,8 @@ export default defineConfig(({ command }) => ({
       "@": path.resolve(__dirname, "./src")
     }
   },
+  optimizeDeps: {
+    include: ["swiper/react", "swiper/modules"]
+  },
   base: command === "build" ? "/Alsama/" : "/"
 }));

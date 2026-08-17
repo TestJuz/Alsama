@@ -2,7 +2,7 @@ import { hotelZones } from "./hotels";
 import { getPrivateTransportPriceLabel, privateTransportRoutes } from "./privateTransportRates";
 import { rentACarRates } from "./rentacarRates";
 import { shuttleRoutes } from "./shuttles";
-import { getAllTours, getTourDetailPath, routes } from "./site";
+import { getAllTours, getTourDetailPath, routes, slugify, tourOrigins } from "./site";
 
 function formatUSD(value) {
   if (typeof value !== "number") return "On request";
@@ -373,15 +373,20 @@ function includesAnyWholeTerm(text, words) {
 function getTourOriginFilter(query) {
   const text = normalize(query);
 
-  if (/\b(desde|from)\s+jaco\b/.test(text) || /\bsaliendo\s+de\s+jaco\b/.test(text) || /\bsalida\s+de\s+jaco\b/.test(text)) {
-    return "From Jaco";
-  }
+  const match = tourOrigins.find((origin) => {
+    const names = [origin.label.replace(/^From\s+/i, ""), origin.value.replace(/-/g, " ")]
+      .map(normalize)
+      .filter(Boolean);
 
-  if (/\b(desde|from)\s+san\s+jose\b/.test(text) || /\bsaliendo\s+de\s+san\s+jose\b/.test(text) || /\bsalida\s+de\s+san\s+jose\b/.test(text)) {
-    return "From San Jose";
-  }
+    return names.some((name) =>
+      text.includes(`desde ${name}`) ||
+      text.includes(`from ${name}`) ||
+      text.includes(`saliendo de ${name}`) ||
+      text.includes(`salida de ${name}`)
+    );
+  });
 
-  return "";
+  return match?.label || "";
 }
 
 function filterToursByOrigin(items, originLabel) {
@@ -486,6 +491,138 @@ function periodLabel(period, language = "en") {
 
 const allTours = getAllTours();
 
+const tourAssistantAliases = {
+  aerial: ["aerial tram", "tram", "teleferico", "rainforest tram", "sky tram"],
+  tram: ["aerial tram", "tram", "teleferico", "rainforest tram"],
+  tranopy: ["tranopy", "tram", "canopy", "zipline", "teleferico"],
+  canopy: ["canopy", "zipline", "zip line", "tirolesa"],
+  zipline: ["zipline", "zip line", "canopy", "tirolesa"],
+  kayak: ["kayak", "sea kayak", "snorkel", "snorkeling", "ocean"],
+  snorkel: ["snorkel", "snorkeling", "kayak", "ocean"],
+  canyoning: ["canyoning", "rappel", "rappelling", "waterfall rappels", "barranquismo"],
+  rafting: ["rafting", "rapidos", "river", "savegre"],
+  savegre: ["savegre", "rafting", "river", "rapidos"],
+  carara: ["carara", "national park", "scarlet macaw", "lapa roja", "bird watching"],
+  chocolate: ["chocolate", "cacao", "cocoa", "tasting"],
+  cacao: ["cacao", "chocolate", "cocoa", "tasting"],
+  folklore: ["folklore", "typical dinner", "cena tipica", "show", "marimba"],
+  dinner: ["dinner", "cena", "folklore", "show"],
+  horseback: ["horseback", "horse riding", "cabalgata", "caballos", "waterfalls"],
+  waterfalls: ["waterfalls", "waterfall", "catarata", "cataratas"],
+  waterfall: ["waterfall", "waterfalls", "catarata", "cataratas"],
+  volcano: ["volcano", "volcan", "arenal", "poas", "irazu"],
+  volcan: ["volcan", "volcano", "arenal", "poas", "irazu"],
+  arenal: ["arenal", "volcano", "volcan", "la fortuna", "hot springs", "aguas termales"],
+  poas: ["poas", "volcano", "volcan", "la paz", "waterfall"],
+  irazu: ["irazu", "volcano", "volcan", "cartago", "orosi", "lankester"],
+  orosi: ["orosi", "irazu", "cartago", "lankester"],
+  lankester: ["lankester", "botanic garden", "garden", "orquideas", "orchids"],
+  tortuga: ["tortuga", "isla tortuga", "turtle island", "gulf of nicoya", "nicoya"],
+  safari: ["safari", "monkeys", "crocodiles", "wildlife", "boat"],
+  monkey: ["monkey", "monkeys", "mono", "monos", "capuchin", "mangrove"],
+  mangrove: ["mangrove", "manglar", "manglares", "riverboat", "boat"],
+  beach: ["beach", "playa", "pacific", "swimming"],
+  playa: ["playa", "beach", "pacific", "swimming"],
+  jaco: ["jaco", "playa jaco", "central pacific", "puntarenas"],
+  puntarenas: ["puntarenas", "central pacific", "jaco", "isla tortuga"],
+  nicoya: ["nicoya", "gulf of nicoya", "isla tortuga", "tortuga"],
+  cartago: ["cartago", "irazu", "orosi", "lankester"]
+};
+
+const tourIntentStopWords = new Set([
+  ...baseStopWords,
+  "activity",
+  "available",
+  "booking",
+  "classic",
+  "clear",
+  "coordination",
+  "day",
+  "experience",
+  "final",
+  "flexible",
+  "full",
+  "hours",
+  "local",
+  "near",
+  "option",
+  "prepared",
+  "price",
+  "route",
+  "service",
+  "support",
+  "time",
+  "tour",
+  "tours",
+  "travelers",
+  "views"
+]);
+
+function getSearchParts(value) {
+  return normalize(value)
+    .replace(/[^a-z0-9]+/g, " ")
+    .split(/\s+/)
+    .filter((term) => term.length > 2 && !tourIntentStopWords.has(term));
+}
+
+function getTourAliasText(tour) {
+  const detail = tour.detail || {};
+  const tourText = normalize([
+    tour.title,
+    tour.slug,
+    tour.originLabel,
+    tour.sourceUrl,
+    tour.galleryFolder,
+    listText(tour.locations),
+    tour.excerpt,
+    detail.subtitle,
+    listText(detail.overview),
+    listText(detail.highlights)
+  ].filter(Boolean).join(" "));
+
+  return Object.entries(tourAssistantAliases)
+    .filter(([term]) => tourText.includes(term))
+    .flatMap(([, aliases]) => aliases)
+    .join(" ");
+}
+
+const activeTourIntentWords = [...new Set([
+  "tour",
+  "tours",
+  "actividad",
+  "actividades",
+  "excursion",
+  "excursiones",
+  "hacer",
+  "visitar",
+  "visita",
+  "lugares",
+  "planes",
+  "recomienda",
+  "recomendame",
+  "recomiendame",
+  ...Object.keys(tourAssistantAliases),
+  ...Object.values(tourAssistantAliases).flatMap((aliases) => aliases.flatMap(getSearchParts)),
+  ...allTours.flatMap((tour) => {
+    const detail = tour.detail || {};
+    return [
+      tour.title,
+      tour.slug,
+      tour.originLabel,
+      tour.galleryFolder,
+      tour.sourceUrl,
+      listText(tour.locations),
+      tour.excerpt,
+      detail.subtitle,
+      listText(detail.highlights)
+    ].flatMap(getSearchParts);
+  })
+])];
+
+function hasTourQuestionIntent(text) {
+  return includesAny(text, activeTourIntentWords);
+}
+
 const hotelZoneSearchAliases = {
   "manuel-antonio": [
     "Manuel Antonio",
@@ -575,15 +712,25 @@ function getTourAssistantHaystack(tour) {
 
   return [
     tour.title,
+    tour.slug,
+    slugify(tour.title),
     tour.originLabel,
     tour.excerpt,
     tour.difficulty,
+    tour.durationText,
+    tour.durationHours,
+    tour.people,
+    formatUSD(tour.price),
+    tour.sourceUrl,
+    tour.galleryFolder,
     listText(tour.locations),
     detail.subtitle,
+    listText(detail.overview),
     listText(detail.highlights),
     listText(detail.included),
     listText(detail.paid),
-    listText(detail.recommendations)
+    listText(detail.recommendations),
+    getTourAliasText(tour)
   ].filter(Boolean).join(" ");
 }
 
@@ -610,9 +757,9 @@ export const travelAssistantItems = [
     type: "tour",
     label: tour.title,
     eyebrow: tour.originLabel,
-    description: tour.excerpt,
+    description: tour.detail?.subtitle || tour.excerpt,
     price: formatUSD(tour.price),
-    meta: [tour.durationText, tour.difficulty, ...tour.locations].filter(Boolean),
+    meta: [tour.durationText, tour.difficulty, tour.people, ...tour.locations].filter(Boolean),
     href: getTourDetailPath(tour),
     haystack: getTourAssistantHaystack(tour)
   })),
@@ -777,7 +924,7 @@ export function answerTravelQuestion(question) {
     };
   }
 
-  if (includesAny(text, ["tour", "tours", "actividad", "actividades", "excursion", "excursiones", "hacer", "visitar", "visita", "lugares", "planes", "recomienda", "recomendame", "recomiendame", "jaco", "san jose", "manuel antonio", "manual antonio", "tortuga", "rafting", "playa", "beach", "isla", "island", "naturaleza", "nature", "catarata", "waterfall", "monkey", "mono", "mangrove", "manglar"])) {
+  if (hasTourQuestionIntent(text)) {
     const originLabel = getTourOriginFilter(question);
     const items = filterToursByOrigin(searchTravelAssistantItems(question, "tour", 8), originLabel).slice(0, 6);
     return {
@@ -794,3 +941,4 @@ export function answerTravelQuestion(question) {
     items
   };
 }
+

@@ -1,27 +1,26 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
 import { ImageGalleryModal } from "../components/ImageGalleryModal";
 import { SiteLayout } from "../components/SiteLayout";
 import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
-import { asset, getAllTours, getTourDetailPath, routes } from "../lib/site";
+import { asset, getAllTours, getTourDetailPath, routes, tourOrigins } from "../lib/site";
 
 const origins = [
   { value: "all", label: "All departures" },
-  { value: "san-jose", label: "From San Jose" },
-  { value: "jaco", label: "From Jaco" }
+  ...tourOrigins.map(({ value, label }) => ({ value, label }))
 ];
 
 function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
-function TourCard({ item, onAdd, onOpenGallery }) {
+function TourCard({ item, onAdd, onOpenGallery, preview = false }) {
   return (
-    <article className="card">
+    <article className={`card${preview ? " card--preview" : ""}`} aria-hidden={preview ? "true" : undefined}>
       <div className="card__media">
-        <button type="button" aria-label={`View ${item.title} image`} onClick={() => onOpenGallery(item)}>
+        <button type="button" aria-label={`View ${item.title} image`} onClick={() => onOpenGallery(item)} tabIndex={preview ? -1 : undefined}>
           <img src={item.image} alt={item.title} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
         </button>
       </div>
@@ -50,8 +49,8 @@ function TourCard({ item, onAdd, onOpenGallery }) {
         </div>
 
         <div className="card__actions">
-          <Link className="btn btn--ghost" to={getTourDetailPath(item)}>View details</Link>
-          <button className="btn btn--primary card__cta" type="button" onClick={() => onAdd(item)}>
+          <Link className="btn btn--ghost" to={getTourDetailPath(item)} tabIndex={preview ? -1 : undefined}>View details</Link>
+          <button className="btn btn--primary card__cta" type="button" onClick={() => onAdd(item)} tabIndex={preview ? -1 : undefined}>
             Add to cart
           </button>
         </div>
@@ -68,6 +67,9 @@ export function ToursPage() {
   const [sort, setSort] = useState("featured");
   const [galleryState, setGalleryState] = useState(null);
   const [tourRequest, setTourRequest] = useState(null);
+  const [visibleTourCounts, setVisibleTourCounts] = useState(() =>
+    Object.fromEntries(tourOrigins.map((item) => [item.value, 3]))
+  );
 
   const allTours = useMemo(() => getAllTours(), []);
 
@@ -88,13 +90,35 @@ export function ToursPage() {
     return items;
   }, [allTours, difficulty, origin, query, sort]);
 
-  const groupedTours = origins
-    .filter((item) => item.value !== "all")
-    .map((item) => ({
-      ...item,
-      tours: filteredTours.filter((tour) => tour.origin === item.value)
-    }))
-    .filter((item) => origin === "all" ? item.tours.length : item.value === origin);
+  const groupedTours = tourOrigins
+    .map((item) => {
+      const originTours = filteredTours.filter((tour) => tour.origin === item.value);
+      const visibleCount = visibleTourCounts[item.value] ?? 3;
+
+      return {
+        ...item,
+        totalTours: originTours.length,
+        visibleCount,
+        tours: originTours.slice(0, visibleCount),
+        previewTours: originTours.slice(visibleCount, visibleCount + 3),
+        hasMoreTours: visibleCount < originTours.length
+      };
+    })
+    .filter((item) => origin === "all" ? item.tours.length || item.previewTours.length : item.value === origin);
+
+  const shownTourCount = groupedTours.reduce((total, group) => total + Math.min(group.visibleCount, group.totalTours), 0);
+  const totalGroupedTours = groupedTours.reduce((total, group) => total + group.totalTours, 0);
+
+  useEffect(() => {
+    setVisibleTourCounts(Object.fromEntries(tourOrigins.map((item) => [item.value, 3])));
+  }, [difficulty, origin, query, sort]);
+
+  function loadMoreTours(originValue, maxTours) {
+    setVisibleTourCounts((current) => ({
+      ...current,
+      [originValue]: Math.min((current[originValue] ?? 3) + 3, maxTours)
+    }));
+  }
 
   function openTourRequest(item) {
     setTourRequest(item);
@@ -202,7 +226,7 @@ export function ToursPage() {
         <section className="section">
           <div className="container tours-sections">
             <div className="list-head">
-              <p className="muted">Showing {filteredTours.length} tours</p>
+              <p className="muted">Showing {shownTourCount} of {totalGroupedTours} tours</p>
             </div>
 
             {groupedTours.map((group) => (
@@ -211,22 +235,36 @@ export function ToursPage() {
                   <div>
                     <h2>{group.label}</h2>
                     <p className="muted">
-                      {group.value === "san-jose"
-                        ? "Tours and experiences that work well when your base is San Jose."
-                        : "Adventure, beach and wildlife options departing from Jaco."}
+                      {group.description}
                     </p>
                   </div>
                 </div>
-                <div className="cards">
+                <div className="cards cards--progressive">
                   {group.tours.map((item) => (
                     <TourCard
-                      key={`${item.origin}-${item.title}`}
+                      key={`${item.origin}-${item.slug}`}
                       item={item}
                       onAdd={openTourRequest}
                       onOpenGallery={openTourGallery}
                     />
                   ))}
+                  {group.previewTours.map((item) => (
+                    <TourCard
+                      key={`${item.origin}-${item.slug}-preview`}
+                      item={item}
+                      onAdd={openTourRequest}
+                      onOpenGallery={openTourGallery}
+                      preview
+                    />
+                  ))}
                 </div>
+                {group.hasMoreTours ? (
+                  <div className="load-more-row">
+                    <button className="btn btn--primary" type="button" onClick={() => loadMoreTours(group.value, group.totalTours)}>
+                      View more
+                    </button>
+                  </div>
+                ) : null}
               </div>
             ))}
 
@@ -265,3 +303,4 @@ export function ToursPage() {
     </SiteLayout>
   );
 }
+
