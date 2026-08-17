@@ -1,4 +1,4 @@
-﻿:root{
+:root{
   --bg: #f4f7f8;
   --panel: #ffffff;
   --panel2: #f0f4f6;
@@ -1611,6 +1611,11 @@ input:focus, textarea:focus{
   background:#f59f00;
 }
 
+@media (max-width: 1100px){
+  :root{
+    --page-gutter: clamp(24px, 4vw, 40px);
+  }
+}
 @media (max-width: 900px){
   .hero__grid,
   .split,
@@ -1665,6 +1670,37 @@ input:focus, textarea:focus{
 }
 
 @media (max-width: 760px){
+  :root{
+    --page-gutter: 34px;
+  }
+
+  .hero--private .hero__copy,
+  .hero--shuttle .hero__copy,
+  .hero--rent .hero__copy,
+  .private-transport-main,
+  .shuttle-results{
+    min-width:0;
+  }
+
+  .transport-card,
+  .transport-highlight__card,
+  .rent-card,
+  .rent-highlight__card,
+  .benefit-card,
+  .requirement-box,
+  .shuttle-card,
+  .shuttle-mapCard,
+  .private-rate-card,
+  .private-map-card{
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+
+  .transport-list,
+  .rent-list{
+    padding-left: 20px;
+  }
   .feature__media,
   .service-card__media,
   .rent-card__media{
@@ -1672,7 +1708,7 @@ input:focus, textarea:focus{
   }
 
   .rate-panel{
-    padding: 12px;
+    padding: 16px;
   }
 
   .rate-tabs,
@@ -2830,7 +2866,7 @@ input:focus, textarea:focus{
 }
 @media (max-width: 760px){
   :root{
-    --page-gutter: 28px;
+    --page-gutter: 34px;
   }
 
   .container{
@@ -2922,5 +2958,83 @@ input:focus, textarea:focus{
 
   .language-switcher__buttons{
     flex:1;
+  }
+}
+html,
+body,
+#root{
+  max-width:100%;
+  overflow-x:hidden;
+}
+
+.transport-service-page{
+  max-width:100%;
+  overflow-x:clip;
+}
+
+@media (min-width: 761px) and (max-width: 1200px){
+  .transport-service-page .container{
+    width:min(var(--max), calc(100% - 96px));
+  }
+}
+
+@media (max-width: 760px){
+  .transport-service-page .hero,
+  .transport-service-page .section{
+    padding-inline:30px;
+  }
+
+  .transport-service-page .container{
+    width:100%;
+  }
+}
+
+@media (max-width: 420px){
+  .transport-service-page .hero,
+  .transport-service-page .section{
+    padding-inline:24px;
+  }
+}
+@media (min-width: 761px) and (max-width: 1200px){
+  .transport-service-page .rate-tableWrap{
+    overflow-x:visible;
+  }
+
+  .transport-service-page .rate-table{
+    min-width:0;
+    table-layout:fixed;
+  }
+
+  .transport-service-page .rate-table th,
+  .transport-service-page .rate-table td{
+    padding:12px 10px;
+  }
+
+  .transport-service-page .rate-table th:nth-child(1),
+  .transport-service-page .rate-table td:nth-child(1){
+    width:32%;
+  }
+
+  .transport-service-page .rate-table th:nth-child(2),
+  .transport-service-page .rate-table td:nth-child(2){
+    width:19%;
+  }
+
+  .transport-service-page .rate-table th:nth-child(3),
+  .transport-service-page .rate-table td:nth-child(3),
+  .transport-service-page .rate-table th:nth-child(4),
+  .transport-service-page .rate-table td:nth-child(4){
+    width:17%;
+  }
+
+  .transport-service-page .rate-table th:nth-child(5),
+  .transport-service-page .rate-table td:nth-child(5){
+    width:15%;
+  }
+
+  .transport-service-page .rate-addBtn{
+    width:100%;
+    min-width:0;
+    padding-inline:8px;
   }
 }

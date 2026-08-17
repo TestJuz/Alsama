@@ -12,7 +12,7 @@ export function ShuttlePage() {
       brandTo={routes.home}
       footerBackToTop="#"
     >
-      <main>
+      <main className="transport-service-page">
         <section className="hero hero--compact hero--image hero--shuttle" style={{ "--hero-image": `url(${asset("img/hero/3.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">

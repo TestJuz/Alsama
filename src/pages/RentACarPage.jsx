@@ -11,7 +11,7 @@ export function RentACarPage() {
       brandTo={routes.home}
       footerBackToTop="#"
     >
-      <main>
+      <main className="transport-service-page">
         <section className="hero hero--compact hero--image hero--rent" style={{ "--hero-image": `url(${asset("img/hero/2.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
