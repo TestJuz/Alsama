@@ -9,6 +9,7 @@ import {
   travelAssistantStats
 } from "../lib/travelAssistantData";
 import { asset } from "../lib/site";
+import { useLanguage } from "../context/LanguageContext";
 
 const TYPING_STEP_MS = 18;
 const TYPING_CHARS_PER_STEP = 3;
@@ -37,6 +38,7 @@ const suggestions = [
 ];
 
 function AssistantResult({ item, onNavigate }) {
+  const { t } = useLanguage();
   return (
     <article className="assistant-result">
       <div>
@@ -46,7 +48,7 @@ function AssistantResult({ item, onNavigate }) {
       </div>
       <div className="assistant-result__side">
         <strong>{item.price}</strong>
-        <Link to={item.href} onClick={onNavigate}>View more / Ver mas</Link>
+        <Link to={item.href} onClick={onNavigate}>{t("View more")}</Link>
       </div>
     </article>
   );
