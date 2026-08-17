@@ -2849,3 +2849,70 @@ input:focus, textarea:focus{
     width:calc(100vw - (var(--page-gutter) * 2));
   }
 }
+
+.language-switcher{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:38px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  background:var(--panel);
+  color:var(--muted);
+  padding:0 8px;
+}
+
+.language-switcher select{
+  border:0;
+  background:transparent;
+  color:var(--text);
+  font:inherit;
+  font-weight:800;
+  cursor:pointer;
+  outline:none;
+  padding:8px 2px;
+}
+
+.language-switcher:hover{
+  background:var(--panel2);
+  color:var(--text);
+}
+
+.google-translate-slot,
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#goog-gt-tt{
+  position:absolute!important;
+  left:-9999px!important;
+  width:1px!important;
+  height:1px!important;
+  overflow:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
+.goog-te-gadget,
+.goog-te-gadget span,
+.goog-te-gadget-simple{
+  height:0!important;
+  overflow:hidden!important;
+  color:transparent!important;
+  border:0!important;
+}
+
+body{
+  top:0!important;
+}
+
+@media (max-width: 760px){
+  .language-switcher{
+    width:100%;
+    justify-content:space-between;
+    padding:0 12px;
+  }
+
+  .language-switcher select{
+    flex:1;
+    text-align:right;
+  }
+}

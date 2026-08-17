@@ -1,5 +1,6 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { useLanguage } from "./context/LanguageContext";
 import { routes } from "./lib/site";
 
 const HomePage = lazy(() => import("./pages/HomePage").then((module) => ({ default: module.HomePage })));
@@ -13,20 +14,70 @@ const TourDetailPage = lazy(() => import("./pages/TourDetailPage").then((module)
 const HotelsPage = lazy(() => import("./pages/HotelsPage").then((module) => ({ default: module.HotelsPage })));
 
 const routeTitles = [
-  { path: routes.home, title: "Alsama Tours | Travel Services in Costa Rica" },
-  { path: routes.shuttle, title: "Shuttle Service | Alsama Tours" },
-  { path: routes.privateTransport, title: "Private Transport | Alsama Tours" },
-  { path: routes.rentACar, title: "Rent a Car | Alsama Tours" },
-  { path: routes.tours, title: "Tours | Alsama Tours" },
-  { path: `${routes.tours}/:tourSlug`, title: "Tour Detail | Alsama Tours" },
-  { path: routes.hotels, title: "Hotels | Alsama Tours" }
+  {
+    path: routes.home,
+    title: {
+      en: "Alsama Tours | Travel Services in Costa Rica",
+      es: "Alsama Tours | Servicios de viaje en Costa Rica",
+      fr: "Alsama Tours | Services de voyage au Costa Rica"
+    }
+  },
+  {
+    path: routes.shuttle,
+    title: {
+      en: "Shuttle Service | Alsama Tours",
+      es: "Servicio de shuttle | Alsama Tours",
+      fr: "Service de navette | Alsama Tours"
+    }
+  },
+  {
+    path: routes.privateTransport,
+    title: {
+      en: "Private Transport | Alsama Tours",
+      es: "Transporte privado | Alsama Tours",
+      fr: "Transport prive | Alsama Tours"
+    }
+  },
+  {
+    path: routes.rentACar,
+    title: {
+      en: "Rent a Car | Alsama Tours",
+      es: "Alquiler de autos | Alsama Tours",
+      fr: "Location de voiture | Alsama Tours"
+    }
+  },
+  {
+    path: routes.tours,
+    title: {
+      en: "Tours | Alsama Tours",
+      es: "Tours | Alsama Tours",
+      fr: "Excursions | Alsama Tours"
+    }
+  },
+  {
+    path: `${routes.tours}/:tourSlug`,
+    title: {
+      en: "Tour Detail | Alsama Tours",
+      es: "Detalle del tour | Alsama Tours",
+      fr: "Detail de l'excursion | Alsama Tours"
+    }
+  },
+  {
+    path: routes.hotels,
+    title: {
+      en: "Hotels | Alsama Tours",
+      es: "Hoteles | Alsama Tours",
+      fr: "Hotels | Alsama Tours"
+    }
+  }
 ];
 
 function ScrollManager() {
   const location = useLocation();
+  const { language } = useLanguage();
 
   useEffect(() => {
-    const nextTitle = routeTitles.find((item) => item.path === location.pathname)?.title;
+    const nextTitle = routeTitles.find((item) => item.path === location.pathname)?.title?.[language];
     if (nextTitle) {
       document.title = nextTitle;
     }
@@ -43,7 +94,7 @@ function ScrollManager() {
     }
 
     window.scrollTo({ top: 0, left: 0 });
-  }, [location.pathname, location.hash]);
+  }, [language, location.pathname, location.hash]);
 
   return null;
 }
