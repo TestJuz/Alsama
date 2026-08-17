@@ -3038,3 +3038,50 @@ body,
     padding-inline:8px;
   }
 }
+@media (max-width: 760px){
+  .travel-assistant{
+    left:16px;
+    bottom:16px;
+  }
+
+  .assistant-fab{
+    width:68px;
+    height:68px;
+    border-width:2px;
+    box-shadow:0 10px 22px rgba(31,42,48,.22);
+  }
+
+  .assistant-fab__badge{
+    min-width:22px;
+    height:22px;
+    border-width:2px;
+    font-size:11px;
+  }
+
+  .assistant-panel{
+    left:0;
+    bottom:78px;
+    width:calc(100vw - 32px);
+    max-height:calc(100vh - 108px);
+  }
+}
+@media (max-width: 760px){
+  body .travel-assistant{
+    left:14px;
+    bottom:8px;
+  }
+
+  body .assistant-fab{
+    width:60px;
+    height:60px;
+  }
+
+  body .assistant-fab__badge{
+    top:-3px;
+    right:-3px;
+  }
+
+  body .assistant-panel{
+    bottom:74px;
+  }
+}
