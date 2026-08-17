@@ -48,10 +48,3 @@ Re-optimizing dependencies because lockfile has changed
 [2m9:20:11 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
 [2m11:49:49 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
 [2m11:49:56 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
-[2m11:55:59 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/main.jsx[22m
-[2m11:55:59 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/SiteLayout.jsx[22m
-[2m11:56:28 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
-[2m11:56:40 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
-[2m11:56:57 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/main.jsx[22m
-[2m11:56:57 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/SiteLayout.jsx[22m
-[2m11:57:06 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m

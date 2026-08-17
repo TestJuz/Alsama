@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { CartWidget } from "./CartWidget";
-import { LanguageSwitcher } from "./LanguageSwitcher";
 import { TravelAssistant } from "./TravelAssistant";
 import { asset, homeLinks, routes, safetyPdf, serviceMenu } from "../lib/site";
 
@@ -81,7 +80,6 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
 
           <a className="nav__link" href={safetyHref} target="_blank" rel="noreferrer">Safety</a>
           <SmartLink to={contactTo} className="nav__link nav__cta">Contact</SmartLink>
-          <LanguageSwitcher />
         </nav>
       </div>
     </header>
