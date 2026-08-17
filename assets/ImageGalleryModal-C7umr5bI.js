@@ -1,4 +1,4 @@
-import{j as a}from"./index-BgVClgmD.js";import{j as i,X as g}from"./SiteLayout-Zh1b2lnr.js";/**
+import{j as a}from"./index-BbBoujGf.js";import{j as i,X as g}from"./SiteLayout-Xy0zu3Y1.js";/**
  * @license lucide-react v1.6.0 - ISC
  *
  * This source code is licensed under the ISC license.
