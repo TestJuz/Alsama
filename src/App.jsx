@@ -1,5 +1,7 @@
-import { Suspense, lazy, useEffect } from "react";
+﻿import { Suspense, lazy, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { useLanguage } from "./context/LanguageContext";
+import { getPageTitle } from "./lib/nativeI18n";
 import { routes } from "./lib/site";
 
 const HomePage = lazy(() => import("./pages/HomePage").then((module) => ({ default: module.HomePage })));
@@ -13,24 +15,27 @@ const TourDetailPage = lazy(() => import("./pages/TourDetailPage").then((module)
 const HotelsPage = lazy(() => import("./pages/HotelsPage").then((module) => ({ default: module.HotelsPage })));
 
 const routeTitles = [
-  { path: routes.home, title: "Alsama Tours | Travel Services in Costa Rica" },
-  { path: routes.shuttle, title: "Shuttle Service | Alsama Tours" },
-  { path: routes.privateTransport, title: "Private Transport | Alsama Tours" },
-  { path: routes.rentACar, title: "Rent a Car | Alsama Tours" },
-  { path: routes.tours, title: "Tours | Alsama Tours" },
-  { path: `${routes.tours}/:tourSlug`, title: "Tour Detail | Alsama Tours" },
-  { path: routes.hotels, title: "Hotels | Alsama Tours" }
+  { path: routes.home, key: "home" },
+  { path: routes.shuttle, key: "shuttle" },
+  { path: routes.privateTransport, key: "privateTransport" },
+  { path: routes.rentACar, key: "rentACar" },
+  { path: routes.tours, key: "tours" },
+  { path: `${routes.tours}/:tourSlug`, key: "tourDetail" },
+  { path: routes.hotels, key: "hotels" }
 ];
 
 function ScrollManager() {
   const location = useLocation();
+  const { language } = useLanguage();
 
   useEffect(() => {
-    const nextTitle = routeTitles.find((item) => item.path === location.pathname)?.title;
-    if (nextTitle) {
-      document.title = nextTitle;
+    const titleKey = routeTitles.find((item) => item.path === location.pathname)?.key;
+    if (titleKey) {
+      document.title = getPageTitle(titleKey, language);
     }
+  }, [language, location.pathname]);
 
+  useEffect(() => {
     if (location.hash) {
       const elementId = decodeURIComponent(location.hash.slice(1));
       window.setTimeout(() => {
@@ -47,7 +52,6 @@ function ScrollManager() {
 
   return null;
 }
-
 export function App() {
   return (
     <Suspense fallback={null}>
@@ -74,3 +78,4 @@ export function App() {
     </Suspense>
   );
 }
+

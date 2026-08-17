@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
 import { ImageGalleryModal } from "../components/ImageGalleryModal";
 import { SiteLayout } from "../components/SiteLayout";
 import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 import { findTourBySlug, getAllTours, getTourDetailPath, routes } from "../lib/site";
 
 function formatUSD(value) {
@@ -23,16 +25,18 @@ function uniqueImages(images) {
 
 export function TourDetailPage() {
   const { tourSlug } = useParams();
+  const navigate = useNavigate();
   const { addItem } = useCart();
+  const { language, t } = useLanguage();
   const [bookingOpen, setBookingOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(null);
   const tour = findTourBySlug(tourSlug);
 
   useEffect(() => {
     if (tour) {
-      document.title = `${tour.title} | Alsama Tours`;
+      document.title = `${t(tour.title)} | Alsama Tours`;
     }
-  }, [tour]);
+  }, [language, t, tour]);
 
   if (!tour) {
     return <Navigate replace to={routes.tours} />;
@@ -46,6 +50,15 @@ export function TourDetailPage() {
   const related = relatedTours.length ? relatedTours : fallbackRelated;
   const gallery = uniqueImages(tour.gallery?.length ? tour.gallery : [tour.image]);
   const detail = tour.detail;
+
+  function handleBack() {
+    if (window.history.length > 1) {
+      navigate(-1);
+      return;
+    }
+
+    navigate(routes.tours);
+  }
 
   function addTourToCart(cartItem) {
     addItem(cartItem);
@@ -63,18 +76,22 @@ export function TourDetailPage() {
         <section className="tour-detail-hero" style={{ "--tour-hero-image": `url(${tour.image})` }}>
           <div className="container tour-detail-hero__content">
             <div className="tour-breadcrumbs">
-              <Link to={routes.tours}>Tours</Link>
+              <button className="tour-back-button" type="button" onClick={handleBack} aria-label={t("Back")}>
+                <ArrowLeft size={16} aria-hidden="true" />
+                <span>{t("Back")}</span>
+              </button>
+              <Link to={routes.tours}>{t("Tours")}</Link>
               <span>/</span>
-              <span>{tour.title}</span>
+              <span>{t(tour.title)}</span>
             </div>
-            <p className="tour-detail-hero__eyebrow">{tour.originLabel}</p>
-            <h1>{tour.title}</h1>
-            <p>{detail.subtitle}</p>
-            <div className="tour-detail-hero__meta" aria-label="Tour details">
-              <span>{tour.durationText}</span>
-              <span>{tour.difficulty}</span>
-              {tour.people ? <span>{tour.people}</span> : null}
-              {tour.locations.map((place) => <span key={place}>{place}</span>)}
+            <p className="tour-detail-hero__eyebrow">{t(tour.originLabel)}</p>
+            <h1>{t(tour.title)}</h1>
+            <p>{t(detail.subtitle)}</p>
+            <div className="tour-detail-hero__meta" aria-label={t("Tour details")}>
+              <span>{t(tour.durationText)}</span>
+              <span>{t(tour.difficulty)}</span>
+              {tour.people ? <span>{t(tour.people)}</span> : null}
+              {tour.locations.map((place) => <span key={place}>{t(place)}</span>)}
             </div>
           </div>
         </section>
@@ -82,7 +99,7 @@ export function TourDetailPage() {
         <section className="section">
           <div className="container tour-detail-layout">
             <article className="tour-detail-main">
-              <div className="tour-detail-gallery" aria-label={`${tour.title} gallery`}>
+              <div className="tour-detail-gallery" aria-label={`${t(tour.title)} ${t("gallery")}`}>
                 <Swiper
                   modules={[A11y, Autoplay, Navigation, Pagination]}
                   className="tour-gallery-carousel"
@@ -96,88 +113,88 @@ export function TourDetailPage() {
                 >
                   {gallery.map((image, index) => (
                     <SwiperSlide key={image}>
-                      <button className="tour-gallery-carousel__zoom" type="button" style={{ "--tour-slide-image": `url(${image})` }} aria-label={`Open ${tour.title} image ${index + 1}`} onClick={() => setGalleryIndex(index)}>
-                        <img src={image} alt={`${tour.title} gallery ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
+                      <button className="tour-gallery-carousel__zoom" type="button" style={{ "--tour-slide-image": `url(${image})` }} aria-label={`${t("Open")} ${t(tour.title)} ${t("image")} ${index + 1}`} onClick={() => setGalleryIndex(index)}>
+                        <img src={image} alt={`${t(tour.title)} ${t("gallery")} ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
                       </button>
                     </SwiperSlide>
                   ))}
                 </Swiper>
               </div>
 
-              <nav className="tour-detail-tabs" aria-label="Tour sections">
-                <a href="#overview">Overview</a>
-                <a href="#cost">Cost</a>
-                <a href="#included">Included</a>
-                <a href="#recommendations">Recommendations</a>
+              <nav className="tour-detail-tabs" aria-label={t("Tour sections")}>
+                <a href="#overview">{t("Overview")}</a>
+                <a href="#cost">{t("Cost")}</a>
+                <a href="#included">{t("Included")}</a>
+                <a href="#recommendations">{t("Recommendations")}</a>
               </nav>
 
               <section className="tour-detail-section" id="overview">
-                <span className="tour-detail-kicker">Overview</span>
-                <h2>{tour.title}</h2>
-                {detail.overview.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                <span className="tour-detail-kicker">{t("Overview")}</span>
+                <h2>{t(tour.title)}</h2>
+                {detail.overview.map((paragraph) => <p key={paragraph}>{t(paragraph)}</p>)}
               </section>
 
               <section className="tour-detail-section">
-                <span className="tour-detail-kicker">Trip Highlights</span>
-                <h2>What to expect</h2>
+                <span className="tour-detail-kicker">{t("Trip Highlights")}</span>
+                <h2>{t("What to expect")}</h2>
                 <ul className="tour-detail-checklist tour-detail-checklist--columns">
-                  {detail.highlights.map((item) => <li key={item}>{item}</li>)}
+                  {detail.highlights.map((item) => <li key={item}>{t(item)}</li>)}
                 </ul>
               </section>
 
               <section className="tour-detail-section tour-detail-split" id="included">
                 <div>
-                  <span className="tour-detail-kicker">Included</span>
-                  <h2>Additional free services</h2>
+                  <span className="tour-detail-kicker">{t("Included")}</span>
+                  <h2>{t("Additional free services")}</h2>
                   <ul className="tour-detail-checklist">
-                    {detail.included.map((item) => <li key={item}>{item}</li>)}
+                    {detail.included.map((item) => <li key={item}>{t(item)}</li>)}
                   </ul>
                 </div>
                 <div>
-                  <span className="tour-detail-kicker">Optional</span>
-                  <h2>Additional paid services</h2>
+                  <span className="tour-detail-kicker">{t("Optional")}</span>
+                  <h2>{t("Additional paid services")}</h2>
                   <ul className="tour-detail-checklist">
-                    {detail.paid.map((item) => <li key={item}>{item}</li>)}
+                    {detail.paid.map((item) => <li key={item}>{t(item)}</li>)}
                   </ul>
                 </div>
               </section>
 
               <section className="tour-detail-section" id="recommendations">
-                <span className="tour-detail-kicker">Recommendations</span>
-                <h2>Before the tour</h2>
+                <span className="tour-detail-kicker">{t("Recommendations")}</span>
+                <h2>{t("Before the tour")}</h2>
                 <ul className="tour-detail-checklist tour-detail-checklist--columns">
-                  {detail.recommendations.map((item) => <li key={item}>{item}</li>)}
+                  {detail.recommendations.map((item) => <li key={item}>{t(item)}</li>)}
                 </ul>
               </section>
             </article>
 
-            <aside className="tour-booking-card" id="cost" aria-label="Tour price and booking">
-              <span className="tour-booking-card__label">Show Prices</span>
+            <aside className="tour-booking-card" id="cost" aria-label={t("Tour price and booking")}>
+              <span className="tour-booking-card__label">{t("Show Prices")}</span>
               <strong>{formatUSD(tour.price)}</strong>
-              <p>/ Adult</p>
+              <p>{t("/ Adult")}</p>
               <dl>
                 <div>
-                  <dt>Duration</dt>
-                  <dd>{tour.durationText}</dd>
+                  <dt>{t("Duration")}</dt>
+                  <dd>{t(tour.durationText)}</dd>
                 </div>
                 <div>
-                  <dt>Difficulty</dt>
-                  <dd>{tour.difficulty}</dd>
+                  <dt>{t("Difficulty")}</dt>
+                  <dd>{t(tour.difficulty)}</dd>
                 </div>
                 <div>
-                  <dt>Departure</dt>
-                  <dd>{tour.originLabel}</dd>
+                  <dt>{t("Departure")}</dt>
+                  <dd>{t(tour.originLabel)}</dd>
                 </div>
               </dl>
-              <button className="btn btn--primary" type="button" onClick={() => setBookingOpen(true)}>Add to cart</button>
-              <a className="btn btn--ghost" href="#contact">Need help with booking?</a>
+              <button className="btn btn--primary" type="button" onClick={() => setBookingOpen(true)}>{t("Add to cart")}</button>
+              <a className="btn btn--ghost" href="#contact">{t("Need help with booking?")}</a>
 
               <div className="tour-booking-card__departures">
-                <h3>Next departures</h3>
+                <h3>{t("Next departures")}</h3>
                 {tour.nextDepartures.map((item) => (
                   <div key={item.date}>
-                    <span>{item.date}</span>
-                    <strong>{item.status}</strong>
+                    <span>{t(item.date)}</span>
+                    <strong>{t(item.status)}</strong>
                   </div>
                 ))}
               </div>
@@ -189,20 +206,20 @@ export function TourDetailPage() {
           <div className="container">
             <div className="sectionHead">
               <div>
-                <h2>Related trips you might be interested in</h2>
-                <p className="muted">More tours that can be combined with transportation, hotels or rent a car.</p>
+                <h2>{t("Related trips you might be interested in")}</h2>
+                <p className="muted">{t("More tours that can be combined with transportation, hotels or rent a car.")}</p>
               </div>
-              <Link className="btn btn--ghost" to={routes.tours}>View all tours</Link>
+              <Link className="btn btn--ghost" to={routes.tours}>{t("View all tours")}</Link>
             </div>
             <div className="tour-related-grid">
               {related.map((item) => (
                 <article className="tour-related-card" key={item.slug}>
-                  <img src={item.image} alt={item.title} loading="lazy" />
+                  <img src={item.image} alt={t(item.title)} loading="lazy" />
                   <div>
                     <span>{formatUSD(item.price)}</span>
-                    <h3>{item.title}</h3>
-                    <p>{item.durationText} | {item.difficulty}</p>
-                    <Link to={getTourDetailPath(item)}>View trip</Link>
+                    <h3>{t(item.title)}</h3>
+                    <p>{t(item.durationText)} | {t(item.difficulty)}</p>
+                    <Link to={getTourDetailPath(item)}>{t("View trip")}</Link>
                   </div>
                 </article>
               ))}
@@ -220,7 +237,7 @@ export function TourDetailPage() {
 
         {galleryIndex !== null ? (
           <ImageGalleryModal
-            title={tour.title}
+            title={t(tour.title)}
             gallery={gallery}
             index={galleryIndex}
             onChangeIndex={setGalleryIndex}
@@ -229,9 +246,9 @@ export function TourDetailPage() {
         ) : null}
 
         <ContactForm
-          title={`Book ${tour.title}`}
-          text="Send us your dates, departure area and number of travelers. We can combine this tour with transport, hotels or rent a car."
-          placeholder={`I am interested in ${tour.title}. My travel dates are...`}
+          title={`${t("Book")} ${t(tour.title)}`}
+          text={t("Send us your dates, departure area and number of travelers. We can combine this tour with transport, hotels or rent a car.")}
+          placeholder={`${t("I am interested in")} ${t(tour.title)}. ${t("My travel dates are...")}`}
         />
       </main>
     </SiteLayout>

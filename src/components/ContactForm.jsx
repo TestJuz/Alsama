@@ -1,6 +1,7 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Mail, MessageSquareText, Send, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 
 const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
 const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
@@ -19,6 +20,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
   const [hint, setHint] = useState("");
   const [isSending, setIsSending] = useState(false);
   const { items, count, clearCart } = useCart();
+  const { t } = useLanguage();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -73,14 +75,14 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
     <section className="section section--alt" id="contact">
       <div className="container contact">
         <div className="contact__copy">
-          <span className="contact__eyebrow">Ready when you are</span>
-          <h2>{title}</h2>
-          <p className="muted">{text}</p>
+          <span className="contact__eyebrow">{t("Ready when you are")}</span>
+          <h2>{t(title)}</h2>
+          <p className="muted">{t(text)}</p>
           <div className="contact__note">
             <span className="contact__noteIcon" aria-hidden="true">
               <MessageSquareText size={18} />
             </span>
-            <p>Tell us where you are going, your dates and the kind of trip you have in mind.</p>
+            <p>{t("Tell us where you are going, your dates and the kind of trip you have in mind.")}</p>
           </div>
         </div>
 
@@ -88,32 +90,32 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
           <input type="text" name="_honey" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
 
           <label className="form__field">
-            <span>Name</span>
+            <span>{t("Name")}</span>
             <div className="form__control">
               <User size={18} aria-hidden="true" />
-              <input name="name" required placeholder="Your name" />
+              <input name="name" required placeholder={t("Your name")} />
             </div>
           </label>
           <label className="form__field">
-            <span>Email</span>
+            <span>{t("Email")}</span>
             <div className="form__control">
               <Mail size={18} aria-hidden="true" />
-              <input name="email" type="email" required placeholder="you@email.com" />
+              <input name="email" type="email" required placeholder={t("you@email.com")} />
             </div>
           </label>
           <label className="form__field form__field--message">
-            <span>Message</span>
+            <span>{t("Message")}</span>
             <div className="form__control form__control--textarea">
               <MessageSquareText size={18} aria-hidden="true" />
-              <textarea name="message" rows="5" required placeholder={placeholder}></textarea>
+              <textarea name="message" rows="5" required placeholder={t(placeholder)}></textarea>
             </div>
           </label>
 
           {items.length ? (
             <div className="form-cart">
               <div className="form-cart__head">
-                <strong>Selected items ({count})</strong>
-                <button type="button" onClick={clearCart}>Clear</button>
+                <strong>{t("Selected items")} ({count})</strong>
+                <button type="button" onClick={clearCart}>{t("Clear")}</button>
               </div>
               <ul>
                 {items.map((item) => (
@@ -127,7 +129,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
           ) : null}
 
           <button className="btn btn--primary form__submit" type="submit" disabled={isSending}>
-            {isSending ? "Sending..." : buttonLabel}
+            {isSending ? t("Sending...") : t(buttonLabel)}
             <Send size={17} aria-hidden="true" />
           </button>
           <p className="form__hint muted" role="status">{hint}</p>
