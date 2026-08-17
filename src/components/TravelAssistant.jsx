@@ -1,5 +1,5 @@
 import { Database, MessageCircle, Search, Send, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   answerTravelQuestion,
@@ -68,6 +68,7 @@ function AssistantContact({ contact }) {
 export function TravelAssistant() {
   const messagesRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const scrollLockRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("chat");
   const [question, setQuestion] = useState("");
@@ -88,28 +89,37 @@ export function TravelAssistant() {
     [catalogQuery, category]
   );
 
+  const restorePageScroll = useCallback(() => {
+    const lock = scrollLockRef.current;
+    if (!lock) return;
+
+    document.body.style.position = lock.position;
+    document.body.style.top = lock.top;
+    document.body.style.width = lock.width;
+    document.body.style.overflow = lock.overflow;
+    window.scrollTo(0, lock.scrollY);
+    scrollLockRef.current = null;
+  }, []);
+
   useEffect(() => {
-    if (!open) return;
+    if (!open || scrollLockRef.current) return;
 
     const scrollY = window.scrollY;
-    const previousBodyPosition = document.body.style.position;
-    const previousBodyTop = document.body.style.top;
-    const previousBodyWidth = document.body.style.width;
-    const previousBodyOverflow = document.body.style.overflow;
+    scrollLockRef.current = {
+      scrollY,
+      position: document.body.style.position,
+      top: document.body.style.top,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow
+    };
 
     document.body.style.position = "fixed";
     document.body.style.top = `-${scrollY}px`;
     document.body.style.width = "100%";
     document.body.style.overflow = "hidden";
 
-    return () => {
-      document.body.style.position = previousBodyPosition;
-      document.body.style.top = previousBodyTop;
-      document.body.style.width = previousBodyWidth;
-      document.body.style.overflow = previousBodyOverflow;
-      window.scrollTo(0, scrollY);
-    };
-  }, [open]);
+    return restorePageScroll;
+  }, [open, restorePageScroll]);
 
   useEffect(() => {
     if (!open || activeTab !== "chat") return;
@@ -131,6 +141,7 @@ export function TravelAssistant() {
   }, []);
 
   function closePanel() {
+    restorePageScroll();
     setOpen(false);
   }
 
