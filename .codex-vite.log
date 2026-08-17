@@ -20,3 +20,14 @@ Port 5173 is in use, trying another one...
 [2m8:38:29 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
 [2m8:38:34 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
 [2m8:39:40 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
+[2m8:41:43 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
+[2m8:45:26 PM[22m [36m[1m[vite][22m[39m [32mvite.config.js changed, restarting server...[39m
+Sites local sign-in: seedy@sites.test
+Re-optimizing dependencies because lockfile has changed
+[2m8:45:26 PM[22m [36m[1m[vite][22m[39m server restarted.
+[2m8:45:30 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:47:08 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:50:42 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx[22m
+[2m8:50:52 PM[22m [36m[1m[vite][22m[39m [32mvite.config.js changed, restarting server...[39m
+Re-optimizing dependencies because lockfile has changed
+[2m8:50:52 PM[22m [36m[1m[vite][22m[39m server restarted.
