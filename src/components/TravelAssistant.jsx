@@ -16,15 +16,29 @@ const TYPING_CHARS_PER_STEP = 3;
 const WHATSAPP_AGENT_URL = "https://wa.me/50661672539";
 
 function buildAgentContact(question, language) {
-  const isSpanish = language === "es";
-  const text = isSpanish
-    ? `Hola, necesito ayuda de un agente de Alsama. Mi pregunta fue: ${question}`
-    : `Hello, I need help from an Alsama agent. My question was: ${question}`;
+  const copy = {
+    es: {
+      text: `Hola, necesito ayuda de un agente de Alsama. Mi pregunta fue: ${question}`,
+      label: "Ponte en contacto con un agente",
+      description: "Enviar esta pregunta por WhatsApp"
+    },
+    fr: {
+      text: `Bonjour, j'ai besoin de l'aide d'un agent Alsama. Ma question etait: ${question}`,
+      label: "Contacter un agent",
+      description: "Envoyer cette question par WhatsApp"
+    },
+    en: {
+      text: `Hello, I need help from an Alsama agent. My question was: ${question}`,
+      label: "Contact an agent",
+      description: "Send this question on WhatsApp"
+    }
+  };
+  const selected = copy[language] || copy.en;
 
   return {
-    href: `${WHATSAPP_AGENT_URL}?text=${encodeURIComponent(text)}`,
-    label: isSpanish ? "Ponte en contacto con un agente" : "Contact an agent",
-    description: isSpanish ? "Enviar esta pregunta por WhatsApp" : "Send this question on WhatsApp"
+    href: `${WHATSAPP_AGENT_URL}?text=${encodeURIComponent(selected.text)}`,
+    label: selected.label,
+    description: selected.description
   };
 }
 
@@ -69,6 +83,7 @@ export function TravelAssistant() {
   const messagesRef = useRef(null);
   const typingTimeoutRef = useRef(null);
   const scrollLockRef = useRef(null);
+  const { language: pageLanguage } = useLanguage();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("chat");
   const [question, setQuestion] = useState("");
@@ -103,6 +118,7 @@ export function TravelAssistant() {
 
   useEffect(() => {
     if (!open || scrollLockRef.current) return;
+    if (!window.matchMedia("(max-width: 760px)").matches) return;
 
     const scrollY = window.scrollY;
     scrollLockRef.current = {
@@ -172,15 +188,15 @@ export function TravelAssistant() {
       window.clearTimeout(typingTimeoutRef.current);
     }
 
-    const language = getQuestionLanguage(value);
-    const baseAnswer = answerTravelQuestion(value);
+    const language = getQuestionLanguage(value, pageLanguage);
+    const baseAnswer = answerTravelQuestion(value, pageLanguage);
     const answer = baseAnswer.items?.length
       ? baseAnswer
       : { ...baseAnswer, contact: buildAgentContact(value, language) };
     setMessages((current) => [...current, { role: "user", body: value }]);
     setTyping({
       role: "assistant",
-      title: language === "es" ? "Alsama esta buscando" : "Alsama is checking",
+      title: language === "es" ? "Alsama esta buscando" : language === "fr" ? "Alsama verifie" : "Alsama is checking",
       body: "",
       items: [],
       done: false

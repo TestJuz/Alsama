@@ -330,6 +330,38 @@ const assistantCopy = {
     catalogBody: "Encontre esto en el catalogo:",
     catalogFallback: "Preguntame por tours, hoteles, rent a car, shuttles o transporte privado.",
     rentDescription: (period, basic, full) => `Tarifa ${period} con seguro basico ${basic} y full cover ${full}.`
+  },
+  fr: {
+    askTitle: "Posez-moi une question sur le catalogue",
+    askBody: "Vous pouvez demander des excursions, hotels, locations de voiture, navettes ou transports prives.",
+    hotelFound: "Options d'hotel trouvees",
+    hotelNotFound: "Aucun hotel trouve",
+    hotelBody: "J'ai trouve ces options d'hotel:",
+    hotelFallback: "Essayez une zone comme Arenal, Manuel Antonio, Monteverde, San Jose, Alajuela, Jaco, Guanacaste ou Caribe.",
+    rentTitle: "Tarifs de location de voiture",
+    rentBody: "Voici des options de location de voiture au tarif {period}:",
+    rentFallback: "Je n'ai pas trouve ce type de vehicule. Essayez economy, SUV, 4x4, Hilux, Toyota, Hiace ou automatique.",
+    shuttleFound: "Routes de navette partagee",
+    shuttleNotFound: "Aucune navette trouvee",
+    shuttleBody: "Ces routes de navette correspondent a votre question:",
+    shuttleFallback: "Essayez une route ou destination comme Arenal, Puerto Viejo, Cahuita, Santa Teresa ou Montezuma.",
+    privateFound: "Routes de transport prive",
+    privateNotFound: "Aucune route privee trouvee",
+    privateBody: "Ces routes de transport prive correspondent:",
+    privateFallback: "Essayez une destination comme Arenal, Manuel Antonio, Monteverde, Liberia, Jaco, Tamarindo ou Puerto Viejo.",
+    transportFound: "Options de transport",
+    transportNotFound: "Aucun transport trouve",
+    transportBody: "Ces options de navette et transport prive correspondent:",
+    transportFallback: "Essayez une destination comme Jaco, Arenal, Manuel Antonio, Monteverde, Santa Teresa, Puerto Viejo ou San Jose.",
+    tourFound: "Excursions recommandees",
+    tourNotFound: "Aucune excursion trouvee",
+    tourBody: "Je recommande ces excursions:",
+    tourFallback: "Essayez Jaco, San Jose, Manuel Antonio, Tortuga, rafting, plage, nature ou La Paz.",
+    catalogFound: "Resultats du catalogue",
+    catalogMore: "J'ai besoin d'un peu plus de detail",
+    catalogBody: "J'ai trouve ceci dans le catalogue:",
+    catalogFallback: "Demandez-moi des excursions, hotels, locations de voiture, navettes ou transports prives.",
+    rentDescription: (period, basic, full) => `Tarif ${period} avec assurance de base ${basic} et couverture complete ${full}.`
   }
 };
 
@@ -460,7 +492,8 @@ function searchTransportItems(query, limit = 8) {
   return [...privateItems.slice(0, limit), ...shuttleItems].slice(0, limit);
 }
 
-export function getQuestionLanguage(query) {
+export function getQuestionLanguage(query, preferredLanguage) {
+  if (["en", "es", "fr"].includes(preferredLanguage)) return preferredLanguage;
   const text = ` ${normalize(query)} `;
   return includesAnyWholeTerm(text, spanishSignals) || includesAny(text, spanishSignalPhrases) ? "es" : "en";
 }
@@ -478,6 +511,12 @@ function rentPeriodFromQuery(query) {
 }
 
 function periodLabel(period, language = "en") {
+  if (language === "fr") {
+    if (period === "semanal") return "hebdomadaire";
+    if (period === "mensual") return "mensuel";
+    return "journalier";
+  }
+
   if (language === "es") {
     if (period === "semanal") return "semanal";
     if (period === "mensual") return "mensual";
@@ -815,6 +854,24 @@ export const travelAssistantItems = [
   }))
 ];
 
+const recommendedTourTitles = ["Nature Combo", "Manuel Antonio", "City Bus"];
+const recommendationTerms = [
+  "recommend", "recommended", "recommendation", "suggest", "best", "top",
+  "recomienda", "recomiendas", "recomendar", "recomendacion", "recomendaciones", "recomendame", "recomiendame", "sugiere", "sugieres", "mejores",
+  "recommande", "recommandez", "conseille", "conseilles", "conseiller", "meilleures", "meilleurs"
+];
+
+function getRecommendedTourItems() {
+  return recommendedTourTitles
+    .map((title) => travelAssistantItems.find((item) => item.type === "tour" && item.label === title))
+    .filter(Boolean);
+}
+
+function hasGenericTourRecommendationIntent(text) {
+  const wantsTour = includesAnyWholeTerm(text, ["tour", "tours", "excursion", "excursions", "actividad", "actividades"]);
+  const wantsRecommendation = includesAnyWholeTerm(text, recommendationTerms);
+  return wantsTour && wantsRecommendation;
+}
 export function searchTravelAssistantItems(query, category = "all", limit = 12) {
   const terms = getSearchTerms(query, category);
   const termOptions = terms.map(getTermOptions);
@@ -843,10 +900,10 @@ function summarizeItems(items) {
     .join("\n");
 }
 
-export function answerTravelQuestion(question) {
+export function answerTravelQuestion(question, preferredLanguage) {
   const text = normalize(question);
-  const language = getQuestionLanguage(question);
-  const copy = assistantCopy[language];
+  const language = getQuestionLanguage(question, preferredLanguage);
+  const copy = assistantCopy[language] || assistantCopy.en;
 
   if (!text.trim()) {
     return {
@@ -926,10 +983,12 @@ export function answerTravelQuestion(question) {
 
   if (hasTourQuestionIntent(text)) {
     const originLabel = getTourOriginFilter(question);
-    const items = filterToursByOrigin(searchTravelAssistantItems(question, "tour", 8), originLabel).slice(0, 6);
+    const recommendedItems = getRecommendedTourItems();
+    const matchedItems = filterToursByOrigin(searchTravelAssistantItems(question, "tour", 8), originLabel).slice(0, 6);
+    const items = hasGenericTourRecommendationIntent(text) || !matchedItems.length ? recommendedItems : matchedItems;
     return {
-      title: items.length ? copy.tourFound : copy.tourNotFound,
-      body: items.length ? `${copy.tourBody}\n${summarizeItems(items)}` : copy.tourFallback,
+      title: copy.tourFound,
+      body: `${copy.tourBody}\n${summarizeItems(items)}`,
       items
     };
   }
@@ -941,4 +1000,3 @@ export function answerTravelQuestion(question) {
     items
   };
 }
-
