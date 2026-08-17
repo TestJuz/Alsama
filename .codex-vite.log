@@ -31,3 +31,19 @@ Re-optimizing dependencies because lockfile has changed
 [2m8:50:52 PM[22m [36m[1m[vite][22m[39m [32mvite.config.js changed, restarting server...[39m
 Re-optimizing dependencies because lockfile has changed
 [2m8:50:52 PM[22m [36m[1m[vite][22m[39m server restarted.
+[2m9:07:43 PM[22m [36m[1m[vite][22m[39m [32mvite.config.js changed, restarting server...[39m
+[2m9:07:43 PM[22m [36m[1m[vite][22m[39m server restarted.
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5174[22m/Alsama/[39m
+[2m9:07:49 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
+[2m9:08:13 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
+[2m9:08:20 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
+[2m9:16:22 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/TourBookingModal.jsx[22m
+[2m9:16:57 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/RentACarRates.jsx[22m
+[2m9:17:52 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/CartWidget.jsx[22m
+[2m9:18:38 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/TourBookingModal.jsx[22m
+[2m9:18:38 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/RentACarRates.jsx[22m
+[2m9:19:13 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/TourBookingModal.jsx[22m
+[2m9:19:13 PM[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/RentACarRates.jsx[22m
+[2m9:20:11 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
+[2m11:49:49 PM[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m

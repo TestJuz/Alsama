@@ -12,6 +12,11 @@ import { ContactForm } from "../components/ContactForm";
 import { SiteLayout } from "../components/SiteLayout";
 import { useCart } from "../context/CartContext";
 import {
+  getTodayDateInputValue,
+  isDateBeforeMinimumInput,
+  SAME_DAY_OR_FUTURE_ERROR
+} from "../lib/bookingDates";
+import {
   getPrivateTransportPrice,
   getPrivateTransportPriceLabel,
   privateTransportRoutes
@@ -25,19 +30,6 @@ function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
-function todayInputValue() {
-  const today = new Date();
-  const offsetDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000);
-  return offsetDate.toISOString().slice(0, 10);
-}
-
-function isPastDate(value) {
-  if (!value) return false;
-  const today = new Date(`${todayInputValue()}T00:00`);
-  const selected = new Date(`${value}T00:00`);
-  return !Number.isNaN(selected.getTime()) && selected < today;
-}
-
 export function PrivateTransportPage() {
   const { addItem } = useCart();
   const [searchParams] = useSearchParams();
@@ -47,7 +39,7 @@ export function PrivateTransportPage() {
   const [draft, setDraft] = useState({
     passengers: 2,
     hotel: "",
-    departureDate: todayInputValue()
+    departureDate: getTodayDateInputValue()
   });
 
   useEffect(() => {
@@ -73,14 +65,15 @@ export function PrivateTransportPage() {
   const selectedPrice = selectedRoute
     ? getPrivateTransportPrice(selectedRoute, draft.passengers)
     : undefined;
-  const selectedHasPastDate = isPastDate(draft.departureDate);
+  const minTransportDate = getTodayDateInputValue();
+  const selectedHasPastDate = isDateBeforeMinimumInput(draft.departureDate, minTransportDate);
 
   function openRequest(route) {
     setSelectedRoute(route);
     setDraft({
       passengers: 2,
       hotel: "",
-      departureDate: todayInputValue()
+      departureDate: getTodayDateInputValue()
     });
   }
 
@@ -351,7 +344,7 @@ export function PrivateTransportPage() {
               <input
                 required
                 type="date"
-                min={todayInputValue()}
+                min={minTransportDate}
                 value={draft.departureDate}
                 onChange={(event) => updateDraft("departureDate", event.target.value)}
               />
@@ -369,7 +362,7 @@ export function PrivateTransportPage() {
             </div>
 
             {selectedHasPastDate ? (
-              <p className="rate-modal__error" role="alert">Please select today or a future date.</p>
+              <p className="rate-modal__error" role="alert">{SAME_DAY_OR_FUTURE_ERROR}</p>
             ) : null}
 
             {typeof selectedPrice !== "number" ? (

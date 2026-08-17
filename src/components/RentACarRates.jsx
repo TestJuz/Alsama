@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import {
+  getOneBusinessDayAdvanceDateTimeInputValue,
+  isDateTimeBeforeMinimumInput
+} from "../lib/bookingDates";
 import { rentACarRates } from "../lib/rentacarRates";
 
 const periods = [
@@ -37,17 +41,6 @@ function matchesTransmission(value, selectedTransmission) {
   if (!selectedTransmission) return true;
   if (value === "MAN/AUT") return selectedTransmission === "MANUAL" || selectedTransmission === "AUTOMATICO";
   return transmissionLabel(value) === selectedTransmission;
-}
-
-function toDateTimeInputValue(date) {
-  const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  return offsetDate.toISOString().slice(0, 16);
-}
-
-function startOfToday() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today;
 }
 
 export function RentACarRates() {
@@ -112,18 +105,15 @@ export function RentACarRates() {
 
   const cheapest = filteredRates[0];
   const periodLabel = periods.find((item) => item.value === period)?.label || period;
-  const minDateTime = toDateTimeInputValue(startOfToday());
+  const minDateTime = getOneBusinessDayAdvanceDateTimeInputValue();
 
   function getRentalDays() {
     const start = new Date(requestDetails.startDateTime);
     const end = new Date(requestDetails.endDateTime);
-    const today = startOfToday();
-
     if (
       Number.isNaN(start.getTime()) ||
       Number.isNaN(end.getTime()) ||
-      start < today ||
-      end < today ||
+      isDateTimeBeforeMinimumInput(requestDetails.startDateTime, minDateTime) ||
       end < start
     ) {
       return 0;

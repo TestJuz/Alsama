@@ -12,5 +12,5 @@ export default defineConfig(({ command }) => ({
   optimizeDeps: {
     include: ["swiper/react", "swiper/modules"]
   },
-  base: "/"
+  base: "/Alsama/"
 }));

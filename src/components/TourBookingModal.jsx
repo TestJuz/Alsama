@@ -1,27 +1,14 @@
 import { useMemo, useState } from "react";
+import {
+  getOneBusinessDayAdvanceDateInputValue,
+  isDateBeforeMinimumInput,
+  ONE_BUSINESS_DAY_NOTICE_ERROR
+} from "../lib/bookingDates";
 import { createTourCartItem, getTourBookingTotal, getTourPassengerCounts } from "../lib/tourBooking";
 
 function formatUSD(value) {
   if (typeof value !== "number") return "";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
-}
-
-function startOfToday() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today;
-}
-
-function minDateValue() {
-  const today = startOfToday();
-  const offsetDate = new Date(today.getTime() - today.getTimezoneOffset() * 60000);
-  return offsetDate.toISOString().slice(0, 10);
-}
-
-function hasPastDate(date) {
-  if (!date) return false;
-  const selected = new Date(`${date}T00:00`);
-  return !Number.isNaN(selected.getTime()) && selected < startOfToday();
 }
 
 export function TourBookingModal({ tour, onClose, onAdd }) {
@@ -32,8 +19,8 @@ export function TourBookingModal({ tour, onClose, onAdd }) {
     hotel: ""
   });
 
-  const minDate = useMemo(() => minDateValue(), []);
-  const pastDate = hasPastDate(details.tourDate);
+  const minDate = useMemo(() => getOneBusinessDayAdvanceDateInputValue(), []);
+  const dateTooSoon = isDateBeforeMinimumInput(details.tourDate, minDate);
   const total = getTourBookingTotal(tour, details);
   const { adults, children, totalPassengers } = getTourPassengerCounts(details);
 
@@ -43,7 +30,7 @@ export function TourBookingModal({ tour, onClose, onAdd }) {
 
   function submit(event) {
     event.preventDefault();
-    if (!details.tourDate || !details.hotel.trim() || pastDate) return;
+    if (!details.tourDate || !details.hotel.trim() || dateTooSoon) return;
     onAdd(createTourCartItem(tour, details));
   }
 
@@ -124,10 +111,10 @@ export function TourBookingModal({ tour, onClose, onAdd }) {
         <p className="rate-modal__note muted">
           Calculation uses the listed tour price per person for {adults} adult{adults === 1 ? "" : "s"} and {children} child{children === 1 ? "" : "ren"}.
         </p>
-        {pastDate ? <p className="rate-modal__error" role="alert">Please select today or a future date.</p> : null}
+        {dateTooSoon ? <p className="rate-modal__error" role="alert">{ONE_BUSINESS_DAY_NOTICE_ERROR}</p> : null}
 
         <div className="rate-modal__actions">
-          <button className="btn btn--primary" type="submit" disabled={!details.tourDate || !details.hotel.trim() || pastDate}>Add to cart</button>
+          <button className="btn btn--primary" type="submit" disabled={!details.tourDate || !details.hotel.trim() || dateTooSoon}>Add to cart</button>
           <button className="btn btn--ghost" type="button" onClick={onClose}>Cancel</button>
         </div>
       </form>

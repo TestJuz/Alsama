@@ -1,6 +1,15 @@
 import { Mail, Pencil, Phone, Send, ShoppingCart, Trash2, User, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import {
+  getOneBusinessDayAdvanceDateInputValue,
+  getOneBusinessDayAdvanceDateTimeInputValue,
+  getTodayDateInputValue,
+  isDateBeforeMinimumInput,
+  isDateTimeBeforeMinimumInput,
+  ONE_BUSINESS_DAY_NOTICE_ERROR,
+  SAME_DAY_OR_FUTURE_ERROR
+} from "../lib/bookingDates";
 import { buildTourMeta, getTourBookingTotal } from "../lib/tourBooking";
 
 const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
@@ -50,27 +59,15 @@ function getPrivateTransportPriceFromDetails(details, passengers) {
   return typeof rates.pax_6_mas === "number" ? rates.pax_6_mas : undefined;
 }
 
-function startOfToday() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today;
-}
 
-function toDateTimeInputValue(date) {
-  const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  return offsetDate.toISOString().slice(0, 16);
-}
-
-function getRentalDays(startDateTime, endDateTime) {
+function getRentalDays(startDateTime, endDateTime, minimumStartDateTime) {
   const start = new Date(startDateTime);
   const end = new Date(endDateTime);
-  const today = startOfToday();
 
   if (
     Number.isNaN(start.getTime()) ||
     Number.isNaN(end.getTime()) ||
-    start < today ||
-    end < today ||
+    isDateTimeBeforeMinimumInput(startDateTime, minimumStartDateTime) ||
     end < start
   ) {
     return 0;
@@ -107,22 +104,11 @@ function getHotelNights(checkIn, checkOut) {
   return Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
 }
 
-function hasPastHotelDate(checkIn, checkOut) {
-  const today = startOfToday();
-  const start = checkIn ? new Date(`${checkIn}T00:00`) : null;
-  const end = checkOut ? new Date(`${checkOut}T00:00`) : null;
-
-  return Boolean(
-    (start && !Number.isNaN(start.getTime()) && start < today) ||
-    (end && !Number.isNaN(end.getTime()) && end < today)
+function hasHotelDateBeforeMinimum(checkIn, checkOut, minimumDate) {
+  return (
+    isDateBeforeMinimumInput(checkIn, minimumDate) ||
+    isDateBeforeMinimumInput(checkOut, minimumDate)
   );
-}
-
-function hasPastDate(date) {
-  if (!date) return false;
-  const today = startOfToday();
-  const selected = new Date(`${date}T00:00`);
-  return !Number.isNaN(selected.getTime()) && selected < today;
 }
 
 export function CartWidget() {
@@ -133,7 +119,9 @@ export function CartWidget() {
   const [requestOpen, setRequestOpen] = useState(false);
   const [requestHint, setRequestHint] = useState("");
   const [requestSending, setRequestSending] = useState(false);
-  const minDateTime = toDateTimeInputValue(startOfToday());
+  const minGeneralDate = getOneBusinessDayAdvanceDateInputValue();
+  const minRentDateTime = getOneBusinessDayAdvanceDateTimeInputValue();
+  const minTransportDate = getTodayDateInputValue();
 
   function openRequest() {
     setOpen(false);
@@ -237,7 +225,7 @@ export function CartWidget() {
     if (editingItem.type === "Hotel" && editingItem.details && Array.isArray(editingItem.details.rooms)) {
       const room = editingItem.details.rooms.find((item) => item.tipo === draft.roomType) || editingItem.details.rooms[0];
       const nights = getHotelNights(draft.checkIn, draft.checkOut);
-      if (!nights || hasPastHotelDate(draft.checkIn, draft.checkOut)) return;
+      if (!nights || hasHotelDateBeforeMinimum(draft.checkIn, draft.checkOut, minGeneralDate)) return;
 
       const nightlyRate = getHotelRoomPrice(room);
       const total = typeof nightlyRate === "number" ? nightlyRate * nights : undefined;
@@ -276,7 +264,7 @@ export function CartWidget() {
     }
 
     if (editingItem.type === "Tour" && editingItem.details) {
-      if (!draft.tourDate || !draft.hotel.trim() || hasPastDate(draft.tourDate)) return;
+      if (!draft.tourDate || !draft.hotel.trim() || isDateBeforeMinimumInput(draft.tourDate, minGeneralDate)) return;
 
       const adults = Math.max(1, Number(draft.adults) || 1);
       const children = Math.max(0, Number(draft.children) || 0);
@@ -302,7 +290,7 @@ export function CartWidget() {
 
     if (editingItem.type !== "Rent a car" || !editingItem.details) {
       if (editingItem.type === "Private transport" && editingItem.details) {
-        if (hasPastDate(draft.departureDate)) return;
+        if (isDateBeforeMinimumInput(draft.departureDate, minTransportDate)) return;
 
         const passengers = Math.max(1, Number(draft.passengers) || 1);
         const total = getPrivateTransportPriceFromDetails(editingItem.details, passengers);
@@ -335,7 +323,7 @@ export function CartWidget() {
       return;
     }
 
-    const rentalDays = getRentalDays(draft.startDateTime, draft.endDateTime);
+    const rentalDays = getRentalDays(draft.startDateTime, draft.endDateTime, minRentDateTime);
     const periodError = getMinimumPeriodError(editingItem.details.period, rentalDays);
     if (!rentalDays || periodError) return;
 
@@ -375,7 +363,7 @@ export function CartWidget() {
     closeEdit();
   }
 
-  const editDays = draft ? getRentalDays(draft.startDateTime, draft.endDateTime) : 0;
+  const editDays = draft ? getRentalDays(draft.startDateTime, draft.endDateTime, minRentDateTime) : 0;
   const editPeriodError = editingItem?.details ? getMinimumPeriodError(editingItem.details.period, editDays) : "";
   const editUnits = editingItem?.details ? getBillingUnits(editingItem.details.period, editDays) : 0;
   const editPrice = editingItem?.type === "Rent a car" && editingItem?.details && draft
@@ -385,16 +373,16 @@ export function CartWidget() {
     ? editingItem.details.rooms.find((item) => item.tipo === draft.roomType) || editingItem.details.rooms[0]
     : null;
   const editHotelNights = editingItem?.type === "Hotel" && draft ? getHotelNights(draft.checkIn, draft.checkOut) : 0;
-  const editHotelHasPastDate = editingItem?.type === "Hotel" && draft ? hasPastHotelDate(draft.checkIn, draft.checkOut) : false;
+  const editHotelHasPastDate = editingItem?.type === "Hotel" && draft ? hasHotelDateBeforeMinimum(draft.checkIn, draft.checkOut, minGeneralDate) : false;
   const editHotelNightlyRate = editHotelRoom ? getHotelRoomPrice(editHotelRoom) : undefined;
   const editHotelPrice = editHotelRoom && editHotelNights && typeof editHotelNightlyRate === "number"
     ? editHotelNightlyRate * editHotelNights
     : undefined;
-  const editPrivateHasPastDate = editingItem?.type === "Private transport" && draft ? hasPastDate(draft.departureDate) : false;
+  const editPrivateHasPastDate = editingItem?.type === "Private transport" && draft ? isDateBeforeMinimumInput(draft.departureDate, minTransportDate) : false;
   const editPrivatePrice = editingItem?.type === "Private transport" && editingItem?.details && draft
     ? getPrivateTransportPriceFromDetails(editingItem.details, draft.passengers)
     : undefined;
-  const editTourHasPastDate = editingItem?.type === "Tour" && draft ? hasPastDate(draft.tourDate) : false;
+  const editTourHasPastDate = editingItem?.type === "Tour" && draft ? isDateBeforeMinimumInput(draft.tourDate, minGeneralDate) : false;
   const editTourPrice = editingItem?.type === "Tour" && editingItem?.details && draft
     ? getTourBookingTotal({ price: editingItem.details.basePrice }, draft)
     : undefined;
@@ -606,7 +594,7 @@ export function CartWidget() {
                     <input
                       required
                       type="datetime-local"
-                      min={minDateTime}
+                      min={minRentDateTime}
                       value={draft.startDateTime}
                       onChange={(event) => updateDraft("startDateTime", event.target.value)}
                     />
@@ -617,7 +605,7 @@ export function CartWidget() {
                     <input
                       required
                       type="datetime-local"
-                      min={draft.startDateTime || minDateTime}
+                      min={draft.startDateTime || minRentDateTime}
                       value={draft.endDateTime}
                       onChange={(event) => updateDraft("endDateTime", event.target.value)}
                     />
@@ -680,7 +668,7 @@ export function CartWidget() {
                     <input
                       required
                       type="date"
-                      min={toDateTimeInputValue(startOfToday()).slice(0, 10)}
+                      min={minGeneralDate}
                       value={draft.checkIn}
                       onChange={(event) => updateDraft("checkIn", event.target.value)}
                     />
@@ -691,7 +679,7 @@ export function CartWidget() {
                     <input
                       required
                       type="date"
-                      min={draft.checkIn || toDateTimeInputValue(startOfToday()).slice(0, 10)}
+                      min={draft.checkIn || minGeneralDate}
                       value={draft.checkOut}
                       onChange={(event) => updateDraft("checkOut", event.target.value)}
                     />
@@ -709,7 +697,7 @@ export function CartWidget() {
                   </div>
                 </div>
 
-                {editHotelHasPastDate ? <p className="rate-modal__error" role="alert">Please select today or a future date.</p> : null}
+                {editHotelHasPastDate ? <p className="rate-modal__error" role="alert">{ONE_BUSINESS_DAY_NOTICE_ERROR}</p> : null}
               </>
             ) : null}
 
@@ -745,7 +733,7 @@ export function CartWidget() {
                     <input
                       required
                       type="date"
-                      min={toDateTimeInputValue(startOfToday()).slice(0, 10)}
+                      min={minGeneralDate}
                       value={draft.tourDate}
                       onChange={(event) => updateDraft("tourDate", event.target.value)}
                     />
@@ -776,7 +764,7 @@ export function CartWidget() {
                   </div>
                 </div>
 
-                {editTourHasPastDate ? <p className="rate-modal__error" role="alert">Please select today or a future date.</p> : null}
+                {editTourHasPastDate ? <p className="rate-modal__error" role="alert">{ONE_BUSINESS_DAY_NOTICE_ERROR}</p> : null}
               </>
             ) : null}
 
@@ -809,7 +797,7 @@ export function CartWidget() {
                   <input
                     required
                     type="date"
-                    min={toDateTimeInputValue(startOfToday()).slice(0, 10)}
+                    min={minTransportDate}
                     value={draft.departureDate}
                     onChange={(event) => updateDraft("departureDate", event.target.value)}
                   />
@@ -826,7 +814,7 @@ export function CartWidget() {
                   </div>
                 </div>
 
-                {editPrivateHasPastDate ? <p className="rate-modal__error" role="alert">Please select today or a future date.</p> : null}
+                {editPrivateHasPastDate ? <p className="rate-modal__error" role="alert">{SAME_DAY_OR_FUTURE_ERROR}</p> : null}
               </>
             ) : null}
 

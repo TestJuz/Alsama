@@ -11,6 +11,11 @@ import { ImageGalleryModal } from "../components/ImageGalleryModal";
 import { SiteLayout } from "../components/SiteLayout";
 import { useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import {
+  getOneBusinessDayAdvanceDateInputValue,
+  isDateBeforeMinimumInput,
+  ONE_BUSINESS_DAY_NOTICE_ERROR
+} from "../lib/bookingDates";
 import { hotelZones } from "../lib/hotels";
 import { asset, routes } from "../lib/site";
 
@@ -24,17 +29,6 @@ function getHotelRoomPrice(room) {
   if (typeof room.alta === "number") return room.alta;
   if (typeof room.verde === "number") return room.verde;
   return undefined;
-}
-
-function toDateInputValue(date) {
-  const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  return offsetDate.toISOString().slice(0, 10);
-}
-
-function startOfToday() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  return today;
 }
 
 function getHotelNights(checkIn, checkOut) {
@@ -52,14 +46,10 @@ function getHotelNights(checkIn, checkOut) {
   return Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
 }
 
-function hasPastHotelDate(checkIn, checkOut) {
-  const today = startOfToday();
-  const start = checkIn ? new Date(`${checkIn}T00:00`) : null;
-  const end = checkOut ? new Date(`${checkOut}T00:00`) : null;
-
-  return Boolean(
-    (start && !Number.isNaN(start.getTime()) && start < today) ||
-    (end && !Number.isNaN(end.getTime()) && end < today)
+function hasHotelDateBeforeMinimum(checkIn, checkOut, minimumDate) {
+  return (
+    isDateBeforeMinimumInput(checkIn, minimumDate) ||
+    isDateBeforeMinimumInput(checkOut, minimumDate)
   );
 }
 
@@ -114,9 +104,9 @@ function HotelRequestModal({
   const room = hotel.habitaciones.find((item) => item.tipo === details.roomType) || hotel.habitaciones[0];
   const price = getHotelRoomPrice(room);
   const nights = getHotelNights(details.checkIn, details.checkOut);
-  const hasPastDate = hasPastHotelDate(details.checkIn, details.checkOut);
+  const minDate = getOneBusinessDayAdvanceDateInputValue();
+  const dateTooSoon = hasHotelDateBeforeMinimum(details.checkIn, details.checkOut, minDate);
   const total = typeof price === "number" ? price * nights : undefined;
-  const minDate = toDateInputValue(startOfToday());
 
   return (
     <div className="rate-modal" role="dialog" aria-modal="true" aria-labelledby="hotelModalTitle">
@@ -203,8 +193,8 @@ function HotelRequestModal({
           </div>
         </div>
 
-        {hasPastDate ? (
-          <p className="rate-modal__error" role="alert">Please select today or a future date.</p>
+        {dateTooSoon ? (
+          <p className="rate-modal__error" role="alert">{ONE_BUSINESS_DAY_NOTICE_ERROR}</p>
         ) : null}
 
         {typeof price !== "number" ? (
@@ -212,7 +202,7 @@ function HotelRequestModal({
         ) : null}
 
         <div className="rate-modal__actions">
-          <button className="btn btn--primary" type="submit" disabled={!nights || hasPastDate}>Add to cart</button>
+          <button className="btn btn--primary" type="submit" disabled={!nights || dateTooSoon}>Add to cart</button>
           <button className="btn btn--ghost" type="button" onClick={onClose}>Cancel</button>
         </div>
       </form>
@@ -310,7 +300,8 @@ export function HotelsPage() {
     const room = hotel.habitaciones.find((item) => item.tipo === hotelRequestDetails.roomType) || hotelRequest.room;
     const price = getHotelRoomPrice(room);
     const nights = getHotelNights(hotelRequestDetails.checkIn, hotelRequestDetails.checkOut);
-    if (!nights || hasPastHotelDate(hotelRequestDetails.checkIn, hotelRequestDetails.checkOut)) return;
+    const minimumDate = getOneBusinessDayAdvanceDateInputValue();
+    if (!nights || hasHotelDateBeforeMinimum(hotelRequestDetails.checkIn, hotelRequestDetails.checkOut, minimumDate)) return;
 
     const total = typeof price === "number" ? price * nights : undefined;
 
