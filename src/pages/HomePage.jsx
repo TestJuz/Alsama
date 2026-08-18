@@ -92,6 +92,8 @@ const travelServices = [
     text: "Beach, wildlife, rainforest and adventure days from key areas.",
     image: asset("img/gallery/Day_Tour.webp"),
     alt: "Tortuga Island day tour in Costa Rica",
+    to: routes.tours,
+    cta: "View tours options",
     tag: "Experiences"
   }
 ];
@@ -213,6 +215,13 @@ export function HomePage() {
           </div>
         </section>
 
+        <FeaturedToursSection
+          sanJoseTours={sanJoseFeaturedTours}
+          jacoTours={jacoFeaturedTours}
+          sanJoseHref={`${routes.tours}#from-san-jose`}
+          jacoHref={`${routes.tours}#from-jaco`}
+        />
+
         <section className="section">
           <div className="container">
             <div className="sectionHead">
@@ -316,12 +325,7 @@ export function HomePage() {
           </div>
         </section>
 
-        <FeaturedToursSection
-          sanJoseTours={sanJoseFeaturedTours}
-          jacoTours={jacoFeaturedTours}
-          sanJoseHref={`${routes.tours}#from-san-jose`}
-          jacoHref={`${routes.tours}#from-jaco`}
-        />
+
 
         <ContactForm
           text="Tell us your travel dates, destinations and which services you need."
