@@ -275,11 +275,6 @@ export function HomePage() {
                   <span className="rent-card__tag">Economy</span>
                   <h3>Compact city option</h3>
                   <p className="muted">Ideal for couples or solo travelers moving between San Jose, beaches and nearby towns.</p>
-                  <ul className="rent-list">
-                    <li>Fuel efficient</li>
-                    <li>Easy parking</li>
-                    <li>Best for paved routes</li>
-                  </ul>
                 </div>
               </article>
               <article className="rent-card rent-card--image">
@@ -288,11 +283,6 @@ export function HomePage() {
                   <span className="rent-card__tag">SUV</span>
                   <h3>More space and comfort</h3>
                   <p className="muted">Recommended for families, luggage-heavy itineraries and longer transfers between destinations.</p>
-                  <ul className="rent-list">
-                    <li>More room for luggage</li>
-                    <li>Comfort for long drives</li>
-                    <li>Good all-around choice</li>
-                  </ul>
                 </div>
               </article>
               <article className="rent-card rent-card--image">
@@ -301,11 +291,6 @@ export function HomePage() {
                   <span className="rent-card__tag">4x4</span>
                   <h3>Adventure-ready vehicle</h3>
                   <p className="muted">For routes that demand extra confidence during mountain, rain-season or rural travel.</p>
-                  <ul className="rent-list">
-                    <li>Better road clearance</li>
-                    <li>Useful for remote areas</li>
-                    <li>Great for flexible routes</li>
-                  </ul>
                 </div>
               </article>
               <article className="rent-card rent-card--image">
@@ -314,11 +299,6 @@ export function HomePage() {
                   <span className="rent-card__tag">Van</span>
                   <h3>Group transportation</h3>
                   <p className="muted">A practical option for large families, private groups and vacation packages with extra luggage.</p>
-                  <ul className="rent-list">
-                    <li>More passenger capacity</li>
-                    <li>Better for group trips</li>
-                    <li>Fits shared itineraries</li>
-                  </ul>
                 </div>
               </article>
             </div>
