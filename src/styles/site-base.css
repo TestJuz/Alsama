@@ -131,6 +131,45 @@ img{ max-width:100%; display:block; }
 
 .nav__dropdown[data-open="true"] .nav__dropdownMenu{ display:block; }
 
+.nav__actions{
+  display:none;
+}
+
+.nav__mobileActions{
+  display:contents;
+}
+
+@media (min-width: 901px){
+  .nav{
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) auto minmax(0, 1fr);
+    min-height:64px;
+  }
+
+  .brand{
+    justify-self:start;
+  }
+
+  .nav__menu{
+    grid-column:2;
+    justify-self:center;
+    justify-content:center;
+    gap:clamp(8px, 1vw, 14px);
+  }
+
+  .nav__actions{
+    display:flex;
+    grid-column:3;
+    justify-self:end;
+    align-items:center;
+    gap:8px;
+  }
+
+  .nav__mobileActions{
+    display:none;
+  }
+}
+
 .hero{ padding: 40px 0 10px; }
 
 .hero__grid{

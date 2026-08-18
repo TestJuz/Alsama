@@ -8,6 +8,17 @@
 @tailwind components;
 @tailwind utilities;
 
+.container{
+  width:min(var(--max), calc(100% - (var(--page-gutter) * 2)));
+  margin-inline:auto;
+}
+
+@media (max-width: 760px){
+  .container{
+    width:100%;
+  }
+}
+
 @layer base {
   .theme {
     --font-heading: var(--font-sans);

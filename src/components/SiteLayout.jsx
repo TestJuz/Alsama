@@ -80,9 +80,16 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
           </div>
 
           <a className="nav__link" href={safetyHref} target="_blank" rel="noreferrer">Safety</a>
+          <div className="nav__mobileActions">
+            <SmartLink to={contactTo} className="nav__link nav__cta">Contact</SmartLink>
+            <LanguageSwitcher />
+          </div>
+        </nav>
+
+        <div className="nav__actions">
           <SmartLink to={contactTo} className="nav__link nav__cta">Contact</SmartLink>
           <LanguageSwitcher />
-        </nav>
+        </div>
       </div>
     </header>
   );
