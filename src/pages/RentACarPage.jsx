@@ -12,7 +12,7 @@ export function RentACarPage() {
       footerBackToTop="#"
     >
       <main className="transport-service-page">
-        <section className="hero hero--compact hero--image hero--rent" style={{ "--hero-image": `url(${asset("img/hero/2.webp")})` }}>
+        <section className="hero hero--compact hero--image hero--rent" style={{ "--hero-image": `url(${asset("img/gallery/RentACar.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Independent travel support</p>

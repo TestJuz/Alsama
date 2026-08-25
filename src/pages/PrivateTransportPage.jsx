@@ -31,6 +31,31 @@ function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
+function PrivateRouteCard({ route, onAdd, preview = false }) {
+  return (
+    <article className={`private-rate-card${preview ? " private-rate-card--preview" : ""}`} aria-hidden={preview ? "true" : undefined}>
+      <div>
+        <span className="transport-card__tag">{route.base === "JACO" ? "From Jaco" : "From San Jose"}</span>
+        <h3>{route.lugar}</h3>
+        <p className="muted">{getPrivateTransportPriceLabel(route)}</p>
+      </div>
+
+      <div className="private-rate-card__side">
+        <strong>{formatUSD(getPrivateTransportPrice(route, 2))}</strong>
+        <span className="muted">Estimated for 2 passengers</span>
+        <button
+          className="btn btn--primary"
+          type="button"
+          onClick={() => onAdd(route)}
+          tabIndex={preview ? -1 : undefined}
+        >
+          Add
+        </button>
+      </div>
+    </article>
+  );
+}
+
 export function PrivateTransportPage() {
   const { addItem } = useCart();
   const [searchParams] = useSearchParams();
@@ -67,6 +92,7 @@ export function PrivateTransportPage() {
   const visibleRoutes = filteredRoutes.slice(0, visibleRouteCount);
   const shownRouteCount = Math.min(visibleRouteCount, filteredRoutes.length);
   const hasMoreRoutes = shownRouteCount < filteredRoutes.length;
+  const previewRoutes = hasMoreRoutes ? filteredRoutes.slice(shownRouteCount, shownRouteCount + 1) : [];
 
   const mapRoutes = base === "ALL"
     ? privateTransportRoutes
@@ -145,7 +171,7 @@ export function PrivateTransportPage() {
       footerBackToTop="#"
     >
       <main className="transport-service-page">
-        <section className="hero hero--compact hero--image hero--private" style={{ "--hero-image": `url(${asset("img/tours/sj/Manuel_Antonio/1.webp")})` }}>
+        <section className="hero hero--compact hero--image hero--private" style={{ "--hero-image": `url(${asset("img/gallery/40.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Private transportation</p>
@@ -214,27 +240,12 @@ export function PrivateTransportPage() {
                   <p className="muted">Showing {shownRouteCount} of {filteredRoutes.length} private transport options</p>
                 </div>
 
-                <div className="private-rate-list">
+                <div className="private-rate-list private-rate-list--progressive">
                   {visibleRoutes.map((route) => (
-                    <article className="private-rate-card" key={route.id}>
-                      <div>
-                        <span className="transport-card__tag">{route.base === "JACO" ? "From Jaco" : "From San Jose"}</span>
-                        <h3>{route.lugar}</h3>
-                        <p className="muted">{getPrivateTransportPriceLabel(route)}</p>
-                      </div>
-
-                      <div className="private-rate-card__side">
-                        <strong>{formatUSD(getPrivateTransportPrice(route, 2))}</strong>
-                        <span className="muted">Estimated for 2 passengers</span>
-                        <button
-                          className="btn btn--primary"
-                          type="button"
-                          onClick={() => openRequest(route)}
-                        >
-                          Add
-                        </button>
-                      </div>
-                    </article>
+                    <PrivateRouteCard key={route.id} route={route} onAdd={openRequest} />
+                  ))}
+                  {previewRoutes.map((route) => (
+                    <PrivateRouteCard key={`${route.id}-preview`} route={route} onAdd={openRequest} preview />
                   ))}
                 </div>
                 {hasMoreRoutes ? (

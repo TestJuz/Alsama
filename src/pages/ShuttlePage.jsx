@@ -1,8 +1,51 @@
 import { Link } from "react-router-dom";
+import { ArrowRight, CalendarDays, DollarSign, MapPin, Route, UsersRound } from "lucide-react";
+import { motion } from "motion/react";
 import { ContactForm } from "../components/ContactForm";
 import { ShuttleExplorer } from "../components/ShuttleExplorer";
 import { SiteLayout } from "../components/SiteLayout";
 import { asset, routes } from "../lib/site";
+
+const shuttleBenefits = [
+  {
+    title: "Lower transport cost",
+    text: "Shared rides usually cost less than booking a full private vehicle.",
+    icon: DollarSign
+  },
+  {
+    title: "Common destinations",
+    text: "A great option when moving between airports, San Jose, Jaco, beaches and other popular stops.",
+    icon: MapPin
+  },
+  {
+    title: "Good for light planning",
+    text: "If your route is already clear, shuttle service can be a straightforward transport solution.",
+    icon: CalendarDays
+  },
+  {
+    title: "Easy to combine",
+    text: "Use it together with tours, hotels and later private transfers if needed.",
+    icon: UsersRound
+  }
+];
+const shuttleRoutePoints = ["SJO", "San Jose", "Jaco", "Beaches", "Hotels"];
+const shuttleFlowVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.08 }
+  }
+};
+
+const shuttleFlowItemVariants = {
+  hidden: { opacity: 0, y: 24, filter: "blur(10px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+  }
+};
 
 export function ShuttlePage() {
   return (
@@ -13,7 +56,7 @@ export function ShuttlePage() {
       footerBackToTop="#"
     >
       <main className="transport-service-page">
-        <section className="hero hero--compact hero--image hero--shuttle" style={{ "--hero-image": `url(${asset("img/hero/3.webp")})` }}>
+        <section className="hero hero--compact hero--image hero--shuttle" style={{ "--hero-image": `url(${asset("img/gallery/50.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Shared shuttle service</p>
@@ -68,27 +111,69 @@ export function ShuttlePage() {
           </div>
         </section>
 
-        <section className="section section--alt">
-          <div className="container">
-            <div className="benefit-grid">
-              <article className="benefit-card">
-                <h3>Lower transport cost</h3>
-                <p className="muted">Shared rides usually cost less than booking a full private vehicle.</p>
-              </article>
-              <article className="benefit-card">
-                <h3>Common destinations</h3>
-                <p className="muted">A great option when moving between airports, San Jose, Jaco, beaches and other popular stops.</p>
-              </article>
-              <article className="benefit-card">
-                <h3>Good for light planning</h3>
-                <p className="muted">If your route is already clear, shuttle service can be a straightforward transport solution.</p>
-              </article>
-              <article className="benefit-card">
-                <h3>Easy to combine</h3>
-                <p className="muted">Use it together with tours, hotels and later private transfers if needed.</p>
-              </article>
+        <section className="section shuttle-flow-section" aria-labelledby="shuttle-benefits-title">
+          <motion.div
+            className="shuttle-flow"
+            style={{ "--flow-bg": `url(${asset("img/gallery/40.webp")})` }}
+            variants={shuttleFlowVariants}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.18 }}
+          >
+            <div className="container shuttle-flow__inner">
+              <motion.div className="shuttle-flow__panel" variants={shuttleFlowItemVariants}>
+                <span className="shuttle-flow__eyebrow">Shared destination-to-destination service</span>
+                <h2 id="shuttle-benefits-title">Shuttle that fits the route you already planned</h2>
+                <p>
+                  A practical option for travelers using common tourist routes and looking for a more affordable transfer.
+                </p>
+                <div className="shuttle-flow__actions" aria-label="Shuttle actions">
+                  <a className="btn btn--primary" href="#shuttle-details">
+                    View routes
+                    <ArrowRight size={17} strokeWidth={2.4} aria-hidden="true" />
+                  </a>
+                  <a className="btn btn--ghost" href="#contact">Request shuttle</a>
+                </div>
+              </motion.div>
+
+              <motion.div className="shuttle-flow__board" variants={shuttleFlowItemVariants}>
+                <div className="shuttle-flow__route" aria-label="Popular shuttle corridor">
+                  <Route size={18} strokeWidth={2.4} aria-hidden="true" />
+                  {shuttleRoutePoints.map((point, index) => (
+                    <span className="shuttle-flow__stop" key={point}>
+                      <i aria-hidden="true" />
+                      {point}
+                      {index < shuttleRoutePoints.length - 1 ? <b aria-hidden="true" /> : null}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="shuttle-flow__cards">
+                  {shuttleBenefits.map((benefit) => {
+                    const Icon = benefit.icon;
+
+                    return (
+                      <motion.article
+                        className="shuttle-flow-card"
+                        key={benefit.title}
+                        variants={shuttleFlowItemVariants}
+                        whileHover={{ y: -4, scale: 1.015 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                      >
+                        <span className="shuttle-flow-card__icon" aria-hidden="true">
+                          <Icon size={22} strokeWidth={2.35} />
+                        </span>
+                        <div>
+                          <h3>{benefit.title}</h3>
+                          <p>{benefit.text}</p>
+                        </div>
+                      </motion.article>
+                    );
+                  })}
+                </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </section>
 
         <ContactForm
