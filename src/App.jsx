@@ -1,4 +1,4 @@
-﻿import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useLanguage } from "./context/LanguageContext";
 import { getPageTitle } from "./lib/nativeI18n";
@@ -13,6 +13,9 @@ const RentACarPage = lazy(() => import("./pages/RentACarPage").then((module) => 
 const ToursPage = lazy(() => import("./pages/ToursPage").then((module) => ({ default: module.ToursPage })));
 const TourDetailPage = lazy(() => import("./pages/TourDetailPage").then((module) => ({ default: module.TourDetailPage })));
 const HotelsPage = lazy(() => import("./pages/HotelsPage").then((module) => ({ default: module.HotelsPage })));
+const PrivacyPolicyPage = lazy(() =>
+  import("./pages/PrivacyPolicyPage").then((module) => ({ default: module.PrivacyPolicyPage }))
+);
 
 const routeTitles = [
   { path: routes.home, key: "home" },
@@ -21,7 +24,8 @@ const routeTitles = [
   { path: routes.rentACar, key: "rentACar" },
   { path: routes.tours, key: "tours" },
   { path: `${routes.tours}/:tourSlug`, key: "tourDetail" },
-  { path: routes.hotels, key: "hotels" }
+  { path: routes.hotels, key: "hotels" },
+  { path: routes.privacy, key: "privacy" }
 ];
 
 function ScrollManager() {
@@ -64,6 +68,7 @@ export function App() {
         <Route path={routes.tours} element={<ToursPage />} />
         <Route path={`${routes.tours}/:tourSlug`} element={<TourDetailPage />} />
         <Route path={routes.hotels} element={<HotelsPage />} />
+        <Route path={routes.privacy} element={<PrivacyPolicyPage />} />
         <Route path={routes.toursSanJose} element={<Navigate replace to={`${routes.tours}#from-san-jose`} />} />
         <Route path={routes.toursJaco} element={<Navigate replace to={`${routes.tours}#from-jaco`} />} />
 

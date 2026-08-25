@@ -1,4 +1,4 @@
-﻿import i18next from "i18next";
+import i18next from "i18next";
 import { supplementalTranslations } from "./i18nSupplement.js";
 import { tourTranslations } from "./i18nTours.js";
 import { fixTranslations } from "./i18nFixes.js";
@@ -8,7 +8,7 @@ import { completeTranslations } from "./i18nComplete.js";
 const exactTranslations = {
   en: {},
   es: {
-    "Home": "Inicio", "Services": "Servicios", "Safety": "Seguridad", "Contact": "Contacto", "Back to top": "Volver arriba", "Menu": "Menu",
+    "Home": "Inicio", "Services": "Servicios", "Safety": "Seguridad", "Contact": "Contacto", "Back to top": "Volver arriba", "Privacy Policy": "Politica de privacidad", "Footer": "Pie de pagina", "Menu": "Menu",
     "Shuttle": "Shuttle", "Private Transport": "Transporte privado", "Tours": "Tours", "Hotels": "Hoteles", "Rent a Car": "Alquiler de autos",
     "Costa Rica travel services": "Servicios de viaje en Costa Rica", "Discover the best of our country": "Descubre lo mejor de nuestro pais",
     "Tours, hotels, shuttles, transfers and more - build your itinerary in minutes.": "Tours, hoteles, shuttles, traslados y mas: arma tu itinerario en minutos.",
@@ -46,7 +46,7 @@ const exactTranslations = {
     "Show Prices": "Ver precios", "/ Adult": "/ Adulto", "Departure": "Salida", "Next departures": "Proximas salidas", "View all tours": "Ver todos los tours", "View trip": "Ver viaje", "Close": "Cerrar"
   },
   fr: {
-    "Home": "Accueil", "Services": "Services", "Safety": "Securite", "Contact": "Contact", "Back to top": "Retour en haut", "Menu": "Menu",
+    "Home": "Accueil", "Services": "Services", "Safety": "Securite", "Contact": "Contact", "Back to top": "Retour en haut", "Privacy Policy": "Politique de confidentialite", "Footer": "Pied de page", "Menu": "Menu",
     "Shuttle": "Navette", "Private Transport": "Transport prive", "Tours": "Excursions", "Hotels": "Hotels", "Rent a Car": "Location de voiture",
     "Costa Rica travel services": "Services de voyage au Costa Rica", "Discover the best of our country": "Decouvrez le meilleur de notre pays",
     "Tours, hotels, shuttles, transfers and more - build your itinerary in minutes.": "Excursions, hotels, navettes, transferts et plus encore: creez votre itineraire en quelques minutes.",
@@ -89,9 +89,9 @@ i18next.init({
   interpolation: { escapeValue: false }
 });
 const titles = {
-  en: { home: "Alsama Tours | Travel Services in Costa Rica", shuttle: "Shuttle Service | Alsama Tours", privateTransport: "Private Transport | Alsama Tours", rentACar: "Rent a Car | Alsama Tours", tours: "Tours | Alsama Tours", tourDetail: "Tour Detail | Alsama Tours", hotels: "Hotels | Alsama Tours" },
-  es: { home: "Alsama Tours | Servicios de viaje en Costa Rica", shuttle: "Servicio de shuttle | Alsama Tours", privateTransport: "Transporte privado | Alsama Tours", rentACar: "Alquiler de autos | Alsama Tours", tours: "Tours | Alsama Tours", tourDetail: "Detalle del tour | Alsama Tours", hotels: "Hoteles | Alsama Tours" },
-  fr: { home: "Alsama Tours | Services de voyage au Costa Rica", shuttle: "Service de navette | Alsama Tours", privateTransport: "Transport prive | Alsama Tours", rentACar: "Location de voiture | Alsama Tours", tours: "Excursions | Alsama Tours", tourDetail: "Detail de l'excursion | Alsama Tours", hotels: "Hotels | Alsama Tours" }
+  en: { home: "Alsama Tours | Travel Services in Costa Rica", shuttle: "Shuttle Service | Alsama Tours", privateTransport: "Private Transport | Alsama Tours", rentACar: "Rent a Car | Alsama Tours", tours: "Tours | Alsama Tours", tourDetail: "Tour Detail | Alsama Tours", hotels: "Hotels | Alsama Tours", privacy: "Privacy Policy | Alsama Tours" },
+  es: { home: "Alsama Tours | Servicios de viaje en Costa Rica", shuttle: "Servicio de shuttle | Alsama Tours", privateTransport: "Transporte privado | Alsama Tours", rentACar: "Alquiler de autos | Alsama Tours", tours: "Tours | Alsama Tours", tourDetail: "Detalle del tour | Alsama Tours", hotels: "Hoteles | Alsama Tours", privacy: "Politica de privacidad | Alsama Tours" },
+  fr: { home: "Alsama Tours | Services de voyage au Costa Rica", shuttle: "Service de navette | Alsama Tours", privateTransport: "Transport prive | Alsama Tours", rentACar: "Location de voiture | Alsama Tours", tours: "Excursions | Alsama Tours", tourDetail: "Detail de l'excursion | Alsama Tours", hotels: "Hotels | Alsama Tours", privacy: "Politique de confidentialite | Alsama Tours" }
 };
 
 function clean(value) {

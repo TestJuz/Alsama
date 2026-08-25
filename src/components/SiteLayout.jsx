@@ -118,7 +118,10 @@ export function SiteLayout({
       <footer className="footer">
         <div className="container footer__grid">
           <p className="muted">{footerLabel} {new Date().getFullYear()} Alsama Tours. All rights reserved.</p>
-          <a className="muted" href={footerBackToTop}>Back to top</a>
+          <nav className="footer__links" aria-label="Footer">
+            <Link className="muted" to={routes.privacy}>Privacy Policy</Link>
+            <a className="muted" href={footerBackToTop}>Back to top</a>
+          </nav>
         </div>
       </footer>
     </>

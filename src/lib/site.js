@@ -14,7 +14,8 @@ export const routes = {
   toursSanJose: "/tours/san-jose",
   toursJaco: "/tours/jaco",
   hotels: "/hotels",
-  rentACar: "/rent-a-car"
+  rentACar: "/rent-a-car",
+  privacy: "/privacy-policy"
 };
 
 export const homeLinks = {

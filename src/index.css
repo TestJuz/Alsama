@@ -34,3 +34,126 @@
     @apply hidden!;
   }
 }
+.footer__links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.footer__links a:hover {
+  color: var(--text);
+}
+
+.privacy-page {
+  background: linear-gradient(180deg, rgba(68, 166, 171, .1), var(--bg) 320px);
+  min-height: 100vh;
+}
+
+.privacy-hero {
+  padding: 74px 0 34px;
+  border-bottom: 1px solid var(--line);
+}
+
+.privacy-hero__inner {
+  display: grid;
+  gap: 12px;
+  max-width: 880px;
+}
+
+.privacy-back {
+  width: max-content;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--brand);
+  padding: 8px 11px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.privacy-hero p,
+.privacy-hero span,
+.privacy-section p,
+.privacy-section li {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.privacy-hero p,
+.privacy-hero h1,
+.privacy-hero span,
+.privacy-section h2,
+.privacy-section p,
+.privacy-section ul {
+  margin: 0;
+}
+
+.privacy-hero h1 {
+  color: var(--text);
+  font-size: clamp(36px, 7vw, 64px);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.privacy-hero span {
+  max-width: 72ch;
+  font-size: 18px;
+}
+
+.privacy-content {
+  max-width: 880px;
+  display: grid;
+  gap: 14px;
+  padding-top: 28px;
+  padding-bottom: 54px;
+}
+
+.privacy-section {
+  display: grid;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 22px;
+  box-shadow: 0 12px 30px rgba(31, 42, 48, .06);
+}
+
+.privacy-section h2 {
+  color: var(--text);
+  font-size: clamp(22px, 3vw, 30px);
+  line-height: 1.15;
+}
+
+.privacy-section ul {
+  display: grid;
+  gap: 8px;
+  padding-left: 20px;
+}
+
+@media (max-width: 760px) {
+  .footer__grid,
+  .footer__links {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .footer__grid {
+    flex-direction: column;
+  }
+
+  .privacy-hero,
+  .privacy-content {
+    padding-inline: var(--page-gutter);
+  }
+
+  .privacy-hero {
+    padding-top: 44px;
+  }
+
+  .privacy-section {
+    padding: 18px;
+  }
+}
