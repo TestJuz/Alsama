@@ -1,7 +1,9 @@
-﻿import { useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Mail, MessageSquareText, Send, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
+import { routes } from "../lib/site";
 
 const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
 const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
@@ -19,6 +21,7 @@ function formatCartItems(items) {
 export function ContactForm({ title = "Contact", text, placeholder, buttonLabel = "Send" }) {
   const [hint, setHint] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const navigate = useNavigate();
   const { items, count, clearCart } = useCart();
   const { t } = useLanguage();
 
@@ -64,6 +67,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
       setHint("Thanks. Your request was sent to Alsama Tours.");
       form.reset();
       if (count) clearCart();
+      navigate(routes.thankYou);
     } catch (error) {
       setHint("We could not send the message. Please email jeaustin.rdz@gmail.com or try again.");
     } finally {

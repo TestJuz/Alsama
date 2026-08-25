@@ -1,7 +1,7 @@
 import { Suspense, lazy, useEffect } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useLanguage } from "./context/LanguageContext";
-import { getPageTitle } from "./lib/nativeI18n";
+import { applySeo, getRouteSeo } from "./lib/seo";
 import { routes } from "./lib/site";
 
 const HomePage = lazy(() => import("./pages/HomePage").then((module) => ({ default: module.HomePage })));
@@ -16,27 +16,27 @@ const HotelsPage = lazy(() => import("./pages/HotelsPage").then((module) => ({ d
 const PrivacyPolicyPage = lazy(() =>
   import("./pages/PrivacyPolicyPage").then((module) => ({ default: module.PrivacyPolicyPage }))
 );
+const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((module) => ({ default: module.ThankYouPage })));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((module) => ({ default: module.NotFoundPage })));
 
-const routeTitles = [
-  { path: routes.home, key: "home" },
-  { path: routes.shuttle, key: "shuttle" },
-  { path: routes.privateTransport, key: "privateTransport" },
-  { path: routes.rentACar, key: "rentACar" },
-  { path: routes.tours, key: "tours" },
-  { path: `${routes.tours}/:tourSlug`, key: "tourDetail" },
-  { path: routes.hotels, key: "hotels" },
-  { path: routes.privacy, key: "privacy" }
-];
 
 function ScrollManager() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { language } = useLanguage();
 
   useEffect(() => {
-    const titleKey = routeTitles.find((item) => item.path === location.pathname)?.key;
-    if (titleKey) {
-      document.title = getPageTitle(titleKey, language);
+    const params = new URLSearchParams(location.search);
+    const redirectedPath = params.get("p");
+    if (redirectedPath) {
+      const pathname = redirectedPath.startsWith("/") ? redirectedPath : `/${redirectedPath}`;
+      const hash = params.get("h");
+      navigate({ pathname, hash: hash ? `#${hash}` : "" }, { replace: true });
     }
+  }, [location.search, navigate]);
+
+  useEffect(() => {
+    applySeo(getRouteSeo(location.pathname, language));
   }, [language, location.pathname]);
 
   useEffect(() => {
@@ -69,6 +69,7 @@ export function App() {
         <Route path={`${routes.tours}/:tourSlug`} element={<TourDetailPage />} />
         <Route path={routes.hotels} element={<HotelsPage />} />
         <Route path={routes.privacy} element={<PrivacyPolicyPage />} />
+        <Route path={routes.thankYou} element={<ThankYouPage />} />
         <Route path={routes.toursSanJose} element={<Navigate replace to={`${routes.tours}#from-san-jose`} />} />
         <Route path={routes.toursJaco} element={<Navigate replace to={`${routes.tours}#from-jaco`} />} />
 
@@ -78,7 +79,7 @@ export function App() {
         <Route path="/transport/private-transport.html" element={<Navigate replace to={routes.privateTransport} />} />
         <Route path="/tours/SanJose/*" element={<Navigate replace to={`${routes.tours}#from-san-jose`} />} />
         <Route path="/tours/Jaco/*" element={<Navigate replace to={`${routes.tours}#from-jaco`} />} />
-        <Route path="*" element={<Navigate replace to={routes.home} />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
   );

@@ -26,7 +26,7 @@ export function ImageGalleryModal({ gallery, title, index, onChangeIndex, onClos
             <ChevronLeft size={24} />
           </button>
         ) : null}
-        <img src={currentImage} alt={title} />
+        <img src={currentImage} alt={`${title} gallery image`} />
         {hasMultiple ? (
           <button className="image-galleryModal__nav image-galleryModal__nav--next" type="button" aria-label="Next image" onClick={goToNext}>
             <ChevronRight size={24} />

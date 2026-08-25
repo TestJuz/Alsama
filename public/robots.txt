@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alsamatourscr.com/Alsama/sitemap.xml

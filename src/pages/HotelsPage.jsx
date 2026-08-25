@@ -459,7 +459,7 @@ export function HotelsPage() {
                     >
                       <div className="hotel-card__media">
                         <button type="button" aria-label={`View ${hotel.hotel} image`} onClick={() => openHotelGallery(hotel)}>
-                          <img src={hotel.image} alt={hotel.hotel} loading="lazy" />
+                          <img src={hotel.image} alt={`${hotel.hotel} hotel in ${zone.name}, Costa Rica`} loading="lazy" />
                         </button>
                         <span>{zone.name}</span>
                       </div>

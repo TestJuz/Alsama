@@ -21,7 +21,7 @@ function TourCard({ item, onAdd, onOpenGallery, preview = false }) {
     <article className={`card${preview ? " card--preview" : ""}`} aria-hidden={preview ? "true" : undefined}>
       <div className="card__media">
         <button type="button" aria-label={`View ${item.title} image`} onClick={() => onOpenGallery(item)} tabIndex={preview ? -1 : undefined}>
-          <img src={item.image} alt={item.title} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
+          <img src={item.image} alt={`${item.title} tour ${item.originLabel}`} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
         </button>
       </div>
       <div className="card__body">

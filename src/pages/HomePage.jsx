@@ -4,20 +4,27 @@ import { motion, useReducedMotion } from "motion/react";
 import {
   ArrowRight,
   Bus,
+  CheckCircle2,
+  Clock3,
   Car,
   Compass,
   Hotel,
   Leaf,
+  Link2,
   MapPinned,
   MessageCircle,
   Navigation as NavigationIcon,
+  ExternalLink,
+  Quote,
   Route,
   ShieldCheck,
   Sparkles,
+  Star,
   UsersRound
 } from "lucide-react";
 import { ContactForm } from "../components/ContactForm";
 import { SiteLayout } from "../components/SiteLayout";
+import { Button } from "../components/ui/button";
 import { Map, MapControls, MapMarker, MapRoute, MarkerContent, MarkerPopup } from "../components/ui/map";
 import {
   asset,
@@ -31,7 +38,8 @@ const trustHighlights = [
   { icon: Leaf, title: "Authentic experiences" },
   { icon: UsersRound, title: "Local expert guides" },
   { icon: ShieldCheck, title: "Safe, reliable service" },
-  { icon: MessageCircle, title: "Fast WhatsApp help" }
+  { icon: MessageCircle, title: "Fast WhatsApp help" },
+  { icon: Clock3, title: "2-hour response window" }
 ];
 
 const travelServices = [
@@ -98,6 +106,60 @@ const travelServices = [
   }
 ];
 
+const responsePromise = [
+  "First reply within 2 business hours",
+  "Same-day routing help for urgent transfers",
+  "Clear next steps before any reservation"
+];
+
+const internalLinks = [
+  { label: "Tours from San Jose", text: "Volcanoes, waterfalls, city nights and classic full-day routes.", to: `${routes.tours}#from-san-jose` },
+  { label: "Tours from Jaco", text: "Beach, rainforest, wildlife and adventure options from the Pacific.", to: `${routes.tours}#from-jaco` },
+  { label: "Private transport routes", text: "Direct transfers between airports, hotels and Costa Rica destinations.", to: routes.privateTransport },
+  { label: "Rent a car rates", text: "Compare vehicles for independent city, mountain and beach travel.", to: routes.rentACar },
+  { label: "Hotel options", text: "Match lodging to your route before confirming services.", to: routes.hotels },
+  { label: "Shared shuttle service", text: "Scheduled options for popular destinations and lighter budgets.", to: routes.shuttle }
+];
+
+const caseStudies = [
+  {
+    title: "Family arrival route from SJO",
+    outcome: "Private airport pickup, Arenal hotel pairing and Manuel Antonio day planning in one request.",
+    result: "3 services coordinated",
+    image: asset("img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp")
+  },
+  {
+    title: "Jaco adventure weekend",
+    outcome: "A short beach stay with rafting, waterfall time and return transport arranged around hotel checkout.",
+    result: "48-hour plan",
+    image: asset("img/tours/jaco/White _Water_Rafting/Rafting-1.webp")
+  },
+  {
+    title: "Flexible road trip support",
+    outcome: "Vehicle category guidance, hotel zones and tour suggestions for travelers building an independent route.",
+    result: "Car + stays + tours",
+    image: asset("img/gallery/RentACar.webp")
+  }
+];
+
+const faqs = [
+  {
+    question: "How fast do you respond to quote requests?",
+    answer: "We aim to send the first reply within 2 business hours. Requests with complete dates, pickup points and passenger counts are easier to confirm quickly."
+  },
+  {
+    question: "Can I combine tours, transport, hotels and car rental?",
+    answer: "Yes. Add items to the cart or describe the full route in the contact form, and the team will coordinate the services as one trip request."
+  },
+  {
+    question: "Do you help with same-day or next-day transport?",
+    answer: "When availability allows, urgent transport requests are prioritized. Include pickup time, pickup place, destination and passenger count."
+  },
+  {
+    question: "Are the listed tour prices final?",
+    answer: "Prices are a planning reference and may vary by season, supplier availability, pickup location or group details. Alsama confirms the exact details before booking."
+  }
+];
 const destinations = [
   {
     id: "san-jose",
@@ -202,6 +264,40 @@ const costaRicaMapStyle = {
 
 const featuredPicks = [...sanJoseFeaturedTours.slice(0, 2), ...jacoFeaturedTours.slice(0, 2)];
 
+const tripadvisorUrl =
+  "https://www.tripadvisor.es/Attraction_Review-g309293-d23810882-Reviews-Alsama_Tours-San_Jose_San_Jose_Metro_Province_of_San_Jose.html";
+
+const travelerReviews = [
+  {
+    name: "Katie",
+    date: "Apr 2026",
+    title: "Excellent service",
+    route: "San Jose Airport to Monteverde",
+    text: "Private transport stayed calm after a long immigration delay. Marco waited, helped with luggage and kept the route stress-free."
+  },
+  {
+    name: "Rebecca A",
+    date: "Oct 2025",
+    title: "Amazing time",
+    route: "Tours + airport transfers",
+    text: "Alexandra coordinated tours and airport rides with warm, attentive support, making the whole four-day stay feel easy."
+  },
+  {
+    name: "Safari67449899515",
+    date: "Jan 2024",
+    title: "Great customer service",
+    route: "Tortuga Island + hotel pickup",
+    text: "Jorge matched the right tours by phone, arranged hotel transportation and helped with practical travel details in Costa Rica."
+  },
+  {
+    name: "Rupal S",
+    date: "May 2023",
+    title: "Loved Alsama Tours",
+    route: "Multi-tour planning",
+    text: "Travelers highlighted helpful planning, fair pricing, included transportation and bilingual guides who made last-minute questions simple."
+  }
+];
+
 const fadeUp = {
   hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0 }
@@ -250,6 +346,16 @@ function MagneticAction({ children, className = "", href, to, ...props }) {
         {children}
       </Component>
     </motion.span>
+  );
+}
+
+function RatingStars({ label = "Rated 5 out of 5 on Tripadvisor" }) {
+  return (
+    <span className="home-rating-stars" aria-label={label}>
+      {Array.from({ length: 5 }, (_, index) => (
+        <Star key={index} size={18} fill="currentColor" aria-hidden="true" />
+      ))}
+    </span>
   );
 }
 
@@ -364,7 +470,7 @@ function DestinationMap() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28 }}
         >
-          <img src={activeDestination.image} alt="" aria-hidden="true" />
+          <img src={activeDestination.image} alt={`${activeDestination.name} travel route in Costa Rica`} />
           <div className="home-route-card__body">
             <span>{activeDestination.label}</span>
             <h3>{activeDestination.name}</h3>
@@ -433,9 +539,20 @@ export function HomePage() {
               <MagneticAction className="home-btn home-btn--primary" href="#services">
                 Explore tours <ArrowRight size={18} aria-hidden="true" />
               </MagneticAction>
-              <MagneticAction className="home-btn home-btn--ghost" href="#contact">
-                Contact us <MessageCircle size={18} aria-hidden="true" />
-              </MagneticAction>
+
+            </motion.div>
+
+            <motion.div
+              className="home-hero__response"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <Clock3 size={22} aria-hidden="true" />
+              <div>
+                <strong>Response time commitment</strong>
+                <span>First reply within 2 business hours for complete quote requests.</span>
+              </div>
             </motion.div>
           </div>
 
@@ -477,6 +594,26 @@ export function HomePage() {
                 <strong>1</strong>
                 <span>Local team</span>
               </div>
+            </MotionBlock>
+          </div>
+        </section>
+
+        <section className="home-section home-section--promise" id="response-time">
+          <div className="container home-promise">
+            <MotionBlock className="home-promise__copy">
+              <span className="home-eyebrow">Response commitment</span>
+              <h2>Clear answers before your travel plan gets complicated.</h2>
+              <p>
+                Send your dates, pickup point and destination. Alsama aims to answer complete quote requests within 2 business hours.
+              </p>
+            </MotionBlock>
+            <MotionBlock className="home-promise__list" delay={0.08}>
+              {responsePromise.map((item) => (
+                <div key={item}>
+                  <CheckCircle2 size={19} aria-hidden="true" />
+                  <span>{item}</span>
+                </div>
+              ))}
             </MotionBlock>
           </div>
         </section>
@@ -533,6 +670,32 @@ export function HomePage() {
           </div>
         </section>
 
+        <section className="home-section home-section--links" id="travel-links">
+          <div className="container">
+            <MotionBlock className="home-section__head home-section__head--row">
+              <div>
+                <span className="home-eyebrow">Plan faster</span>
+                <h2>Jump to the service that matches your route.</h2>
+              </div>
+              <Link className="home-btn home-btn--light" to={homeLinks.contact}>
+                Ask for a route <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            </MotionBlock>
+
+            <div className="home-link-grid">
+              {internalLinks.map((item, index) => (
+                <MotionBlock className="home-link-card" delay={index * 0.035} key={item.label}>
+                  <Link to={item.to}>
+                    <Link2 size={18} aria-hidden="true" />
+                    <strong>{item.label}</strong>
+                    <span>{item.text}</span>
+                  </Link>
+                </MotionBlock>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="home-section home-section--map" id="destinations">
           <div className="container">
             <MotionBlock>
@@ -556,12 +719,91 @@ export function HomePage() {
             <div className="home-picks">
               {featuredPicks.map((tour, index) => (
                 <MotionBlock className="home-pick" delay={index * 0.05} key={`${tour.title}-${tour.location}`}>
-                  <img src={tour.image} alt={tour.title} style={{ objectPosition: tour.imagePosition }} />
+                  <img src={tour.image} alt={`${tour.title} tour from ${tour.location}, Costa Rica`} style={{ objectPosition: tour.imagePosition }} />
                   <div>
                     <span>{tour.location}</span>
                     <h3>{tour.title}</h3>
                     <p>{tour.duration}</p>
                   </div>
+                </MotionBlock>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="home-section home-section--cases" id="case-studies">
+          <div className="container">
+            <MotionBlock className="home-section__head">
+              <span className="home-eyebrow">Case studies</span>
+              <h2>Common trip problems we help simplify.</h2>
+            </MotionBlock>
+
+            <div className="home-case-grid">
+              {caseStudies.map((item, index) => (
+                <MotionBlock className="home-case" delay={index * 0.05} key={item.title}>
+                  <img src={item.image} alt="" aria-hidden="true" loading="lazy" />
+                  <div>
+                    <span><Star size={15} aria-hidden="true" /> {item.result}</span>
+                    <h3>{item.title}</h3>
+                    <p>{item.outcome}</p>
+                  </div>
+                </MotionBlock>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="home-section home-section--faqs" id="faqs">
+          <div className="container home-faq-layout">
+            <MotionBlock className="home-section__head">
+              <span className="home-eyebrow">FAQs</span>
+              <h2>Questions travelers ask before booking.</h2>
+            </MotionBlock>
+            <MotionBlock className="home-faqs" delay={0.08}>
+              {faqs.map((item) => (
+                <details key={item.question}>
+                  <summary>{item.question}</summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
+            </MotionBlock>
+          </div>
+        </section>
+
+        <section className="home-section home-section--reviews" id="opiniones">
+          <div className="container home-reviews">
+            <MotionBlock className="home-reviews__summary">
+              <span className="home-eyebrow">Opiniones</span>
+              <h2>Trusted by travelers on Tripadvisor.</h2>
+              <p>
+                Alsama Tours is rated 4.9/5 on Tripadvisor, with travelers highlighting private transport,
+                fast coordination and local support across Costa Rica.
+              </p>
+              <div className="home-reviews__score" aria-label="Tripadvisor rating summary">
+                <strong>4.9</strong>
+                <span>/ 5</span>
+                <RatingStars label="Overall rating 4.9 out of 5 on Tripadvisor" />
+                <small>51 reviews</small>
+              </div>
+              <Button asChild className="home-reviews__trip-button">
+                <a href={tripadvisorUrl} target="_blank" rel="noreferrer">
+                  View on Tripadvisor <ExternalLink size={17} aria-hidden="true" />
+                </a>
+              </Button>
+            </MotionBlock>
+
+            <div className="home-reviews__grid">
+              {travelerReviews.map((review, index) => (
+                <MotionBlock className="home-review-card" delay={index * 0.05} key={review.name + review.date}>
+                  <Quote size={24} aria-hidden="true" />
+                  <RatingStars />
+                  <h3>{review.title}</h3>
+                  <p>{review.text}</p>
+                  <div className="home-review-card__meta">
+                    <strong>{review.name}</strong>
+                    <span>{review.date}</span>
+                  </div>
+                  <small>{review.route}</small>
                 </MotionBlock>
               ))}
             </div>

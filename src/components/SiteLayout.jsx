@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Breadcrumbs } from "./Breadcrumbs";
 import { CartWidget } from "./CartWidget";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { TravelAssistant } from "./TravelAssistant";
 import { asset, homeLinks, routes, safetyPdf, serviceMenu } from "../lib/site";
+
 
 function SmartLink({ to, className, children, ...props }) {
   if (typeof to === "string" && to.startsWith("#")) {
@@ -42,7 +44,7 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
       <div className="container nav">
         <Link className="brand" to={brandTo}>
           <span className="brand__logo" aria-hidden="true">
-            <img src={asset("img/tortuga.png")} alt="Logo" className="brand__logo-img" />
+            <img src={asset("img/tortuga.png")} alt="Alsama Tours logo" className="brand__logo-img" />
           </span>
           <span className="brand__text">Alsama Tours</span>
         </Link>
@@ -102,7 +104,8 @@ export function SiteLayout({
   contactTo = "#contact",
   brandTo = routes.home,
   footerBackToTop = "#",
-  footerLabel = "Copyright"
+  footerLabel = "Copyright",
+  showBreadcrumbs = true
 }) {
   return (
     <>
@@ -114,6 +117,7 @@ export function SiteLayout({
       />
       <TravelAssistant />
       <CartWidget />
+      {showBreadcrumbs ? <Breadcrumbs /> : null}
       {children}
       <footer className="footer">
         <div className="container footer__grid">

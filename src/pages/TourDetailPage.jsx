@@ -75,6 +75,7 @@ export function TourDetailPage() {
       contactTo="#contact"
       brandTo={routes.home}
       footerBackToTop="#top"
+      showBreadcrumbs={false}
     >
       <main className="tour-detail" id="top">
         <section className="tour-detail-hero" style={{ "--tour-hero-image": cssImageUrl(tour.image) }}>
@@ -218,7 +219,7 @@ export function TourDetailPage() {
             <div className="tour-related-grid">
               {related.map((item) => (
                 <article className="tour-related-card" key={item.slug}>
-                  <img src={item.image} alt={t(item.title)} loading="lazy" />
+                  <img src={item.image} alt={`${t(item.title)} tour in Costa Rica`} loading="lazy" />
                   <div>
                     <span>{formatUSD(item.price)}</span>
                     <h3>{t(item.title)}</h3>
