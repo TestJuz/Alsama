@@ -24,6 +24,7 @@ import {
 import { asset, routes } from "../lib/site";
 
 const naturalMapStyle = "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
+const TRANSPORT_BATCH_SIZE = 3;
 
 function formatUSD(value) {
   if (typeof value !== "number") return "Rate on request";
@@ -36,6 +37,7 @@ export function PrivateTransportPage() {
   const [query, setQuery] = useState(searchParams.get("query") || "");
   const [base, setBase] = useState(["SAN_JOSE", "JACO"].includes(searchParams.get("base")) ? searchParams.get("base") : "ALL");
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const [visibleRouteCount, setVisibleRouteCount] = useState(TRANSPORT_BATCH_SIZE);
   const [draft, setDraft] = useState({
     passengers: 2,
     hotel: "",
@@ -57,6 +59,14 @@ export function PrivateTransportPage() {
       return `${route.lugar} ${route.base}`.toLowerCase().includes(normalizedQuery);
     });
   }, [base, query]);
+
+  useEffect(() => {
+    setVisibleRouteCount(TRANSPORT_BATCH_SIZE);
+  }, [base, query]);
+
+  const visibleRoutes = filteredRoutes.slice(0, visibleRouteCount);
+  const shownRouteCount = Math.min(visibleRouteCount, filteredRoutes.length);
+  const hasMoreRoutes = shownRouteCount < filteredRoutes.length;
 
   const mapRoutes = base === "ALL"
     ? privateTransportRoutes
@@ -83,6 +93,10 @@ export function PrivateTransportPage() {
 
   function updateDraft(field, value) {
     setDraft((current) => ({ ...current, [field]: value }));
+  }
+
+  function loadMoreRoutes() {
+    setVisibleRouteCount((current) => Math.min(current + TRANSPORT_BATCH_SIZE, filteredRoutes.length));
   }
 
   function savePrivateTransport(event) {
@@ -197,11 +211,11 @@ export function PrivateTransportPage() {
                 </div>
 
                 <div className="list-head">
-                  <p className="muted">Showing {filteredRoutes.length} private transport options</p>
+                  <p className="muted">Showing {shownRouteCount} of {filteredRoutes.length} private transport options</p>
                 </div>
 
                 <div className="private-rate-list">
-                  {filteredRoutes.map((route) => (
+                  {visibleRoutes.map((route) => (
                     <article className="private-rate-card" key={route.id}>
                       <div>
                         <span className="transport-card__tag">{route.base === "JACO" ? "From Jaco" : "From San Jose"}</span>
@@ -223,6 +237,13 @@ export function PrivateTransportPage() {
                     </article>
                   ))}
                 </div>
+                {hasMoreRoutes ? (
+                  <div className="load-more-row">
+                    <button className="btn btn--primary" type="button" onClick={loadMoreRoutes}>
+                      View more
+                    </button>
+                  </div>
+                ) : null}
               </div>
 
               <aside className="private-map-card">

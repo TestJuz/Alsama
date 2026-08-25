@@ -49,16 +49,19 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
           <span className="brand__text">Alsama Tours</span>
         </Link>
 
-        <button
-          ref={toggleRef}
-          className="nav__toggle"
-          type="button"
-          aria-expanded={menuOpen}
-          aria-controls="navMenu"
-          onClick={() => setMenuOpen((value) => !value)}
-        >
-          Menu
-        </button>
+        <div className="nav__mobileBar">
+          <LanguageSwitcher />
+          <button
+            ref={toggleRef}
+            className="nav__toggle"
+            type="button"
+            aria-expanded={menuOpen}
+            aria-controls="navMenu"
+            onClick={() => setMenuOpen((value) => !value)}
+          >
+            Menu
+          </button>
+        </div>
 
         <nav ref={menuRef} className="nav__menu" id="navMenu" data-open={menuOpen ? "true" : "false"}>
           <SmartLink to={homeTo} className="nav__link">Home</SmartLink>
@@ -84,7 +87,6 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
           <a className="nav__link" href={safetyHref} target="_blank" rel="noreferrer">Safety</a>
           <div className="nav__mobileActions">
             <SmartLink to={contactTo} className="nav__link nav__cta">Contact</SmartLink>
-            <LanguageSwitcher />
           </div>
         </nav>
 

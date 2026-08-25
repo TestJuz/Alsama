@@ -46,9 +46,37 @@
   color: var(--text);
 }
 
+html {
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  overscroll-behavior-y: none;
+}
+
+body {
+  min-height: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: none;
+}
+
+#root {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+
+#root > main {
+  flex: 1 0 auto;
+}
+
+#root > .footer {
+  flex-shrink: 0;
+}
 .privacy-page {
   background: linear-gradient(180deg, rgba(68, 166, 171, .1), var(--bg) 320px);
-  min-height: 100vh;
 }
 
 .privacy-hero {
@@ -187,7 +215,6 @@
 
 .not-found-page,
 .thank-you-page {
-  min-height: 100vh;
   background: var(--bg);
 }
 

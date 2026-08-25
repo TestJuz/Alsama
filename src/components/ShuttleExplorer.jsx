@@ -11,8 +11,7 @@ import {
 import { useCart } from "@/context/CartContext";
 import { getFallbackRouteCoordinates, shuttleRoutes } from "@/lib/shuttles";
 
-const INITIAL_VISIBLE_SHUTTLES = 10;
-const SHUTTLE_PREVIEW_COUNT = 3;
+const SHUTTLE_BATCH_SIZE = 3;
 
 function parseTimeToMinutes(time) {
   const [hours, minutes] = time.split(":").map(Number);
@@ -52,7 +51,6 @@ async function fetchRoadRoute(route) {
 function ShuttleRouteCard({
   route,
   isActive,
-  preview = false,
   onAdd,
   onToggle,
   viewport,
@@ -60,12 +58,10 @@ function ShuttleRouteCard({
   routeCoordinates,
   routeSourceLabel
 }) {
-  const previewTabIndex = preview ? -1 : undefined;
 
   return (
     <article
-      className={`shuttle-card${isActive ? " shuttle-card--active" : ""}${preview ? " shuttle-card--preview" : ""}`}
-      aria-hidden={preview ? "true" : undefined}
+      className={`shuttle-card${isActive ? " shuttle-card--active" : ""}`}
     >
       <div className="shuttle-card__header">
         <span className="transport-card__tag">{route.region}</span>
@@ -95,7 +91,6 @@ function ShuttleRouteCard({
           className="btn btn--primary"
           type="button"
           onClick={() => onAdd(route)}
-          tabIndex={previewTabIndex}
         >
           Add to cart
         </button>
@@ -103,7 +98,6 @@ function ShuttleRouteCard({
           className="btn btn--ghost shuttle-card__button"
           type="button"
           onClick={() => onToggle(route.id)}
-          tabIndex={previewTabIndex}
         >
           {isActive ? "Hide route" : "View route"}
         </button>
@@ -200,7 +194,7 @@ export function ShuttleExplorer() {
   const [region, setRegion] = useState("");
   const [departure, setDeparture] = useState("");
   const [sort, setSort] = useState("featured");
-  const [visibleRouteCount, setVisibleRouteCount] = useState(INITIAL_VISIBLE_SHUTTLES);
+  const [visibleRouteCount, setVisibleRouteCount] = useState(SHUTTLE_BATCH_SIZE);
   const [expandedId, setExpandedId] = useState(searchParams.get("route") || "");
   const [viewport, setViewport] = useState(undefined);
   const [routeCoordinates, setRouteCoordinates] = useState(
@@ -254,7 +248,7 @@ export function ShuttleExplorer() {
   }, [departure, query, region, sort]);
 
   useEffect(() => {
-    setVisibleRouteCount(INITIAL_VISIBLE_SHUTTLES);
+    setVisibleRouteCount(SHUTTLE_BATCH_SIZE);
   }, [departure, query, region, sort]);
 
   useEffect(() => {
@@ -270,10 +264,6 @@ export function ShuttleExplorer() {
     ? selectedRouteIndex + 1
     : visibleRouteCount;
   const visibleRoutes = filteredRoutes.slice(0, effectiveVisibleRouteCount);
-  const previewRoutes = filteredRoutes.slice(
-    effectiveVisibleRouteCount,
-    effectiveVisibleRouteCount + SHUTTLE_PREVIEW_COUNT
-  );
   const shownRouteCount = Math.min(effectiveVisibleRouteCount, filteredRoutes.length);
   const hasMoreRoutes = shownRouteCount < filteredRoutes.length;
 
@@ -307,7 +297,7 @@ export function ShuttleExplorer() {
   }
 
   function loadMoreRoutes() {
-    setVisibleRouteCount((current) => Math.min(current + INITIAL_VISIBLE_SHUTTLES, filteredRoutes.length));
+    setVisibleRouteCount((current) => Math.min(current + SHUTTLE_BATCH_SIZE, filteredRoutes.length));
   }
 
   useEffect(() => {
@@ -408,20 +398,6 @@ export function ShuttleExplorer() {
                       key={route.id}
                       route={route}
                       isActive={route.id === selectedRoute?.id}
-                      onAdd={addShuttleToCart}
-                      onToggle={toggleRoute}
-                      viewport={viewport}
-                      setViewport={setViewport}
-                      routeCoordinates={routeCoordinates}
-                      routeSourceLabel={routeSourceLabel}
-                    />
-                  ))}
-                  {previewRoutes.map((route) => (
-                    <ShuttleRouteCard
-                      key={`${route.id}-preview`}
-                      route={route}
-                      isActive={false}
-                      preview
                       onAdd={addShuttleToCart}
                       onToggle={toggleRoute}
                       viewport={viewport}
