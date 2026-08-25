@@ -14,6 +14,7 @@ body:has(.home-redesign) {
   --gold: #d6aa48;
   --forest: #153b30;
   background: var(--bg);
+  overscroll-behavior-y: none;
 }
 
 body:has(.home-redesign) .site-header {
@@ -73,7 +74,8 @@ body:has(.home-redesign) .language-switcher__menu{
 
 
 .home-redesign {
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   background:
     linear-gradient(180deg, #f5f4ef 0%, #ffffff 38%, #eef5f2 100%);
 }

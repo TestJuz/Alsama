@@ -3,8 +3,10 @@ import { supplementalTranslations } from "./i18nSupplement.js";
 import { tourTranslations } from "./i18nTours.js";
 import { fixTranslations } from "./i18nFixes.js";
 import { tourOverviewFrTranslations } from "./i18nTourOverviewFr.js";
+import { completeTranslations } from "./i18nComplete.js";
 
 const exactTranslations = {
+  en: {},
   es: {
     "Home": "Inicio", "Services": "Servicios", "Safety": "Seguridad", "Contact": "Contacto", "Back to top": "Volver arriba", "Menu": "Menu",
     "Shuttle": "Shuttle", "Private Transport": "Transporte privado", "Tours": "Tours", "Hotels": "Hoteles", "Rent a Car": "Alquiler de autos",
@@ -72,14 +74,15 @@ const exactTranslations = {
 };
 
 
-Object.assign(exactTranslations.es, supplementalTranslations.es, tourTranslations.es, fixTranslations.es);
-Object.assign(exactTranslations.fr, supplementalTranslations.fr, tourTranslations.fr, fixTranslations.fr, tourOverviewFrTranslations);
+Object.assign(exactTranslations.en, completeTranslations.en);
+Object.assign(exactTranslations.es, supplementalTranslations.es, tourTranslations.es, fixTranslations.es, completeTranslations.es);
+Object.assign(exactTranslations.fr, supplementalTranslations.fr, tourTranslations.fr, fixTranslations.fr, tourOverviewFrTranslations, completeTranslations.fr);
 
 i18next.init({
   lng: "en",
-  fallbackLng: "en",
+  fallbackLng: false,
   resources: {
-    en: { translation: {} },
+    en: { translation: exactTranslations.en },
     es: { translation: exactTranslations.es },
     fr: { translation: exactTranslations.fr }
   },
@@ -95,48 +98,216 @@ function clean(value) {
   return String(value || "").replace(/\s+/g, " ").trim();
 }
 
+const routeTermTranslations = {
+  en: [
+    ["ONE DAY", "Full day"], ["ONE Day", "Full day"], ["all day", "all day"], ["maximo", "maximum"], ["Maximo", "Maximum"],
+    ["max", "maximum"], ["Max", "Maximum"], ["hrs de espera", "hours waiting"], ["hrs espera", "hours waiting"], ["espera", "waiting"],
+    ["1 via", "one way"], ["por ferry", "by ferry"], ["Carretera", "by road"], ["Tierra", "land route"],
+    ["Transfer IN", "Inbound transfer"], ["Transfer OUT", "Outbound transfer"], ["Transfer In", "Inbound transfer"], ["Transfer Out", "Outbound transfer"],
+    ["Volcan", "Volcano"], ["Basilica y Ruinas", "Basilica and Ruins"], ["Ruinas de Cartago & Basilica", "Cartago Ruins and Basilica"],
+    ["Cenas en", "Dinner in"], ["cena", "dinner"], ["desde", "from"], ["ROUNDTRIP", "round trip"]
+  ],
+  es: [
+    ["ONE DAY", "Dia completo"], ["ONE Day", "Dia completo"], ["all day", "dia completo"], ["Rain Forest", "Bosque lluvioso"],
+    ["Coffee Tour", "Tour de cafe"], ["coffee tour", "tour de cafe"], ["Transfer IN", "Traslado de entrada"], ["Transfer OUT", "Traslado de salida"],
+    ["Transfer In", "Traslado de entrada"], ["Transfer Out", "Traslado de salida"], ["ROUNDTRIP", "ida y vuelta"], ["1 via", "una via"],
+    ["maximo", "maximo"], ["Maximo", "Maximo"], ["max", "max."], ["Max", "Max."], ["hrs espera", "horas de espera"],
+    ["hrs de espera", "horas de espera"], ["Volcan", "Volcan"], ["Poas", "Poas"], ["Irazu", "Irazu"], ["Jaco", "Jaco"], ["San Jose", "San Jose"]
+  ],
+  fr: [
+    ["ONE DAY", "Journee complete"], ["ONE Day", "Journee complete"], ["all day", "journee complete"], ["Rain Forest", "Foret tropicale"],
+    ["Coffee Tour", "Excursion cafe"], ["coffee tour", "excursion cafe"], ["Transfer IN", "Transfert aller"], ["Transfer OUT", "Transfert retour"],
+    ["Transfer In", "Transfert aller"], ["Transfer Out", "Transfert retour"], ["ROUNDTRIP", "aller-retour"], ["1 via", "aller simple"],
+    ["por ferry", "par ferry"], ["Carretera", "par la route"], ["Tierra", "par voie terrestre"], ["maximo", "maximum"],
+    ["Maximo", "Maximum"], ["max", "max."], ["Max", "Max."], ["hrs de espera", "h d'attente"], ["hrs espera", "h d'attente"],
+    ["espera", "attente"], ["Basilica y Ruinas", "basilique et ruines"], ["Ruinas de Cartago & Basilica", "ruines de Cartago et basilique"],
+    ["Cenas en", "Diner a"], ["cena", "diner"], ["desde", "depuis"]
+  ]
+};
+
+function replaceAllLiteral(value, search, replacement) {
+  return value.split(search).join(replacement);
+}
+
+function translateRouteTerms(text, language) {
+  const replacements = routeTermTranslations[language] || [];
+  return replacements.reduce((current, pair) => replaceAllLiteral(current, pair[0], pair[1]), text);
+}
+
+function translateDynamicText(text, language) {
+  const showingOf = text.match(/^Showing (\d+) of (\d+) tours$/);
+  if (showingOf) {
+    if (language === "es") return "Mostrando " + showingOf[1] + " de " + showingOf[2] + " tours";
+    if (language === "fr") return "Affichage de " + showingOf[1] + " sur " + showingOf[2] + " excursions";
+  }
+
+  const priceJaco = text.match(/^\$(\d+(?:\.\d+)?) \/ 1-5 passengers \+ \$(\d+(?:\.\d+)?) extra passenger$/);
+  if (priceJaco) {
+    if (language === "es") return "$" + priceJaco[1] + " / 1-5 pasajeros + $" + priceJaco[2] + " pasajero adicional";
+    if (language === "fr") return "$" + priceJaco[1] + " / 1-5 passagers + $" + priceJaco[2] + " passager supplementaire";
+  }
+
+  const priceRange = text.match(/^(.+) \/ 1-5 passengers .+? (.+) \/ 6\+ passengers$/);
+  if (priceRange) {
+    if (language === "es") return priceRange[1] + " / 1-5 pasajeros - " + priceRange[2] + " / 6+ pasajeros";
+    if (language === "fr") return priceRange[1] + " / 1-5 passagers - " + priceRange[2] + " / 6+ passagers";
+  }
+
+  const calculation = text.match(/^Calculation uses the listed tour price per person for (\d+) adult(s?) and (\d+) child(?:ren)?\.$/);
+  if (calculation) {
+    if (language === "es") return "El calculo usa el precio publicado del tour por persona para " + calculation[1] + " adulto" + (calculation[1] === "1" ? "" : "s") + " y " + calculation[3] + " nino" + (calculation[3] === "1" ? "" : "s") + ".";
+    if (language === "fr") return "Le calcul utilise le prix publie de l'excursion par personne pour " + calculation[1] + " adulte" + (calculation[1] === "1" ? "" : "s") + " et " + calculation[3] + " enfant" + (calculation[3] === "1" ? "" : "s") + ".";
+  }
+
+  const totalUses = text.match(/^Total uses the selected (.+) rate and rounds the rental duration up to the next billing unit\.(?: Minimum duration: (\d+) days\.)?$/);
+  if (totalUses) {
+    const period = translateText(totalUses[1], language).toLowerCase();
+    if (language === "es") return "El total usa la tarifa " + period + " seleccionada y redondea la duracion del alquiler a la siguiente unidad de cobro." + (totalUses[2] ? " Duracion minima: " + totalUses[2] + " dias." : "");
+    if (language === "fr") return "Le total utilise le tarif " + period + " selectionne et arrondit la duree de location a l'unite de facturation suivante." + (totalUses[2] ? " Duree minimale : " + totalUses[2] + " jours." : "");
+  }
+
+  const stopOnRoute = text.match(/^Stop (\d+) on the (.+) route\.$/);
+  if (stopOnRoute) {
+    if (language === "es") return "Parada " + stopOnRoute[1] + " en la ruta " + stopOnRoute[2] + ".";
+    if (language === "fr") return "Arret " + stopOnRoute[1] + " sur la route " + stopOnRoute[2] + ".";
+  }
+
+  const viewImage = text.match(/^View (.+) image$/);
+  if (viewImage) {
+    if (language === "es") return "Ver imagen de " + translateText(viewImage[1], language);
+    if (language === "fr") return "Voir l'image de " + translateText(viewImage[1], language);
+  }
+
+  const openImage = text.match(/^Open (.+) image (\d+)$/);
+  if (openImage) {
+    if (language === "es") return "Abrir imagen " + openImage[2] + " de " + translateText(openImage[1], language);
+    if (language === "fr") return "Ouvrir l'image " + openImage[2] + " de " + translateText(openImage[1], language);
+  }
+
+  const actionTitle = text.match(/^(Edit|Remove|Show) (.+)$/);
+  if (actionTitle) {
+    const verbs = { Edit: { es: "Editar", fr: "Modifier" }, Remove: { es: "Eliminar", fr: "Supprimer" }, Show: { es: "Mostrar", fr: "Afficher" } };
+    if (language === "es" || language === "fr") return verbs[actionTitle[1]][language] + " " + translateText(actionTitle[2], language);
+  }
+
+  const defaultTour = text.match(/^(.+) is prepared as a consistent Alsama Tours experience with pickup planning, clear pricing and flexible support\.$/);
+  if (defaultTour) {
+    if (language === "es") return translateText(defaultTour[1], language) + " se prepara como una experiencia consistente de Alsama Tours con planificacion de recogida, precios claros y apoyo flexible.";
+    if (language === "fr") return translateText(defaultTour[1], language) + " est preparee comme une experience Alsama Tours coherente, avec planification de la prise en charge, prix clairs et assistance flexible.";
+  }
+
+  const availableTour = text.match(/^(.+) available through Alsama Tours with booking support, pickup planning and clear per-person pricing\.$/);
+  if (availableTour) {
+    if (language === "es") return translateText(availableTour[1], language) + " disponible con Alsama Tours, con apoyo de reserva, planificacion de recogida y precio claro por persona.";
+    if (language === "fr") return translateText(availableTour[1], language) + " disponible avec Alsama Tours, avec assistance de reservation, planification de prise en charge et prix clair par personne.";
+  }
+
+  const rentalCategory = text.match(/^(.+) rental category with (.+)\.$/);
+  if (rentalCategory) {
+    if (language === "es") return "Categoria de alquiler " + translateText(rentalCategory[1], language) + " con " + translateText(rentalCategory[2], language).toLowerCase() + ".";
+    if (language === "fr") return "Categorie de location " + translateText(rentalCategory[1], language) + " avec " + translateText(rentalCategory[2], language).toLowerCase() + ".";
+  }
+
+  return null;
+}
+
+
 export function translateText(value, language) {
   const text = clean(value);
-  if (!text || language === "en") return text;
+  if (!text) return text;
+
   const found = i18next.t(text, { lng: language, defaultValue: "" });
   if (found) return found;
+
   const maps = exactTranslations[language] || {};
+  const dynamic = translateDynamicText(text, language);
+  if (dynamic) return dynamic;
+
   const showing = text.match(/^Showing (\d+) (.+)$/);
-  if (showing) return `${maps.Showing || "Showing"} ${showing[1]} ${translateText(showing[2], language)}`;
+  if (showing) return (maps.Showing || "Showing") + " " + showing[1] + " " + translateText(showing[2], language);
+
   const genericHotel = text.match(/^(.+) hotel option in (.+) with listed room rates for trip planning\.$/);
   if (genericHotel) {
-    return language === "es"
-      ? `${genericHotel[1]} es una opcion de hotel en ${genericHotel[2]} con tarifas de habitacion listadas para planificar el viaje.`
-      : `${genericHotel[1]} est une option d'hotel a ${genericHotel[2]} avec des tarifs de chambre indiques pour planifier le voyage.`;
+    if (language === "es") return genericHotel[1] + " es una opcion de hotel en " + genericHotel[2] + " con tarifas de habitacion listadas para planificar el viaje.";
+    if (language === "fr") return genericHotel[1] + " est une option d'hotel a " + genericHotel[2] + " avec des tarifs de chambre indiques pour planifier le voyage.";
   }
+
   const selected = text.match(/^Selected items \((\d+)\)$/);
-  if (selected) return language === "es" ? `Servicios seleccionados (${selected[1]})` : `Elements selectionnes (${selected[1]})`;
+  if (selected) {
+    if (language === "es") return "Servicios seleccionados (" + selected[1] + ")";
+    if (language === "fr") return "Elements selectionnes (" + selected[1] + ")";
+  }
+
   const passengers = text.match(/^(\d+) passenger(s?)$/);
-  if (passengers) return language === "es" ? `${passengers[1]} pasajero${passengers[1] === "1" ? "" : "s"}` : `${passengers[1]} passager${passengers[1] === "1" ? "" : "s"}`;
+  if (passengers) {
+    if (language === "es") return passengers[1] + " pasajero" + (passengers[1] === "1" ? "" : "s");
+    if (language === "fr") return passengers[1] + " passager" + (passengers[1] === "1" ? "" : "s");
+  }
+
   const adults = text.match(/^(\d+) adult(s?)$/);
-  if (adults) return language === "es" ? `${adults[1]} adulto${adults[1] === "1" ? "" : "s"}` : `${adults[1]} adulte${adults[1] === "1" ? "" : "s"}`;
+  if (adults) {
+    if (language === "es") return adults[1] + " adulto" + (adults[1] === "1" ? "" : "s");
+    if (language === "fr") return adults[1] + " adulte" + (adults[1] === "1" ? "" : "s");
+  }
+
   const children = text.match(/^(\d+) child(?:ren)?$/);
-  if (children) return language === "es" ? `${children[1]} nino${children[1] === "1" ? "" : "s"}` : `${children[1]} enfant${children[1] === "1" ? "" : "s"}`;
+  if (children) {
+    if (language === "es") return children[1] + " nino" + (children[1] === "1" ? "" : "s");
+    if (language === "fr") return children[1] + " enfant" + (children[1] === "1" ? "" : "s");
+  }
+
   const days = text.match(/^(\d+) day(s?)$/);
-  if (days) return language === "es" ? `${days[1]} dia${days[1] === "1" ? "" : "s"}` : `${days[1]} jour${days[1] === "1" ? "" : "s"}`;
+  if (days) {
+    if (language === "es") return days[1] + " dia" + (days[1] === "1" ? "" : "s");
+    if (language === "fr") return days[1] + " jour" + (days[1] === "1" ? "" : "s");
+  }
+
   const nights = text.match(/^(\d+) night(s?)$/);
-  if (nights) return language === "es" ? `${nights[1]} noche${nights[1] === "1" ? "" : "s"}` : `${nights[1]} nuit${nights[1] === "1" ? "" : "s"}`;
+  if (nights) {
+    if (language === "es") return nights[1] + " noche" + (nights[1] === "1" ? "" : "s");
+    if (language === "fr") return nights[1] + " nuit" + (nights[1] === "1" ? "" : "s");
+  }
+
   const stops = text.match(/^(\d+) stop(s?)$/);
-  if (stops) return language === "es" ? `${stops[1]} parada${stops[1] === "1" ? "" : "s"}` : `${stops[1]} arret${stops[1] === "1" ? "" : "s"}`;
+  if (stops) {
+    if (language === "es") return stops[1] + " parada" + (stops[1] === "1" ? "" : "s");
+    if (language === "fr") return stops[1] + " arret" + (stops[1] === "1" ? "" : "s");
+  }
+
   const hotels = text.match(/^(\d+) hotel(s?)$/);
-  if (hotels) return `${hotels[1]} ${translateText(hotels[1] === "1" ? "hotel" : "hotels", language)}`;
+  if (hotels) return hotels[1] + " " + translateText(hotels[1] === "1" ? "hotel" : "hotels", language);
+
   const options = text.match(/^(\d+) options$/);
-  if (options) return `${options[1]} ${translateText("options", language)}`;
+  if (options) return options[1] + " " + translateText("options", language);
+
   const selectedItems = text.match(/^(\d+) selected item(s?)$/);
-  if (selectedItems) return language === "es" ? `${selectedItems[1]} servicio${selectedItems[1] === "1" ? "" : "s"} seleccionado${selectedItems[1] === "1" ? "" : "s"}` : `${selectedItems[1]} element${selectedItems[1] === "1" ? "" : "s"} selectionne${selectedItems[1] === "1" ? "" : "s"}`;
+  if (selectedItems) {
+    if (language === "es") return selectedItems[1] + " servicio" + (selectedItems[1] === "1" ? "" : "s") + " seleccionado" + (selectedItems[1] === "1" ? "" : "s");
+    if (language === "fr") return selectedItems[1] + " element" + (selectedItems[1] === "1" ? "" : "s") + " selectionne" + (selectedItems[1] === "1" ? "" : "s");
+  }
+
   const units = text.match(/^(\d+) (.+) unit(s?)$/);
-  if (units) return language === "es" ? `${units[1]} unidad${units[1] === "1" ? "" : "es"} ${translateText(units[2], language).toLowerCase()}` : `${units[1]} unite${units[1] === "1" ? "" : "s"} ${translateText(units[2], language).toLowerCase()}`;
-  if (text.startsWith("From ")) return `${maps.From || "From"} ${text.slice(5)}`;
-  if (text.startsWith("To ")) return language === "es" ? `Hasta ${text.slice(3)}` : `Jusqu'au ${text.slice(3)}`;
-  if (text.startsWith("Departure ")) return `${maps.Departure || "Departure"} ${text.slice(10)}`;
-  if (text.startsWith("Check-in ")) return language === "es" ? `Entrada ${text.slice(9)}` : `Arrivee ${text.slice(9)}`;
-  if (text.startsWith("Check-out ")) return language === "es" ? `Salida ${text.slice(10)}` : `Depart ${text.slice(10)}`;
-  return text;
+  if (units) {
+    if (language === "es") return units[1] + " unidad" + (units[1] === "1" ? "" : "es") + " " + translateText(units[2], language).toLowerCase();
+    if (language === "fr") return units[1] + " unite" + (units[1] === "1" ? "" : "s") + " " + translateText(units[2], language).toLowerCase();
+  }
+
+  if (text.startsWith("From ")) return (maps.From || "From") + " " + text.slice(5);
+  if (text.startsWith("To ")) {
+    if (language === "es") return "Hasta " + text.slice(3);
+    if (language === "fr") return "Jusqu'au " + text.slice(3);
+  }
+  if (text.startsWith("Departure ")) return (maps.Departure || "Departure") + " " + text.slice(10);
+  if (text.startsWith("Check-in ")) {
+    if (language === "es") return "Entrada " + text.slice(9);
+    if (language === "fr") return "Arrivee " + text.slice(9);
+  }
+  if (text.startsWith("Check-out ")) {
+    if (language === "es") return "Salida " + text.slice(10);
+    if (language === "fr") return "Depart " + text.slice(10);
+  }
+
+  return translateRouteTerms(text, language);
 }
 
 export function getPageTitle(key, language) {
