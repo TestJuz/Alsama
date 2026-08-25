@@ -48,41 +48,46 @@ const onRequestDepartures = [
   { date: "Custom dates", status: "Ask us" }
 ];
 
+function getTourFolderCover(folder, fallback) {
+  const [cover] = tourGalleryManifest[folder] || [];
+  return asset(cover || fallback);
+}
+
 const tourImages = {
-  beach: asset("img/tours/sj/beach-day.webp"),
-  laPaz: asset("img/tours/sj/La-Paz-Waterfall-Gardens-2.webp"),
-  manuelAntonio: asset("img/tours/sj/Manuel-Antonio.webp"),
-  monkey: asset("img/tours/jaco/Monkey-Tour-9-1.webp"),
-  rafting: asset("img/tours/jaco/Rafting-1.webp"),
-  tortuga: asset("img/tours/jaco/Tortuga-7.webp")
+  beach: getTourFolderCover("sj/Beach_Day", "img/tours/sj/Beach_Day/1.webp"),
+  laPaz: getTourFolderCover("sj/La_Paz_Waterfall_Gardens", "img/tours/sj/La_Paz_Waterfall_Gardens/La Paz Waterfall.webp"),
+  manuelAntonio: getTourFolderCover("sj/Manuel_Antonio", "img/tours/sj/Manuel_Antonio/1.webp"),
+  monkey: getTourFolderCover("jaco/Monkey_Mangrove_Tour", "img/tours/jaco/Monkey_Mangrove_Tour/1.webp"),
+  rafting: getTourFolderCover("jaco/White _Water_Rafting", "img/tours/jaco/White _Water_Rafting/Rafting-1.webp"),
+  tortuga: getTourFolderCover("jaco/Tortuga_Island_Tour", "img/tours/jaco/Tortuga_Island_Tour/1.webp")
 };
 
 const sourceTourImages = {
-  manuelAntonio: "https://alsamatourscr.com/wp-content/uploads/2024/01/Manuel-Antonio-1024x1024.png",
-  beachDay: "https://alsamatourscr.com/wp-content/uploads/2024/01/Beach-Day-scaled.jpeg",
-  natureCombo: "https://alsamatourscr.com/wp-content/uploads/2024/01/La-Paz-Waterfall-Gardens-2-768x768.png",
-  cityBus: "https://alsamatourscr.com/wp-content/uploads/2024/01/City-bus.jpg",
-  laPazWaterfall: "https://alsamatourscr.com/wp-content/uploads/2024/01/La-Paz-Waterfall-Gardens-768x768.png",
-  irazuOrosi: "https://alsamatourscr.com/wp-content/uploads/2024/01/Irazu-Volcano-Orosi-Valley-Lankester-Botanic-Garden-768x768.png",
-  premiumTortuga: "https://alsamatourscr.com/wp-content/uploads/2024/01/Premiun-Isla-Tortuga-1024x1024.png",
-  arenal: "https://alsamatourscr.com/wp-content/uploads/2024/01/Arenal-portada-trip-1024x683.png",
-  folklore: "https://alsamatourscr.com/wp-content/uploads/2024/01/Folklore-500-x-500.png",
-  irazuHalfday: "https://alsamatourscr.com/wp-content/uploads/2024/01/1.png",
-  whiteWaterRafting: "https://alsamatourscr.com/wp-content/uploads/2024/01/Rafting-1-1024x1024.png",
-  aerialTramHighRope: "https://alsamatourscr.com/wp-content/uploads/2024/01/5-in-1-6-1024x1024.png",
-  seaKayakSnorkel: "https://alsamatourscr.com/wp-content/uploads/2024/01/Kayak-1024x1024.png",
-  canyoning: "https://alsamatourscr.com/wp-content/uploads/2024/01/Canyoning-1024x1024.png",
-  extremeAdrenaline: "https://alsamatourscr.com/wp-content/uploads/2024/01/5-in-1-1024x1024.png",
-  carara: "https://alsamatourscr.com/wp-content/uploads/2024/01/carara-4.jpg",
-  poasLaPaz: "https://alsamatourscr.com/wp-content/uploads/2024/01/Poas-Volcano-y-la-paz-waterfall-1024x1024.png",
-  safariAdventure: "https://alsamatourscr.com/wp-content/uploads/2024/01/Safary-Jaco-1024x1024.png",
-  aerialTram: "https://alsamatourscr.com/wp-content/uploads/2024/01/Teleferico-768x768.png",
-  horsebackWaterfalls: "https://alsamatourscr.com/wp-content/uploads/2024/01/Horseback-Riding-6.png",
-  monkeyMangrove: "https://alsamatourscr.com/wp-content/uploads/2024/01/Monkey-Tour-1024x1024.png",
-  waterfallExperience: "https://alsamatourscr.com/wp-content/uploads/2024/01/Waterfall-Experience-1024x1024.png",
-  tranopy: "https://alsamatourscr.com/wp-content/uploads/2024/01/carara-2.jpg",
-  tortugaIsland: "https://alsamatourscr.com/wp-content/uploads/2024/01/Tortuga-7-1024x1024.png",
-  chocolate: "https://alsamatourscr.com/wp-content/uploads/2024/01/Chocolate-500px-x-500px.png"
+  manuelAntonio: getTourFolderCover("sj/Manuel_Antonio", "img/tours/sj/Manuel_Antonio/1.webp"),
+  beachDay: getTourFolderCover("sj/Beach_Day", "img/tours/sj/Beach_Day/1.webp"),
+  natureCombo: getTourFolderCover("sj/Natural_Combo", "img/tours/sj/Natural_Combo/Combo.webp"),
+  cityBus: getTourFolderCover("sj/City_Bus", "img/gallery/City-bus.webp"),
+  laPazWaterfall: getTourFolderCover("sj/La_Paz_Waterfall_Gardens", "img/tours/sj/La_Paz_Waterfall_Gardens/La Paz Waterfall.webp"),
+  irazuOrosi: getTourFolderCover("sj/Irazu_Volcano_Orisi_Valley_&_Lankester_Botanic_Garden", "img/tours/sj/Irazu_Volcano_Orisi_Valley_&_Lankester_Botanic_Garden/1.webp"),
+  premiumTortuga: getTourFolderCover("sj/Premium Tortuga Island_Tour", "img/tours/sj/Premium Tortuga Island_Tour/1.webp"),
+  arenal: getTourFolderCover("sj/Arenal_Volcano_and_Hot_Springs", "img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp"),
+  folklore: getTourFolderCover("sj/Typical_Dinner_and_Folklore_Show", "img/tours/sj/Typical_Dinner_and_Folklore_Show/1.webp"),
+  irazuHalfday: getTourFolderCover("sj/Irazu_Volcano_Halfday", "img/tours/sj/Irazu_Volcano_Halfday/1.webp"),
+  whiteWaterRafting: getTourFolderCover("jaco/White _Water_Rafting", "img/tours/jaco/White _Water_Rafting/Rafting-1.webp"),
+  aerialTramHighRope: getTourFolderCover("jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", "img/tours/jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit/Teleferico.webp"),
+  seaKayakSnorkel: getTourFolderCover("jaco/Sea_Kayak_&_Snorkel_Tour", "img/tours/jaco/Sea_Kayak_&_Snorkel_Tour/Kayak.webp"),
+  canyoning: getTourFolderCover("jaco/Canyoning_Tour", "img/tours/jaco/Canyoning_Tour/Canyoning.webp"),
+  extremeAdrenaline: getTourFolderCover("jaco/Extreme_Adrenaline_5_in_1", "img/tours/jaco/Extreme_Adrenaline_5_in_1/5-in-1.webp"),
+  carara: getTourFolderCover("jaco/Carara_National_Park", "img/tours/jaco/Carara_National_Park/1.webp"),
+  poasLaPaz: getTourFolderCover("jaco/Poas_Volcano_&_La_Paz_Waterfall", "img/tours/jaco/Poas_Volcano_&_La_Paz_Waterfall/Poas-Volcano-y-la-paz-waterfall.webp"),
+  safariAdventure: getTourFolderCover("jaco/Safari_Adventure", "img/tours/jaco/Safari_Adventure/Safary-Jaco.webp"),
+  aerialTram: getTourFolderCover("jaco/Aerial_Tram", "img/tours/jaco/Aerial_Tram/Teleferico.webp"),
+  horsebackWaterfalls: getTourFolderCover("jaco/Horseback_Riding_&_Waterfalls", "img/tours/jaco/Horseback_Riding_&_Waterfalls/Horseback-Riding.webp"),
+  monkeyMangrove: getTourFolderCover("jaco/Monkey_Mangrove_Tour", "img/tours/jaco/Monkey_Mangrove_Tour/1.webp"),
+  waterfallExperience: getTourFolderCover("jaco/Waterfall_Experience_Tour", "img/tours/jaco/Waterfall_Experience_Tour/Waterfall-Experience.webp"),
+  tranopy: getTourFolderCover("jaco/Tranopy_Tour", "img/tours/jaco/Tranopy_Tour/1.webp"),
+  tortugaIsland: getTourFolderCover("jaco/Tortuga_Island_Tour", "img/tours/jaco/Tortuga_Island_Tour/1.webp"),
+  chocolate: getTourFolderCover("jaco/Chocolate_Tour", "img/tours/jaco/Chocolate_Tour/1.webp")
 };
 
 function getTourFolderGallery(folder) {
@@ -244,11 +249,11 @@ export const sanJoseTours = [
   makeTour("Nature Combo", 207.29, { origin: "san-jose", galleryFolder: "sj/Natural_Combo", durationText: "12 Hours", durationHours: 12, image: sourceTourImages.natureCombo, locations: ["Alajuela", "Poas", "La Paz"], excerpt: "Coffee, Poas Volcano, waterfalls and wildlife combined into one varied day from San Jose.", sourceUrl: "https://alsamatourscr.com/trip/nature-combo/" }),
   makeTour("City Bus", 87.86, { origin: "san-jose", galleryFolder: "sj/City_Bus", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.cityBus, locations: ["San Jose"], excerpt: "A panoramic San Jose sightseeing route by double decker bus with cultural stops and local history.", sourceUrl: "https://alsamatourscr.com/trip/city-bus/" }),
   makeTour("La Paz Waterfall Gardens", 142.96, { origin: "san-jose", galleryFolder: "sj/La_Paz_Waterfall_Gardens", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.laPazWaterfall, locations: ["Alajuela", "Vara Blanca"], excerpt: "Five waterfalls, lush rainforest and one of Costa Rica's best wildlife sanctuary visits.", sourceUrl: "https://alsamatourscr.com/trip/la-paz-waterfall-gardens/" }),
-  makeTour("Irazú Volcano, Orosi Valley & Lankester Botanic Garden", 142.89, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Orisi_Valley_&_Lankester_Botanic_Garden", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.irazuOrosi, locations: ["Cartago", "Irazu", "Orosi", "Lankester"], excerpt: "Cartago history, Irazu Volcano, Orosi Valley and Lankester Botanic Garden in one scenic route.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-orosi-valley-lankester-botanic-garden/" }),
+  makeTour("IrazÃº Volcano, Orosi Valley & Lankester Botanic Garden", 142.89, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Orisi_Valley_&_Lankester_Botanic_Garden", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.irazuOrosi, locations: ["Cartago", "Irazu", "Orosi", "Lankester"], excerpt: "Cartago history, Irazu Volcano, Orosi Valley and Lankester Botanic Garden in one scenic route.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-orosi-valley-lankester-botanic-garden/" }),
   makeTour("Premium Tortuga Island Tour", 172.08, { origin: "san-jose", galleryFolder: "sj/Premium Tortuga Island_Tour", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.premiumTortuga, locations: ["Isla Tortuga", "Gulf of Nicoya"], excerpt: "A premium island day with turquoise water, beach time, ocean views and activities in the Gulf of Nicoya.", sourceUrl: "https://alsamatourscr.com/trip/premium-tortuga-island-tour/" }),
   makeTour("Arenal Volcano and Hot Springs", 208.49, { origin: "san-jose", galleryFolder: "sj/Arenal_Volcano_and_Hot_Springs", durationText: "13 Hours", durationHours: 13, image: sourceTourImages.arenal, locations: ["Arenal", "La Fortuna", "San Carlos"], excerpt: "Arenal Volcano scenery, La Fortuna views and time to relax in volcanic hot springs.", sourceUrl: "https://alsamatourscr.com/trip/arenal-volcano-and-hot-springs/" }),
   makeTour("Typical Dinner and Folklore Show", 99.28, { origin: "san-jose", galleryFolder: "sj/Typical_Dinner_and_Folklore_Show", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.folklore, locations: ["San Jose", "Central Valley"], excerpt: "An evening of Central Valley views, Costa Rican folklore, marimba music and traditional buffet dinner.", sourceUrl: "https://alsamatourscr.com/trip/typical-dinner-and-folklore-show/" }),
-  makeTour("Irazú Volcano Halfday", 90.46, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A half-day volcano route from San Jose toward Cartago and the summit landscapes of Irazu.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
+  makeTour("IrazÃº Volcano Halfday", 90.46, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A half-day volcano route from San Jose toward Cartago and the summit landscapes of Irazu.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
 ];
 
 export const jacoTours = [
@@ -262,7 +267,7 @@ export const jacoTours = [
   makeTour("Safari Adventure", 107.55, { origin: "jaco", galleryFolder: "jaco/Safari_Adventure", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.safariAdventure, locations: ["Jaco"], excerpt: "A Jaco-area sightseeing day with monkeys, crocodile river cruise, countryside visits and beach time.", sourceUrl: "https://alsamatourscr.com/trip/safari-adventure/" }),
   makeTour("Aerial Tram", 113.19, { origin: "jaco", galleryFolder: "jaco/Aerial_Tram", durationText: "2 Hours", durationHours: 2, difficulty: "Medium", image: sourceTourImages.aerialTram, locations: ["Jaco"], excerpt: "A treetop aerial tram ride that lets travelers see the Central Pacific forest from above.", sourceUrl: "https://alsamatourscr.com/trip/aerial-tram/" }),
   makeTour("Horseback Riding & Waterfalls", 82.73, { origin: "jaco", galleryFolder: "jaco/Horseback_Riding_&_Waterfalls", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.horsebackWaterfalls, locations: ["Jaco"], excerpt: "A horseback route near Jaco with waterfall and pool time, plus chances to spot tropical wildlife.", sourceUrl: "https://alsamatourscr.com/trip/horseback-riding-waterfalls/" }),
-  makeTour("Monkey Mangrove Tour", 91.01, { origin: "jaco", galleryFolder: "jaco/Monkey_Mangrove_Tour", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.monkeyMangrove, locations: ["Jaco", "Los Sueños"], excerpt: "A family-friendly mangrove riverboat experience with white-faced capuchin monkey sightings.", sourceUrl: "https://alsamatourscr.com/trip/monkey-mangrove-tour/" }),
+  makeTour("Monkey Mangrove Tour", 91.01, { origin: "jaco", galleryFolder: "jaco/Monkey_Mangrove_Tour", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.monkeyMangrove, locations: ["Jaco", "Los SueÃ±os"], excerpt: "A family-friendly mangrove riverboat experience with white-faced capuchin monkey sightings.", sourceUrl: "https://alsamatourscr.com/trip/monkey-mangrove-tour/" }),
   makeTour("Waterfall Experience Tour", 108.36, { origin: "jaco", galleryFolder: "jaco/Waterfall_Experience_Tour", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.waterfallExperience, locations: ["Jaco", "Manuel Antonio"], excerpt: "A guided rainforest waterfall trip above the Pacific with pools, trails and mountain views.", sourceUrl: "https://alsamatourscr.com/trip/waterfall-experience-tour/" }),
   makeTour("Tranopy Tour", 85.08, { origin: "jaco", galleryFolder: "jaco/Tranopy_Tour", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.tranopy, locations: ["Jaco"], excerpt: "A Jaco adventure mix with aerial tram scenery and zipline-style forest excitement.", sourceUrl: "https://alsamatourscr.com/trip/tranopy-tour/" }),
   makeTour("Tortuga Island Tour", 182.01, { origin: "jaco", galleryFolder: "jaco/Tortuga_Island_Tour", durationText: "1 Day", durationHours: 24, image: sourceTourImages.tortugaIsland, locations: ["Jaco", "Isla Tortuga", "Puntarenas"], excerpt: "A classic Gulf of Nicoya cruise to Tortuga Island with white sand beach and turquoise water.", sourceUrl: "https://alsamatourscr.com/trip/tortuga-island-tour/" }),

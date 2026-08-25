@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -22,6 +22,10 @@ function uniqueImages(images) {
   return [...new Set(images.filter(Boolean))];
 }
 
+function cssImageUrl(value) {
+  const safeValue = String(value || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  return `url("${safeValue}")`;
+}
 
 export function TourDetailPage() {
   const { tourSlug } = useParams();
@@ -73,7 +77,7 @@ export function TourDetailPage() {
       footerBackToTop="#top"
     >
       <main className="tour-detail" id="top">
-        <section className="tour-detail-hero" style={{ "--tour-hero-image": `url(${tour.image})` }}>
+        <section className="tour-detail-hero" style={{ "--tour-hero-image": cssImageUrl(tour.image) }}>
           <div className="container tour-detail-hero__content">
             <div className="tour-breadcrumbs">
               <button className="tour-back-button" type="button" onClick={handleBack} aria-label={t("Back")}>
@@ -113,7 +117,7 @@ export function TourDetailPage() {
                 >
                   {gallery.map((image, index) => (
                     <SwiperSlide key={image}>
-                      <button className="tour-gallery-carousel__zoom" type="button" style={{ "--tour-slide-image": `url(${image})` }} aria-label={`${t("Open")} ${t(tour.title)} ${t("image")} ${index + 1}`} onClick={() => setGalleryIndex(index)}>
+                      <button className="tour-gallery-carousel__zoom" type="button" style={{ "--tour-slide-image": cssImageUrl(image) }} aria-label={`${t("Open")} ${t(tour.title)} ${t("image")} ${index + 1}`} onClick={() => setGalleryIndex(index)}>
                         <img src={image} alt={`${t(tour.title)} ${t("gallery")} ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
                       </button>
                     </SwiperSlide>

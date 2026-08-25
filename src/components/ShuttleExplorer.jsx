@@ -11,6 +11,9 @@ import {
 import { useCart } from "@/context/CartContext";
 import { getFallbackRouteCoordinates, shuttleRoutes } from "@/lib/shuttles";
 
+const INITIAL_VISIBLE_SHUTTLES = 10;
+const SHUTTLE_PREVIEW_COUNT = 3;
+
 function parseTimeToMinutes(time) {
   const [hours, minutes] = time.split(":").map(Number);
   return hours * 60 + minutes;
@@ -46,6 +49,150 @@ async function fetchRoadRoute(route) {
   return geometry;
 }
 
+function ShuttleRouteCard({
+  route,
+  isActive,
+  preview = false,
+  onAdd,
+  onToggle,
+  viewport,
+  setViewport,
+  routeCoordinates,
+  routeSourceLabel
+}) {
+  const previewTabIndex = preview ? -1 : undefined;
+
+  return (
+    <article
+      className={`shuttle-card${isActive ? " shuttle-card--active" : ""}${preview ? " shuttle-card--preview" : ""}`}
+      aria-hidden={preview ? "true" : undefined}
+    >
+      <div className="shuttle-card__header">
+        <span className="transport-card__tag">{route.region}</span>
+        <span className="badge">{route.departurePeriod}</span>
+      </div>
+
+      <h3>{route.service}</h3>
+      <p className="muted">{route.summary}</p>
+
+      <dl className="shuttle-card__meta">
+        <div>
+          <dt>Price</dt>
+          <dd>{formatUSD(route.price)}</dd>
+        </div>
+        <div>
+          <dt>Schedule</dt>
+          <dd>{route.schedule}</dd>
+        </div>
+        <div>
+          <dt>Stops</dt>
+          <dd>{route.stops.length}</dd>
+        </div>
+      </dl>
+
+      <div className="shuttle-card__actions">
+        <button
+          className="btn btn--primary"
+          type="button"
+          onClick={() => onAdd(route)}
+          tabIndex={previewTabIndex}
+        >
+          Add to cart
+        </button>
+        <button
+          className="btn btn--ghost shuttle-card__button"
+          type="button"
+          onClick={() => onToggle(route.id)}
+          tabIndex={previewTabIndex}
+        >
+          {isActive ? "Hide route" : "View route"}
+        </button>
+      </div>
+
+      {isActive ? (
+        <div className="shuttle-expanded">
+          <div className="transport-card shuttle-selected">
+            <span className="transport-card__tag">Selected shuttle</span>
+            <h3>{route.service}</h3>
+            <p className="muted">{route.summary}</p>
+
+            <div className="shuttle-selected__meta">
+              <div className="summary-card">
+                <h3>{formatUSD(route.price)}</h3>
+                <p className="muted">Shared service price</p>
+              </div>
+              <div className="summary-card">
+                <h3>{route.schedule}</h3>
+                <p className="muted">Departure window</p>
+              </div>
+            </div>
+
+            <div className="shuttle-stopList">
+              {route.stops.map((stop, index) => (
+                <span key={stop.name} className="chip">
+                  {index + 1}. {stop.name}
+                </span>
+              ))}
+            </div>
+
+            <button
+              className="btn btn--primary shuttle-card__button"
+              type="button"
+              onClick={() => onAdd(route)}
+            >
+              Add shuttle to cart
+            </button>
+          </div>
+
+          <div className="shuttle-mapCard">
+            <div className="shuttle-mapCard__head">
+              <div>
+                <h3>Shuttle path map</h3>
+                <p className="muted">{routeSourceLabel}</p>
+                <p className="shuttle-mapDisclaimer">Routes are examples and may vary.</p>
+              </div>
+            </div>
+
+            <div className="shuttle-mapCanvas">
+              <Map
+                viewport={viewport}
+                onViewportChange={setViewport}
+                center={route.viewport.center}
+                zoom={route.viewport.zoom}
+                theme="light"
+                styles={{ light: naturalMapStyle, dark: naturalMapStyle }}
+              >
+                <MapControls showZoom showFullscreen />
+                <MapRoute coordinates={routeCoordinates} color="#0f8b8d" width={4} />
+
+                {route.stops.map((stop, index) => (
+                  <MapMarker
+                    key={stop.name}
+                    longitude={stop.lng}
+                    latitude={stop.lat}
+                  >
+                    <MarkerContent>
+                      <div className="shuttle-marker">{index + 1}</div>
+                    </MarkerContent>
+                    <MarkerPopup closeButton>
+                      <div className="shuttle-popup">
+                        <strong>{stop.name}</strong>
+                        <p>
+                          Stop {index + 1} on the {route.service} route.
+                        </p>
+                      </div>
+                    </MarkerPopup>
+                  </MapMarker>
+                ))}
+              </Map>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
 export function ShuttleExplorer() {
   const { addItem } = useCart();
   const [searchParams] = useSearchParams();
@@ -53,6 +200,7 @@ export function ShuttleExplorer() {
   const [region, setRegion] = useState("");
   const [departure, setDeparture] = useState("");
   const [sort, setSort] = useState("featured");
+  const [visibleRouteCount, setVisibleRouteCount] = useState(INITIAL_VISIBLE_SHUTTLES);
   const [expandedId, setExpandedId] = useState(searchParams.get("route") || "");
   const [viewport, setViewport] = useState(undefined);
   const [routeCoordinates, setRouteCoordinates] = useState(
@@ -106,6 +254,10 @@ export function ShuttleExplorer() {
   }, [departure, query, region, sort]);
 
   useEffect(() => {
+    setVisibleRouteCount(INITIAL_VISIBLE_SHUTTLES);
+  }, [departure, query, region, sort]);
+
+  useEffect(() => {
     if (expandedId && !filteredRoutes.some((route) => route.id === expandedId)) {
       setExpandedId("");
     }
@@ -113,6 +265,17 @@ export function ShuttleExplorer() {
 
   const selectedRoute =
     filteredRoutes.find((route) => route.id === expandedId) ?? null;
+  const selectedRouteIndex = filteredRoutes.findIndex((route) => route.id === expandedId);
+  const effectiveVisibleRouteCount = selectedRouteIndex >= visibleRouteCount
+    ? selectedRouteIndex + 1
+    : visibleRouteCount;
+  const visibleRoutes = filteredRoutes.slice(0, effectiveVisibleRouteCount);
+  const previewRoutes = filteredRoutes.slice(
+    effectiveVisibleRouteCount,
+    effectiveVisibleRouteCount + SHUTTLE_PREVIEW_COUNT
+  );
+  const shownRouteCount = Math.min(effectiveVisibleRouteCount, filteredRoutes.length);
+  const hasMoreRoutes = shownRouteCount < filteredRoutes.length;
 
   function addShuttleToCart(route) {
     addItem({
@@ -137,6 +300,14 @@ export function ShuttleExplorer() {
         stops: route.stops.map((stop) => stop.name)
       }
     });
+  }
+
+  function toggleRoute(routeId) {
+    setExpandedId((current) => (current === routeId ? "" : routeId));
+  }
+
+  function loadMoreRoutes() {
+    setVisibleRouteCount((current) => Math.min(current + INITIAL_VISIBLE_SHUTTLES, filteredRoutes.length));
   }
 
   useEffect(() => {
@@ -226,145 +397,48 @@ export function ShuttleExplorer() {
         <div className="shuttle-explorer">
           <div className="shuttle-results">
             <div className="list-head">
-              <p className="muted">Showing {filteredRoutes.length} shuttle options</p>
+              <p className="muted">Showing {shownRouteCount} of {filteredRoutes.length} shuttle options</p>
             </div>
 
             {filteredRoutes.length ? (
-              <div className="shuttle-list">
-                {filteredRoutes.map((route) => {
-                  const isActive = route.id === selectedRoute?.id;
-
-                  return (
-                    <article
+              <>
+                <div className="shuttle-list shuttle-list--progressive">
+                  {visibleRoutes.map((route) => (
+                    <ShuttleRouteCard
                       key={route.id}
-                      className={`shuttle-card${isActive ? " shuttle-card--active" : ""}`}
-                    >
-                      <div className="shuttle-card__header">
-                        <span className="transport-card__tag">{route.region}</span>
-                        <span className="badge">{route.departurePeriod}</span>
-                      </div>
-
-                      <h3>{route.service}</h3>
-                      <p className="muted">{route.summary}</p>
-
-                      <dl className="shuttle-card__meta">
-                        <div>
-                          <dt>Price</dt>
-                          <dd>{formatUSD(route.price)}</dd>
-                        </div>
-                        <div>
-                          <dt>Schedule</dt>
-                          <dd>{route.schedule}</dd>
-                        </div>
-                        <div>
-                          <dt>Stops</dt>
-                          <dd>{route.stops.length}</dd>
-                        </div>
-                      </dl>
-
-                      <div className="shuttle-card__actions">
-                        <button
-                          className="btn btn--primary"
-                          type="button"
-                          onClick={() => addShuttleToCart(route)}
-                        >
-                          Add to cart
-                        </button>
-                        <button
-                          className="btn btn--ghost shuttle-card__button"
-                          type="button"
-                          onClick={() =>
-                            setExpandedId((current) => (current === route.id ? "" : route.id))
-                          }
-                        >
-                          {isActive ? "Hide route" : "View route"}
-                        </button>
-                      </div>
-
-                      {isActive ? (
-                        <div className="shuttle-expanded">
-                          <div className="transport-card shuttle-selected">
-                            <span className="transport-card__tag">Selected shuttle</span>
-                            <h3>{selectedRoute.service}</h3>
-                            <p className="muted">{selectedRoute.summary}</p>
-
-                            <div className="shuttle-selected__meta">
-                              <div className="summary-card">
-                                <h3>{formatUSD(selectedRoute.price)}</h3>
-                                <p className="muted">Shared service price</p>
-                              </div>
-                              <div className="summary-card">
-                                <h3>{selectedRoute.schedule}</h3>
-                                <p className="muted">Departure window</p>
-                              </div>
-                            </div>
-
-                            <div className="shuttle-stopList">
-                              {selectedRoute.stops.map((stop, index) => (
-                                <span key={stop.name} className="chip">
-                                  {index + 1}. {stop.name}
-                                </span>
-                              ))}
-                            </div>
-
-                            <button
-                              className="btn btn--primary shuttle-card__button"
-                              type="button"
-                              onClick={() => addShuttleToCart(selectedRoute)}
-                            >
-                              Add shuttle to cart
-                            </button>
-                          </div>
-
-                          <div className="shuttle-mapCard">
-                            <div className="shuttle-mapCard__head">
-                              <div>
-                                <h3>Shuttle path map</h3>
-                                <p className="muted">{routeSourceLabel}</p>
-                                <p className="shuttle-mapDisclaimer">Routes are examples and may vary.</p>
-                              </div>
-                            </div>
-
-                            <div className="shuttle-mapCanvas">
-                              <Map
-                                viewport={viewport}
-                                onViewportChange={setViewport}
-                                center={selectedRoute.viewport.center}
-                                zoom={selectedRoute.viewport.zoom}
-                                theme="light"
-                                styles={{ light: naturalMapStyle, dark: naturalMapStyle }}
-                              >
-                                <MapControls showZoom showFullscreen />
-                                <MapRoute coordinates={routeCoordinates} color="#0f8b8d" width={4} />
-
-                                {selectedRoute.stops.map((stop, index) => (
-                                  <MapMarker
-                                    key={stop.name}
-                                    longitude={stop.lng}
-                                    latitude={stop.lat}
-                                  >
-                                    <MarkerContent>
-                                      <div className="shuttle-marker">{index + 1}</div>
-                                    </MarkerContent>
-                                    <MarkerPopup closeButton>
-                                      <div className="shuttle-popup">
-                                        <strong>{stop.name}</strong>
-                                        <p>
-                                          Stop {index + 1} on the {selectedRoute.service} route.
-                                        </p>
-                                      </div>
-                                    </MarkerPopup>
-                                  </MapMarker>
-                                ))}
-                              </Map>
-                            </div>
-                          </div>
-                        </div>
-                      ) : null}
-                    </article>
-                  );
-                })}
-              </div>
+                      route={route}
+                      isActive={route.id === selectedRoute?.id}
+                      onAdd={addShuttleToCart}
+                      onToggle={toggleRoute}
+                      viewport={viewport}
+                      setViewport={setViewport}
+                      routeCoordinates={routeCoordinates}
+                      routeSourceLabel={routeSourceLabel}
+                    />
+                  ))}
+                  {previewRoutes.map((route) => (
+                    <ShuttleRouteCard
+                      key={`${route.id}-preview`}
+                      route={route}
+                      isActive={false}
+                      preview
+                      onAdd={addShuttleToCart}
+                      onToggle={toggleRoute}
+                      viewport={viewport}
+                      setViewport={setViewport}
+                      routeCoordinates={routeCoordinates}
+                      routeSourceLabel={routeSourceLabel}
+                    />
+                  ))}
+                </div>
+                {hasMoreRoutes ? (
+                  <div className="load-more-row">
+                    <button className="btn btn--primary" type="button" onClick={loadMoreRoutes}>
+                      View more
+                    </button>
+                  </div>
+                ) : null}
+              </>
             ) : (
               <div className="empty">
                 <h3>No shuttle results</h3>

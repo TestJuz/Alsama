@@ -41,6 +41,16 @@ body:has(.home-redesign) .nav__link:hover {
   color: #fff;
 }
 
+body:has(.home-redesign) .nav__dropdownMenu {
+  background: #fffdf8;
+  color: var(--text);
+}
+
+body:has(.home-redesign) .nav__dropdownMenu a:hover {
+  background: var(--panel2);
+  color: var(--text);
+}
+
 body:has(.home-redesign) .nav__cta,
 body:has(.home-redesign) .language-switcher__option--active {
   background: var(--gold);

@@ -131,7 +131,7 @@ export function PrivateTransportPage() {
       footerBackToTop="#"
     >
       <main className="transport-service-page">
-        <section className="hero hero--compact hero--image hero--private" style={{ "--hero-image": `url(${asset("img/tours/sj/Manuel-Antonio.webp")})` }}>
+        <section className="hero hero--compact hero--image hero--private" style={{ "--hero-image": `url(${asset("img/tours/sj/Manuel_Antonio/1.webp")})` }}>
           <div className="container hero__grid">
             <div className="hero__copy">
               <p className="hero__kicker">Private transportation</p>

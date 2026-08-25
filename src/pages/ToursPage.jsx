@@ -145,7 +145,7 @@ export function ToursPage() {
       footerBackToTop="#"
     >
       <main>
-        <section className="page-hero page-hero--image page-hero--tours" style={{ "--hero-image": `url(${asset("img/tours/sj/La-Paz-Waterfall-Gardens-2.webp")})` }}>
+        <section className="page-hero page-hero--image page-hero--tours" style={{ "--hero-image": `url(${asset("img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp")})` }}>
           <div className="container">
             <h1 className="page-title">Tours in Costa Rica</h1>
             <p className="muted">
