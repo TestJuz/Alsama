@@ -100,14 +100,16 @@ function clean(value) {
 
 const routeTermTranslations = {
   en: [
+    [" y ", " and "], ["Volc\u00e1n", "Volcano"], ["Cataratas", "Waterfalls"], ["Tour de", "Tour of"], ["Muelle", "dock"], ["Pta Uva", "Punta Uva"],
     ["ONE DAY", "Full day"], ["ONE Day", "Full day"], ["all day", "all day"], ["maximo", "maximum"], ["Maximo", "Maximum"],
     ["max", "maximum"], ["Max", "Maximum"], ["hrs de espera", "hours waiting"], ["hrs espera", "hours waiting"], ["espera", "waiting"],
     ["1 via", "one way"], ["por ferry", "by ferry"], ["Carretera", "by road"], ["Tierra", "land route"],
     ["Transfer IN", "Inbound transfer"], ["Transfer OUT", "Outbound transfer"], ["Transfer In", "Inbound transfer"], ["Transfer Out", "Outbound transfer"],
-    ["Volcan", "Volcano"], ["Basilica y Ruinas", "Basilica and Ruins"], ["Ruinas de Cartago & Basilica", "Cartago Ruins and Basilica"],
+    ["Volcan ", "Volcano "], ["Volcan,", "Volcano,"], ["Basilica y Ruinas", "Basilica and Ruins"], ["Ruinas de Cartago & Basilica", "Cartago Ruins and Basilica"],
     ["Cenas en", "Dinner in"], ["cena", "dinner"], ["desde", "from"], ["ROUNDTRIP", "round trip"]
   ],
   es: [
+    ["Pta Uva", "Punta Uva"], ["Transfer IN", "Traslado de entrada"], ["Transfer OUT", "Traslado de salida"],
     ["ONE DAY", "Dia completo"], ["ONE Day", "Dia completo"], ["all day", "dia completo"], ["Rain Forest", "Bosque lluvioso"],
     ["Coffee Tour", "Tour de cafe"], ["coffee tour", "tour de cafe"], ["Transfer IN", "Traslado de entrada"], ["Transfer OUT", "Traslado de salida"],
     ["Transfer In", "Traslado de entrada"], ["Transfer Out", "Traslado de salida"], ["ROUNDTRIP", "ida y vuelta"], ["1 via", "una via"],
@@ -115,6 +117,7 @@ const routeTermTranslations = {
     ["hrs de espera", "horas de espera"], ["Volcan", "Volcan"], ["Poas", "Poas"], ["Irazu", "Irazu"], ["Jaco", "Jaco"], ["San Jose", "San Jose"]
   ],
   fr: [
+    [" y ", " et "], ["Volcan", "volcan"], ["Volc\u00e1n", "volcan"], ["Iraz\u00fa", "Irazu"], ["Cataratas", "cascades"], ["Tour de", "Excursion de"], ["Tour", "Excursion"], ["tour", "excursion"], ["Muelle", "embarcadere"], ["Pta Uva", "Punta Uva"],
     ["ONE DAY", "Journee complete"], ["ONE Day", "Journee complete"], ["all day", "journee complete"], ["Rain Forest", "Foret tropicale"],
     ["Coffee Tour", "Excursion cafe"], ["coffee tour", "excursion cafe"], ["Transfer IN", "Transfert aller"], ["Transfer OUT", "Transfert retour"],
     ["Transfer In", "Transfert aller"], ["Transfer Out", "Transfert retour"], ["ROUNDTRIP", "aller-retour"], ["1 via", "aller simple"],

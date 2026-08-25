@@ -179,15 +179,15 @@ export const sanJoseFeaturedTours = [
     imagePosition: "center 52%"
   },
   {
-    title: "Beach Day",
-    summary: "A Pacific beach escape with Crocodile Bridge, resort time, beach chairs and buffet lunch.",
-    location: "Jaco",
+    title: "Arenal Volcano and Hot Springs",
+    summary: "Arenal Volcano scenery, La Fortuna views and time to relax in volcanic hot springs.",
+    location: "San Jose",
     difficulty: "Easy",
     people: "",
-    duration: "10 Hours",
-    price: 198.56,
-    image: sourceTourImages.beachDay,
-    imagePosition: "center 48%"
+    duration: "13 Hours",
+    price: 208.49,
+    image: sourceTourImages.arenal,
+    imagePosition: "center 50%"
   },
   {
     title: "Nature Combo",
@@ -203,17 +203,6 @@ export const sanJoseFeaturedTours = [
 ];
 
 export const jacoFeaturedTours = [
-  {
-    title: "White Water Rafting",
-    summary: "A family-friendly Savegre River rafting day with rainforest scenery, river time and organized logistics.",
-    location: "Jaco",
-    difficulty: "Medium",
-    people: "",
-    duration: "1 Day",
-    price: 182.42,
-    image: sourceTourImages.whiteWaterRafting,
-    imagePosition: "center 42%"
-  },
   {
     title: "Half day pass: Aerial Tram and High Rope Circuit",
     summary: "A central Pacific adventure park combo with aerial tram views and a high rope challenge circuit.",
@@ -235,6 +224,17 @@ export const jacoFeaturedTours = [
     price: 175.71,
     image: sourceTourImages.seaKayakSnorkel,
     imagePosition: "center 38%"
+  },
+  {
+    title: "White Water Rafting",
+    summary: "A family-friendly Savegre River rafting day with rainforest scenery, river time and organized logistics.",
+    location: "Jaco",
+    difficulty: "Medium",
+    people: "",
+    duration: "1 Day",
+    price: 182.42,
+    image: sourceTourImages.whiteWaterRafting,
+    imagePosition: "center 42%"
   }
 ];
 
@@ -250,6 +250,7 @@ export const sanJoseTours = [
   makeTour("Typical Dinner and Folklore Show", 99.28, { origin: "san-jose", galleryFolder: "sj/Typical_Dinner_and_Folklore_Show", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.folklore, locations: ["San Jose", "Central Valley"], excerpt: "An evening of Central Valley views, Costa Rican folklore, marimba music and traditional buffet dinner.", sourceUrl: "https://alsamatourscr.com/trip/typical-dinner-and-folklore-show/" }),
   makeTour("Irazú Volcano Halfday", 90.46, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A half-day volcano route from San Jose toward Cartago and the summit landscapes of Irazu.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
 ];
+
 export const jacoTours = [
   makeTour("White Water Rafting", 182.42, { origin: "jaco", galleryFolder: "jaco/White _Water_Rafting", durationText: "1 Day", durationHours: 24, difficulty: "Medium", image: sourceTourImages.whiteWaterRafting, locations: ["Jaco", "Rio Savegre"], excerpt: "A family-friendly Savegre River rafting day with rainforest scenery, river time and organized logistics.", sourceUrl: "https://alsamatourscr.com/trip/white-water-rafting/" }),
   makeTour("Half day pass: Aerial Tram and High Rope Circuit", 92.69, { origin: "jaco", galleryFolder: "jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", durationText: "9 Hours", durationHours: 9, difficulty: "Medium", image: sourceTourImages.aerialTramHighRope, locations: ["Jaco"], excerpt: "A central Pacific adventure park combo with aerial tram views and a high rope challenge circuit.", sourceUrl: "https://alsamatourscr.com/trip/half-day-pass-aerial-tram-and-high-rope-circuit/" }),
