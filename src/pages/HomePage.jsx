@@ -1,105 +1,395 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import {
+  ArrowRight,
+  Bus,
+  Car,
+  Compass,
+  Hotel,
+  Leaf,
+  MapPinned,
+  MessageCircle,
+  Navigation as NavigationIcon,
+  Route,
+  ShieldCheck,
+  Sparkles,
+  UsersRound
+} from "lucide-react";
 import { ContactForm } from "../components/ContactForm";
-import { FeaturedToursSection } from "../components/FeaturedToursSection";
 import { SiteLayout } from "../components/SiteLayout";
+import { Map, MapControls, MapMarker, MapRoute, MarkerContent, MarkerPopup } from "../components/ui/map";
 import {
   asset,
   homeLinks,
-  homeGalleryImages,
-  homeHeroImages,
   jacoFeaturedTours,
   routes,
   sanJoseFeaturedTours,
 } from "../lib/site";
 
-function GalleryLightbox({ image, onClose }) {
-  if (!image) return null;
-
-  return (
-    <div className="lightbox" aria-hidden="false" onClick={onClose}>
-      <button className="lightbox__close" type="button" aria-label="Close" onClick={onClose}>x</button>
-      <img className="lightbox__img" src={image} alt="" onClick={(event) => event.stopPropagation()} />
-    </div>
-  );
-}
-
-const travelSupportHighlights = [
-  {
-    tag: "Local",
-    title: "One local team",
-    text: "Hotels, transfers and activities coordinated as one easy trip."
-  },
-  {
-    tag: "Flex",
-    title: "Travel your way",
-    text: "Start with a pickup, add hotels, or build a full vacation plan."
-  },
-  {
-    tag: "Care",
-    title: "Support on the road",
-    text: "Clear help before arrival, between destinations and during your stay."
-  }
+const trustHighlights = [
+  { icon: Leaf, title: "Authentic experiences" },
+  { icon: UsersRound, title: "Local expert guides" },
+  { icon: ShieldCheck, title: "Safe, reliable service" },
+  { icon: MessageCircle, title: "Fast WhatsApp help" }
 ];
 
 const travelServices = [
   {
     title: "Private transportation",
-    text: "Direct airport, hotel, beach and national park transfers.",
+    text: "Direct airport, hotel and beach transfers.",
     image: asset("img/gallery/Buseta.webp"),
     alt: "Private transportation in Costa Rica",
     to: routes.privateTransport,
-    cta: "View private transport",
-    tag: "Door to door"
+    cta: "Private transport",
+    tag: "Door to door",
+    icon: Route,
+    size: "wide"
   },
   {
     title: "Shared shuttles",
-    text: "Scheduled routes between Costa Rica's most visited destinations.",
+    text: "Scheduled routes between top destinations.",
     image: asset("img/gallery/Private.webp"),
     alt: "Shared shuttle travel in Costa Rica",
     to: routes.shuttle,
-    cta: "View shuttle service",
-    tag: "Popular routes"
+    cta: "Shuttle service",
+    tag: "Popular routes",
+    icon: Bus
   },
   {
     title: "Rent a car",
-    text: "Vehicle options for independent beach, city and mountain travel.",
+    text: "Flexible vehicles for city, beach and mountain travel.",
     image: asset("img/gallery/RentACar.webp"),
     imagePosition: "center 35%",
     alt: "Road trip route in Costa Rica",
     to: routes.rentACar,
-    cta: "View rent a car options",
-    tag: "Independent"
+    cta: "Rent a car",
+    tag: "Independent",
+    icon: Car
   },
   {
     title: "Vacation packages",
-    text: "Hotels, transport and experiences arranged around your route.",
+    text: "Hotels, transport and experiences in one plan.",
     image: asset("img/gallery/Vacation_packages.webp"),
     alt: "Costa Rica vacation package scenery",
-    tag: "Multi-day"
+    tag: "Multi-day",
+    icon: Sparkles,
+    size: "tall"
   },
   {
     title: "Hotels and stays",
-    text: "Lodging matched to your route, budget and travel style.",
+    text: "Lodging matched to your route and travel style.",
     image: asset("img/hotels/Hotel_Manuel_Antonio.webp"),
     alt: "Hotel stay in Costa Rica",
     to: routes.hotels,
-    cta: "View hotel options",
-    tag: "Stays"
+    cta: "Hotels",
+    tag: "Stays",
+    icon: Hotel
   },
   {
     title: "Day tours",
-    text: "Beach, wildlife, rainforest and adventure days from key areas.",
+    text: "Beach, wildlife, rainforest and adventure days.",
     image: asset("img/gallery/Day_Tour.webp"),
     alt: "Tortuga Island day tour in Costa Rica",
     to: routes.tours,
-    cta: "View tours options",
-    tag: "Experiences"
+    cta: "Day tours",
+    tag: "Experiences",
+    icon: Compass
   }
 ];
-export function HomePage() {
-  const [lightboxImage, setLightboxImage] = useState("");
 
+const destinations = [
+  {
+    id: "san-jose",
+    name: "San Jose",
+    label: "Airport + city base",
+    coords: [-84.0907, 9.9281],
+    tone: "hub",
+    image: asset("img/gallery/City-bus.webp"),
+    bestFor: "Arrivals, city nights and Central Valley day trips.",
+    services: ["Airport pickup", "Hotels", "City tours"],
+    cta: "Plan from San Jose",
+    to: `${routes.tours}#from-san-jose`,
+    route: [[-84.0907, 9.9281], [-84.2207, 10.0081], [-84.7032, 10.4678]]
+  },
+  {
+    id: "jaco",
+    name: "Jaco",
+    label: "Pacific beach hub",
+    coords: [-84.6356, 9.6148],
+    tone: "beach",
+    image: asset("img/gallery/Day_Tour.webp"),
+    bestFor: "Beach days, adventure parks and quick Pacific transfers.",
+    services: ["Shuttle", "Private transport", "Day tours"],
+    cta: "Explore Jaco tours",
+    to: `${routes.tours}#from-jaco`,
+    route: [[-84.0907, 9.9281], [-84.36, 9.78], [-84.6356, 9.6148]]
+  },
+  {
+    id: "arenal",
+    name: "Arenal",
+    label: "Volcano + hot springs",
+    coords: [-84.7032, 10.4678],
+    tone: "volcano",
+    image: asset("img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal-portada-trip-1024x683.webp"),
+    bestFor: "Volcano views, hot springs and mountain scenery.",
+    services: ["Private route", "Full-day tour", "Hotel pairing"],
+    cta: "See Arenal tour",
+    to: routes.tours,
+    route: [[-84.0907, 9.9281], [-84.31, 10.1], [-84.7032, 10.4678]]
+  },
+  {
+    id: "monteverde",
+    name: "Monteverde",
+    label: "Cloud forest",
+    coords: [-84.8255, 10.3005],
+    tone: "forest",
+    image: asset("img/gallery/Private.webp"),
+    bestFor: "Cloud forest walks, hanging bridges and cooler nights.",
+    services: ["Private transport", "Hotels", "Custom route"],
+    cta: "Ask for route",
+    to: homeLinks.contact,
+    route: [[-84.0907, 9.9281], [-84.49, 10.08], [-84.8255, 10.3005]]
+  },
+  {
+    id: "manuel-antonio",
+    name: "Manuel Antonio",
+    label: "Wildlife + beach",
+    coords: [-84.1557, 9.3894],
+    tone: "beach",
+    image: asset("img/tours/sj/Manuel-Antonio.webp"),
+    bestFor: "Wildlife trails, ocean views and family-friendly beach time.",
+    services: ["Day tour", "Private pickup", "Hotel stay"],
+    cta: "See Manuel Antonio",
+    to: routes.tours,
+    route: [[-84.0907, 9.9281], [-84.36, 9.78], [-84.6356, 9.6148], [-84.1557, 9.3894]]
+  },
+  {
+    id: "tortuguero",
+    name: "Tortuguero",
+    label: "Canals + rainforest",
+    coords: [-83.505, 10.541],
+    tone: "forest",
+    image: asset("img/gallery/Vacation_packages.webp"),
+    bestFor: "Multi-day rainforest plans, canals and nature-focused stays.",
+    services: ["Package planning", "Transfers", "Hotels"],
+    cta: "Build this route",
+    to: homeLinks.contact,
+    route: [[-84.0907, 9.9281], [-83.86, 10.19], [-83.505, 10.541]]
+  }
+];
+
+const mapRoutes = destinations.map((destination) => destination.route).filter(Boolean);
+
+const costaRicaMapStyle = {
+  version: 8,
+  sources: {
+    osm: {
+      type: "raster",
+      tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+      tileSize: 256,
+      attribution: "&copy; OpenStreetMap contributors"
+    }
+  },
+  layers: [
+    {
+      id: "osm",
+      type: "raster",
+      source: "osm"
+    }
+  ]
+};
+
+const featuredPicks = [...sanJoseFeaturedTours.slice(0, 2), ...jacoFeaturedTours.slice(0, 2)];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0 }
+};
+
+function MotionBlock({ children, className = "", delay = 0 }) {
+  const reducedMotion = useReducedMotion();
+
+  return (
+    <motion.div
+      className={className}
+      variants={fadeUp}
+      initial={reducedMotion ? false : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function MagneticAction({ children, className = "", href, to, ...props }) {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const reducedMotion = useReducedMotion();
+  const Component = to ? Link : "a";
+
+  function handlePointerMove(event) {
+    if (reducedMotion) return;
+    const rect = event.currentTarget.getBoundingClientRect();
+    setOffset({
+      x: (event.clientX - rect.left - rect.width / 2) * 0.14,
+      y: (event.clientY - rect.top - rect.height / 2) * 0.18
+    });
+  }
+
+  return (
+    <motion.span
+      className="magnetic-action"
+      animate={{ x: offset.x, y: offset.y }}
+      transition={{ type: "spring", stiffness: 180, damping: 18, mass: 0.45 }}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={() => setOffset({ x: 0, y: 0 })}
+    >
+      <Component className={className} href={href} to={to} {...props}>
+        {children}
+      </Component>
+    </motion.span>
+  );
+}
+
+function DestinationMap() {
+  const mapRef = useRef(null);
+  const [activeDestination, setActiveDestination] = useState(destinations[1]);
+  const activeRoute = activeDestination.route || [];
+
+  function selectDestination(destination) {
+    setActiveDestination(destination);
+    mapRef.current?.flyTo({
+      center: destination.coords,
+      zoom: destination.id === "san-jose" ? 7.4 : 8.05,
+      pitch: 34,
+      bearing: destination.id === "tortuguero" ? 14 : -8,
+      duration: 950,
+      essential: true
+    });
+  }
+
+  return (
+    <div className="home-map">
+      <div className="home-map__canvas" aria-label="Interactive map of Costa Rica travel destinations">
+        <Map
+          ref={mapRef}
+          theme="light"
+          styles={{ light: costaRicaMapStyle, dark: costaRicaMapStyle }}
+          center={[-84.25, 9.92]}
+          zoom={6.55}
+          pitch={28}
+          minZoom={5.8}
+          maxZoom={10}
+          cooperativeGestures
+        >
+          {mapRoutes.map((coordinates, index) => (
+            <MapRoute
+              key={`route-base-${index}`}
+              id={`home-route-base-${index}`}
+              coordinates={coordinates}
+              color="#2d9aa0"
+              width={2}
+              opacity={0.2}
+              dashArray={[1.4, 1.4]}
+              interactive={false}
+            />
+          ))}
+
+          {activeRoute.length > 1 ? (
+            <MapRoute
+              key={activeDestination.id}
+              id={`home-route-active-${activeDestination.id}`}
+              coordinates={activeRoute}
+              color="#d7a646"
+              width={6}
+              opacity={0.95}
+            />
+          ) : null}
+
+          {destinations.map((destination) => {
+            const isActive = activeDestination.id === destination.id;
+            return (
+              <MapMarker
+                key={destination.id}
+                longitude={destination.coords[0]}
+                latitude={destination.coords[1]}
+                onClick={() => selectDestination(destination)}
+              >
+                <MarkerContent>
+                  <button
+                    className={`home-map__marker home-map__marker--${destination.tone} ${isActive ? "is-active" : ""}`}
+                    type="button"
+                    aria-pressed={isActive}
+                    aria-label={`Show ${destination.name}`}
+                  />
+                </MarkerContent>
+                <MarkerPopup className="home-map__popup">
+                  <strong>{destination.name}</strong>
+                  <span>{destination.label}</span>
+                </MarkerPopup>
+              </MapMarker>
+            );
+          })}
+          <MapControls showFullscreen />
+        </Map>
+      </div>
+
+      <div className="home-map__panel">
+        <span className="home-eyebrow">Routes we coordinate</span>
+        <h2>Pick a destination. See the route.</h2>
+        <p>
+          Tap a place to focus the map, highlight the route and see what Alsama can coordinate there.
+        </p>
+
+        <div className="home-map__destinations" aria-label="Choose a destination">
+          {destinations.map((destination) => (
+            <button
+              key={destination.id}
+              className={activeDestination.id === destination.id ? "is-active" : ""}
+              type="button"
+              onClick={() => selectDestination(destination)}
+            >
+              <MapPinned size={16} aria-hidden="true" />
+              <span>{destination.name}</span>
+            </button>
+          ))}
+        </div>
+
+        <motion.article
+          className="home-route-card"
+          key={activeDestination.id}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.28 }}
+        >
+          <img src={activeDestination.image} alt="" aria-hidden="true" />
+          <div className="home-route-card__body">
+            <span>{activeDestination.label}</span>
+            <h3>{activeDestination.name}</h3>
+            <p>{activeDestination.bestFor}</p>
+            <div className="home-route-card__chips">
+              {activeDestination.services.map((service) => (
+                <small key={service}>{service}</small>
+              ))}
+            </div>
+            <div className="home-route-card__actions">
+              <Link className="home-btn home-btn--primary" to={activeDestination.to}>
+                {activeDestination.cta} <ArrowRight size={17} aria-hidden="true" />
+              </Link>
+              <a className="home-btn home-btn--ghost" href="#contact">
+                Quote route <NavigationIcon size={17} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </motion.article>
+      </div>
+    </div>
+  );
+}
+
+export function HomePage() {
   return (
     <SiteLayout
       homeTo={homeLinks.home}
@@ -107,212 +397,193 @@ export function HomePage() {
       brandTo={routes.home}
       footerBackToTop="#home"
     >
-      <main id="home">
-        <section className="hero hero--image hero--home" style={{ "--hero-image": `url(${homeHeroImages[0]})` }}>
-          <div className="container hero__grid">
-            <div className="hero__copy">
-              <p className="hero__kicker">Costa Rica travel services</p>
-              <h1 className="hero__title">Discover the best of our country</h1>
-              <p className="hero__subtitle">
-                Tours, hotels, shuttles, transfers and more - build your itinerary in minutes.
-              </p>
+      <main className="home-redesign" id="home">
+        <section className="home-hero" style={{ "--home-hero-image": `url(${asset("img/hero/4.webp")})` }}>
+          <div className="home-hero__content">
+            <motion.p
+              className="home-eyebrow"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Alsama Tours Costa Rica
+            </motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Discover the magic of <span>Costa Rica</span>
+            </motion.h1>
+            <motion.p
+              className="home-hero__lead"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
+            >
+              Tours, transport, hotels and car rentals planned by one local team.
+            </motion.p>
 
-              <div className="hero__actions">
-                <a className="btn btn--primary" href="#services">Explore services</a>
-                <a className="btn btn--ghost" href="#contact">Get a quote</a>
-              </div>
-            </div>
+            <motion.div
+              className="home-hero__actions"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.24 }}
+            >
+              <MagneticAction className="home-btn home-btn--primary" href="#services">
+                Explore tours <ArrowRight size={18} aria-hidden="true" />
+              </MagneticAction>
+              <MagneticAction className="home-btn home-btn--ghost" href="#contact">
+                Contact us <MessageCircle size={18} aria-hidden="true" />
+              </MagneticAction>
+            </motion.div>
+          </div>
 
-            <div className="hero__media" aria-hidden="true">
-              <div className="hero__card">
-                <img src={homeHeroImages[0]} className="hero__img" alt="Costa Rica transport service" />
-                <img src={homeHeroImages[1]} className="hero__img hero__img--2" alt="Costa Rica hotel and shuttle service" />
-                <img src={homeHeroImages[2]} className="hero__img hero__img--3" alt="Costa Rica tours and travel planning" />
-              </div>
-            </div>
+          <div className="home-hero__trust" aria-label="Travel benefits">
+            {trustHighlights.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <motion.div
+                  className="home-trust"
+                  key={item.title}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.34 + index * 0.06 }}
+                >
+                  <Icon size={23} aria-hidden="true" />
+                  <span>{item.title}</span>
+                </motion.div>
+              );
+            })}
           </div>
         </section>
 
-        <section className="section">
-          <div className="container intro-strip">
-            <p className="muted">
-              We coordinate the key parts of your trip so you can move easily between destinations and book everything with one local company.
-            </p>
-          </div>
-        </section>
-
-        <section className="section section--alt">
-          <div className="container split">
-            <div>
-              <h2>Experience Costa Rica your way</h2>
-              <p className="muted">
-                From family vacations to private transfers and multi-day itineraries, we build travel plans around how you want to experience the country.
-              </p>
-            </div>
-            <div className="mini-gallery" aria-hidden="true">
-              {homeGalleryImages.map((image, index) => (
-                <img
-                  key={image}
-                  src={image}
-                  alt={`Gallery image ${index + 1}`}
-                  onClick={() => setLightboxImage(image)}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="container">
-            <div className="sectionHead sectionHead--visual">
+        <section className="home-section home-section--intro">
+          <div className="container home-intro">
+            <MotionBlock className="home-intro__copy">
+              <span className="home-eyebrow">Plan less, see more</span>
+              <h2>Your trip, coordinated end to end.</h2>
+            </MotionBlock>
+            <MotionBlock className="home-intro__stats" delay={0.08}>
               <div>
-                <h2>Travel support beyond day tours</h2>
-                <p className="muted">Local logistics with the warmth of a real Costa Rica vacation.</p>
+                <strong>5</strong>
+                <span>Core services</span>
               </div>
-              <a className="btn btn--ghost" href="#contact">Plan my route</a>
-            </div>
-
-            <div className="features">
-              {travelSupportHighlights.map((item) => (
-                <article className="feature" key={item.title}>
-                  <div className="feature__body">
-                    <span className="feature__icon" aria-hidden="true">{item.tag}</span>
-                    <h3>{item.title}</h3>
-                    <p className="muted">{item.text}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
+              <div>
+                <strong>2</strong>
+                <span>Main departure hubs</span>
+              </div>
+              <div>
+                <strong>1</strong>
+                <span>Local team</span>
+              </div>
+            </MotionBlock>
           </div>
         </section>
 
-        <section className="section section--alt" id="services">
+        <section className="home-section" id="services">
           <div className="container">
-            <div className="sectionHead">
-              <div>
-                <h2>Our travel services</h2>
-                <p className="muted">Designed for travelers who want more than a single excursion.</p>
-              </div>
-            </div>
+            <MotionBlock className="home-section__head">
+              <span className="home-eyebrow">Services</span>
+              <h2>Everything for a smoother Costa Rica route.</h2>
+            </MotionBlock>
 
-            <div className="services-grid">
-              {travelServices.map((service) => (
-                <article className="service-card service-card--image" id={service.title === "Rent a car" ? "rent" : undefined} key={service.title}>
-                  <div className="service-card__media">
-                    <img src={service.image} alt={service.alt} style={service.imagePosition ? { objectPosition: service.imagePosition } : undefined} />
-                    <span>{service.tag}</span>
-                  </div>
-                  <div className="service-card__body">
-                    <h3>{service.title}</h3>
-                    <p className="muted">{service.text}</p>
+            <div className="home-bento">
+              {travelServices.map((service, index) => {
+                const Icon = service.icon;
+                const content = (
+                  <>
+                    <img
+                      src={service.image}
+                      alt={service.alt}
+                      style={service.imagePosition ? { objectPosition: service.imagePosition } : undefined}
+                    />
+                    <div className="home-bento__shade" />
+                    <div className="home-bento__content">
+                      <span>{service.tag}</span>
+                      <Icon size={24} aria-hidden="true" />
+                      <h3>{service.title}</h3>
+                      <p>{service.text}</p>
+                      {service.to ? (
+                        <strong>
+                          {service.cta} <ArrowRight size={16} aria-hidden="true" />
+                        </strong>
+                      ) : null}
+                    </div>
+                  </>
+                );
+
+                return (
+                  <MotionBlock
+                    className={`home-bento__item ${service.size ? `home-bento__item--${service.size}` : ""}`}
+                    delay={index * 0.04}
+                    key={service.title}
+                  >
                     {service.to ? (
-                      <Link className="service-card__link" to={service.to}>{service.cta}</Link>
-                    ) : null}
+                      <Link to={service.to} id={service.title === "Rent a car" ? "rent" : undefined}>
+                        {content}
+                      </Link>
+                    ) : (
+                      <div>{content}</div>
+                    )}
+                  </MotionBlock>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="home-section home-section--map" id="destinations">
+          <div className="container">
+            <MotionBlock>
+              <DestinationMap />
+            </MotionBlock>
+          </div>
+        </section>
+
+        <section className="home-section">
+          <div className="container">
+            <MotionBlock className="home-section__head home-section__head--row">
+              <div>
+                <span className="home-eyebrow">Popular picks</span>
+                <h2>Start with a proven favorite.</h2>
+              </div>
+              <Link className="home-btn home-btn--light" to={routes.tours}>
+                View all tours <ArrowRight size={18} aria-hidden="true" />
+              </Link>
+            </MotionBlock>
+
+            <div className="home-picks">
+              {featuredPicks.map((tour, index) => (
+                <MotionBlock className="home-pick" delay={index * 0.05} key={`${tour.title}-${tour.location}`}>
+                  <img src={tour.image} alt={tour.title} style={{ objectPosition: tour.imagePosition }} />
+                  <div>
+                    <span>{tour.location}</span>
+                    <h3>{tour.title}</h3>
+                    <p>{tour.duration}</p>
                   </div>
-                </article>
+                </MotionBlock>
               ))}
             </div>
           </div>
         </section>
 
-        <FeaturedToursSection
-          sanJoseTours={sanJoseFeaturedTours}
-          jacoTours={jacoFeaturedTours}
-          sanJoseHref={`${routes.tours}#from-san-jose`}
-          jacoHref={`${routes.tours}#from-jaco`}
-        />
-
-        <section className="section">
-          <div className="container">
-            <div className="sectionHead">
-              <div>
-                <h2>Transport in Costa Rica</h2>
-                <p className="muted">Compare shared shuttles and private transportation before choosing the best fit for your itinerary.</p>
-              </div>
-            </div>
-
-            <div className="transport-grid">
-              <article className="transport-card">
-                <span className="transport-card__tag">Shuttle</span>
-                <h3>Shared destination-to-destination service</h3>
-                <p className="muted">A practical option for travelers using common tourist routes and looking for a more affordable transfer.</p>
-                <ul className="transport-list">
-                  <li>Popular routes</li>
-                  <li>Comfortable shared ride</li>
-                  <li>Good value for simple transfers</li>
-                </ul>
-                <Link className="btn btn--ghost" to={routes.shuttle}>See shuttle details</Link>
-              </article>
-              <article className="transport-card">
-                <span className="transport-card__tag">Private Transport</span>
-                <h3>Direct pickup with more flexibility</h3>
-                <p className="muted">Recommended for families, groups, airport arrivals, custom schedules and multi-stop routes.</p>
-                <ul className="transport-list">
-                  <li>Custom pickup time</li>
-                  <li>Direct service</li>
-                  <li>Better for groups and luggage</li>
-                </ul>
-                <Link className="btn btn--ghost" to={routes.privateTransport}>See private transport</Link>
-              </article>
-            </div>
+        <section className="home-section home-section--cta">
+          <div className="container home-cta">
+            <MotionBlock>
+              <span className="home-eyebrow">Custom routes</span>
+              <h2>Tell us where you land. We will shape the rest.</h2>
+            </MotionBlock>
+            <MagneticAction className="home-btn home-btn--primary" href="#contact">
+              Build my trip <ArrowRight size={18} aria-hidden="true" />
+            </MagneticAction>
           </div>
         </section>
-
-        <section className="section" id="rent-preview">
-          <div className="container">
-            <div className="sectionHead">
-              <div>
-                <h2>Rent a Car in Costa Rica</h2>
-                <p className="muted">Choose the vehicle type that fits your route, group size and travel style.</p>
-              </div>
-              <Link className="btn btn--ghost" to={routes.rentACar}>Full rent a car page</Link>
-            </div>
-
-            <div className="rent-grid">
-              <article className="rent-card rent-card--image">
-                <img className="rent-card__media rent-card__media--economy" src={asset("img/gallery/Economy.webp")} alt="Economy rent a car option in Costa Rica" />
-                <div className="rent-card__body">
-                  <span className="rent-card__tag">Economy</span>
-                  <h3>Compact city option</h3>
-                  <p className="muted">Ideal for couples or solo travelers moving between San Jose, beaches and nearby towns.</p>
-                </div>
-              </article>
-              <article className="rent-card rent-card--image">
-                <img className="rent-card__media rent-card__media--suv" src={asset("img/gallery/Suv.webp")} alt="SUV rent a car option in Costa Rica" />
-                <div className="rent-card__body">
-                  <span className="rent-card__tag">SUV</span>
-                  <h3>More space and comfort</h3>
-                  <p className="muted">Recommended for families, luggage-heavy itineraries and longer transfers between destinations.</p>
-                </div>
-              </article>
-              <article className="rent-card rent-card--image">
-                <img className="rent-card__media" src={asset("img/gallery/4x4.webp")} alt="4x4 rent a car option in Costa Rica" />
-                <div className="rent-card__body">
-                  <span className="rent-card__tag">4x4</span>
-                  <h3>Adventure-ready vehicle</h3>
-                  <p className="muted">For routes that demand extra confidence during mountain, rain-season or rural travel.</p>
-                </div>
-              </article>
-              <article className="rent-card rent-card--image">
-                <img className="rent-card__media" src={asset("img/gallery/van.webp")} alt="Van rent a car option in Costa Rica" />
-                <div className="rent-card__body">
-                  <span className="rent-card__tag">Van</span>
-                  <h3>Group transportation</h3>
-                  <p className="muted">A practical option for large families, private groups and vacation packages with extra luggage.</p>
-                </div>
-              </article>
-            </div>
-          </div>
-        </section>
-
-
 
         <ContactForm
           text="Tell us your travel dates, destinations and which services you need."
           placeholder="Tell us if you need tours, transportation, hotels, rent a car or a complete package."
         />
-
-        <GalleryLightbox image={lightboxImage} onClose={() => setLightboxImage("")} />
       </main>
     </SiteLayout>
   );
