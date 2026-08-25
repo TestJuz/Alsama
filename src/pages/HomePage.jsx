@@ -773,7 +773,7 @@ export function HomePage() {
         <section className="home-section home-section--reviews" id="opiniones">
           <div className="container home-reviews">
             <MotionBlock className="home-reviews__summary">
-              <span className="home-eyebrow">Opiniones</span>
+              <span className="home-eyebrow">Reviews</span>
               <h2>Trusted by travelers on Tripadvisor.</h2>
               <p>
                 Alsama Tours is rated 4.9/5 on Tripadvisor, with travelers highlighting private transport,

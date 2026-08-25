@@ -4,6 +4,7 @@ import { tourTranslations } from "./i18nTours.js";
 import { fixTranslations } from "./i18nFixes.js";
 import { tourOverviewFrTranslations } from "./i18nTourOverviewFr.js";
 import { completeTranslations } from "./i18nComplete.js";
+import { homeFixTranslations } from "./i18nHomeFixes.js";
 
 const exactTranslations = {
   en: {},
@@ -74,9 +75,9 @@ const exactTranslations = {
 };
 
 
-Object.assign(exactTranslations.en, completeTranslations.en);
-Object.assign(exactTranslations.es, supplementalTranslations.es, tourTranslations.es, fixTranslations.es, completeTranslations.es);
-Object.assign(exactTranslations.fr, supplementalTranslations.fr, tourTranslations.fr, fixTranslations.fr, tourOverviewFrTranslations, completeTranslations.fr);
+Object.assign(exactTranslations.en, completeTranslations.en, homeFixTranslations.en);
+Object.assign(exactTranslations.es, supplementalTranslations.es, tourTranslations.es, completeTranslations.es, fixTranslations.es, homeFixTranslations.es);
+Object.assign(exactTranslations.fr, supplementalTranslations.fr, tourTranslations.fr, tourOverviewFrTranslations, completeTranslations.fr, fixTranslations.fr, homeFixTranslations.fr);
 
 i18next.init({
   lng: "en",
@@ -320,5 +321,6 @@ export function getPageTitle(key, language) {
 export function setI18nLanguage(language) {
   if (i18next.language !== language) i18next.changeLanguage(language);
 }
+
 
 
