@@ -1,62 +1,87 @@
 export const rentACarRates = {
   diario: [
-    { categoria: "MINI", transmision: "MANUAL", seguro_basico: 56, full_cover: 89.1 },
-    { categoria: "ECONOMICO", transmision: "AUTOMATICO", seguro_basico: 64, full_cover: 97.35 },
-    { categoria: "COMPACTO", transmision: "AUTOMATICO", seguro_basico: 74, full_cover: 107.25 },
-    { categoria: "MID SIZE AUT.", transmision: "AUTOMATICO", seguro_basico: 79, full_cover: 112.2 },
-    { categoria: "ECONOMY SUV 4X2", transmision: null, seguro_basico: 74, full_cover: 107.25 },
-    { categoria: "COMPACTO SUV 4X2", transmision: "AUTOMATICO", seguro_basico: 78, full_cover: 110.55 },
-    { categoria: "MID SIZE 4X4", transmision: "AUTOMATICO", seguro_basico: 102, full_cover: 135.3 },
-    { categoria: "STANDARD 4X4", transmision: "AUTOMATICO", seguro_basico: 114, full_cover: 146.85 },
-    { categoria: "SPECIAL 4X2", transmision: "AUTOMATICO", seguro_basico: 114, full_cover: 146.85 },
-    { categoria: "STANDARD 4X4 SPORT", transmision: null, seguro_basico: 145, full_cover: 178.2 },
-    { categoria: "STANDARD 4X4 ELECTRIC", transmision: "AUTOMATICO", seguro_basico: 145, full_cover: 178.2 },
-    { categoria: "PICK-UP 4X4", transmision: "MAN/AUT", seguro_basico: 132, full_cover: 165 },
-    { categoria: "FULL SIZE 4X4", transmision: "AUTOMATICO", seguro_basico: 160, full_cover: 193.05 },
-    { categoria: "PREMIUM 4X4", transmision: "AUTOMATICO", seguro_basico: 180, full_cover: 212.85 },
-    { categoria: "MICROBUS 4X2", transmision: "MANUAL", seguro_basico: 180, full_cover: 212.85 },
-    { categoria: "MICROBUS 4X2", transmision: null, seguro_basico: 188, full_cover: 221.1 },
-    { categoria: "MICROBUS 4X4", transmision: "AUTOMATICO", seguro_basico: 196, full_cover: 229.35 },
-    { categoria: "LUXURY", transmision: "AUTOMATICO", seguro_basico: 347, full_cover: 379.5 }
+    { categoria: "MINI", modelo: "TOYOTA AGYA", transmision: "MANUAL", seguro_basico: 34, full_cover: 54 },
+    { categoria: "ECONOMICO", modelo: "SUZUKI SWIFT", transmision: "AUTOMATICO", seguro_basico: 39, full_cover: 59 },
+    { categoria: "COMPACTO", modelo: "VOLKSWAGEN NIVUS", transmision: "AUTOMATICO", seguro_basico: 45, full_cover: 65 },
+    { categoria: "MID SIZE AUT.", modelo: "TOYOTA COROLLA", transmision: "AUTOMATICO", seguro_basico: 48, full_cover: 68 },
+    { categoria: "ECONOMY SUV 4X2", modelo: "TOYOTA YARIS CROSS", transmision: null, seguro_basico: 45, full_cover: 65 },
+    { categoria: "COMPACTO SUV 4X2", modelo: "TOYOTA COROLLA CROSS", transmision: "AUTOMATICO", seguro_basico: 47, full_cover: 67 },
+    { categoria: "MID SIZE 4X4", modelo: "SUZUKI VITARA", transmision: "AUTOMATICO", seguro_basico: 62, full_cover: 82 },
+    { categoria: "STANDARD 4X4", modelo: "TOYOTA RAV4", transmision: "AUTOMATICO", seguro_basico: 69, full_cover: 89 },
+    { categoria: "SPECIAL 4X2", modelo: "TOYOTA RUSH 4X2", transmision: "AUTOMATICO", seguro_basico: 69, full_cover: 89 },
+    { categoria: "STANDARD 4X4 SPORT", modelo: "FORD BRONCO", transmision: null, seguro_basico: 88, full_cover: 108 },
+    { categoria: "STANDARD 4X4 ELECTRIC", modelo: "TOYOTA BZ4X 4X4", transmision: "AUTOMATICO", seguro_basico: 88, full_cover: 108 },
+    { categoria: "PICK-UP 4X4", modelo: "TOYOTA HILUX", transmision: "MAN/AUT", seguro_basico: 80, full_cover: 100 },
+    { categoria: "FULL SIZE 4X4", modelo: "TOYOTA FORTUNER", transmision: "AUTOMATICO", seguro_basico: 97, full_cover: 117 },
+    { categoria: "PREMIUM 4X4", modelo: "FORD EVEREST", transmision: "AUTOMATICO", seguro_basico: 109, full_cover: 129 },
+    { categoria: "MICROBUS 4X2", modelo: "TOYOTA HIACE", transmision: "MANUAL", seguro_basico: 109, full_cover: 129 },
+    { categoria: "MICROBUS 4X2", modelo: "TOYOTA HIACE", transmision: null, seguro_basico: 114, full_cover: 134 },
+    { categoria: "MICROBUS 4X4", modelo: "HYUNDAI STARIA", transmision: "AUTOMATICO", seguro_basico: 119, full_cover: 139 },
+    { categoria: "LUXURY", modelo: "FORD EXPEDITION", transmision: "AUTOMATICO", seguro_basico: 210, full_cover: 230 }
   ],
   semanal: [
-    { categoria: "MINI", transmision: "MANUAL", seguro_basico: 356.4, full_cover: 587.4 },
-    { categoria: "ECONOMICO", transmision: "AUTOMATICO", seguro_basico: 405.9, full_cover: 636.9 },
-    { categoria: "COMPACTO", transmision: "AUTOMATICO", seguro_basico: 465.3, full_cover: 696.3 },
-    { categoria: "MID SIZE AUT.", transmision: "AUTOMATICO", seguro_basico: 495, full_cover: 726 },
-    { categoria: "ECONOMY SUV 4X2", transmision: null, seguro_basico: 470.25, full_cover: 701.25 },
-    { categoria: "COMPACTO SUV 4X2", transmision: "AUTOMATICO", seguro_basico: 490.05, full_cover: 721.05 },
-    { categoria: "MID SIZE 4X4", transmision: "AUTOMATICO", seguro_basico: 638.55, full_cover: 869.55 },
-    { categoria: "STANDARD 4X4", transmision: "AUTOMATICO", seguro_basico: 707.85, full_cover: 938.85 },
-    { categoria: "SPECIAL 4X2", transmision: "AUTOMATICO", seguro_basico: 707.85, full_cover: 938.85 },
-    { categoria: "STANDARD 4X4 SPORT", transmision: null, seguro_basico: 912.45, full_cover: 1143.45 },
-    { categoria: "STANDARD 4X4 ELECTRIC", transmision: "AUTOMATICO", seguro_basico: 912.45, full_cover: 1143.45 },
-    { categoria: "PICK-UP 4X4", transmision: "MAN/AUT", seguro_basico: 833.25, full_cover: 1064.25 },
-    { categoria: "FULL SIZE 4X4", transmision: "AUTOMATICO", seguro_basico: 1001.55, full_cover: 1232.55 },
-    { categoria: "PREMIUM 4X4", transmision: "AUTOMATICO", seguro_basico: 1120.35, full_cover: 1351.35 },
-    { categoria: "MICROBUS 4X2", transmision: "MANUAL", seguro_basico: 1120.35, full_cover: 1351.35 },
-    { categoria: "MICROBUS 4X2", transmision: null, seguro_basico: 1169.85, full_cover: 1400.85 },
-    { categoria: "MICROBUS 4X4", transmision: "AUTOMATICO", seguro_basico: 1219.35, full_cover: 1450.35 },
-    { categoria: "LUXURY", transmision: "AUTOMATICO", seguro_basico: 2120.25, full_cover: 2351.25 }
+    { categoria: "MINI", modelo: "TOYOTA AGYA", transmision: "MANUAL", seguro_basico: 216, full_cover: 356 },
+    { categoria: "ECONOMICO", modelo: "SUZUKI SWIFT", transmision: "AUTOMATICO", seguro_basico: 246, full_cover: 386 },
+    { categoria: "COMPACTO", modelo: "VOLKSWAGEN NIVUS", transmision: "AUTOMATICO", seguro_basico: 282, full_cover: 422 },
+    { categoria: "MID SIZE AUT.", modelo: "TOYOTA COROLLA", transmision: "AUTOMATICO", seguro_basico: 300, full_cover: 440 },
+    { categoria: "ECONOMY SUV 4X2", modelo: "TOYOTA YARIS CROSS", transmision: null, seguro_basico: 285, full_cover: 425 },
+    { categoria: "COMPACTO SUV 4X2", modelo: "TOYOTA COROLLA CROSS", transmision: "AUTOMATICO", seguro_basico: 297, full_cover: 437 },
+    { categoria: "MID SIZE 4X4", modelo: "SUZUKI VITARA", transmision: "AUTOMATICO", seguro_basico: 387, full_cover: 527 },
+    { categoria: "STANDARD 4X4", modelo: "TOYOTA RAV4", transmision: "AUTOMATICO", seguro_basico: 429, full_cover: 569 },
+    { categoria: "SPECIAL 4X2", modelo: "TOYOTA RUSH 4X2", transmision: "AUTOMATICO", seguro_basico: 429, full_cover: 569 },
+    { categoria: "STANDARD 4X4 SPORT", modelo: "FORD BRONCO", transmision: null, seguro_basico: 553, full_cover: 693 },
+    { categoria: "STANDARD 4X4 ELECTRIC", modelo: "TOYOTA BZ4X 4X4", transmision: "AUTOMATICO", seguro_basico: 553, full_cover: 693 },
+    { categoria: "PICK-UP 4X4", modelo: "TOYOTA HILUX", transmision: "MAN/AUT", seguro_basico: 505, full_cover: 645 },
+    { categoria: "FULL SIZE 4X4", modelo: "TOYOTA FORTUNER", transmision: "AUTOMATICO", seguro_basico: 607, full_cover: 747 },
+    { categoria: "PREMIUM 4X4", modelo: "FORD EVEREST", transmision: "AUTOMATICO", seguro_basico: 679, full_cover: 819 },
+    { categoria: "MICROBUS 4X2", modelo: "TOYOTA HIACE", transmision: "MANUAL", seguro_basico: 679, full_cover: 819 },
+    { categoria: "MICROBUS 4X2", modelo: "TOYOTA HIACE", transmision: null, seguro_basico: 709, full_cover: 849 },
+    { categoria: "MICROBUS 4X4", modelo: "HYUNDAI STARIA", transmision: "AUTOMATICO", seguro_basico: 739, full_cover: 879 },
+    { categoria: "LUXURY", modelo: "FORD EXPEDITION", transmision: "AUTOMATICO", seguro_basico: 1285, full_cover: 1425 }
   ],
   mensual: [
-    { categoria: "MINI", transmision: "MANUAL", seguro_basico: 1465.2, full_cover: 2455.2 },
-    { categoria: "ECONOMICO", transmision: "AUTOMATICO", seguro_basico: 1663.2, full_cover: 2653.2 },
-    { categoria: "COMPACTO", transmision: "AUTOMATICO", seguro_basico: 1900.8, full_cover: 2890.8 },
-    { categoria: "MID SIZE AUT.", transmision: "AUTOMATICO", seguro_basico: 2019.6, full_cover: 3009.6 },
-    { categoria: "ECONOMY SUV 4X2", transmision: null, seguro_basico: 1930.5, full_cover: 3036 },
-    { categoria: "COMPACTO SUV 4X2", transmision: "AUTOMATICO", seguro_basico: 2009.7, full_cover: 2999.7 },
-    { categoria: "MID SIZE 4X4", transmision: "AUTOMATICO", seguro_basico: 2603.7, full_cover: 3709.2 },
-    { categoria: "STANDARD 4X4", transmision: "AUTOMATICO", seguro_basico: 2880.9, full_cover: 3870.9 },
-    { categoria: "SPECIAL 4X2", transmision: "AUTOMATICO", seguro_basico: 2880.9, full_cover: 3870.9 },
-    { categoria: "STANDARD 4X4 SPORT", transmision: null, seguro_basico: 3732.3, full_cover: 4870.8 },
-    { categoria: "STANDARD 4X4 ELECTRIC", transmision: "AUTOMATICO", seguro_basico: 3732.3, full_cover: 4722.3 },
-    { categoria: "PICK-UP 4X4", transmision: "MAN/AUT", seguro_basico: 3415.5, full_cover: 4405.5 },
-    { categoria: "FULL SIZE 4X4", transmision: "AUTOMATICO", seguro_basico: 4088.7, full_cover: 5227.2 },
-    { categoria: "PREMIUM 4X4", transmision: "AUTOMATICO", seguro_basico: 4563.9, full_cover: 5553.9 },
-    { categoria: "MICROBUS 4X2", transmision: "MANUAL", seguro_basico: 4563.9, full_cover: 5702.4 },
-    { categoria: "MICROBUS 4X2", transmision: null, seguro_basico: 4761.9, full_cover: 5751.9 },
-    { categoria: "MICROBUS 4X4", transmision: "AUTOMATICO", seguro_basico: 4959.9, full_cover: 5949.9 },
-    { categoria: "LUXURY", transmision: "AUTOMATICO", seguro_basico: 8563.5, full_cover: 9553.5 }
+    { categoria: "MINI", modelo: "TOYOTA AGYA", transmision: "MANUAL", seguro_basico: 888, full_cover: 1488 },
+    { categoria: "ECONOMICO", modelo: "SUZUKI SWIFT", transmision: "AUTOMATICO", seguro_basico: 1008, full_cover: 1608 },
+    { categoria: "COMPACTO", modelo: "VOLKSWAGEN NIVUS", transmision: "AUTOMATICO", seguro_basico: 1152, full_cover: 1752 },
+    { categoria: "MID SIZE AUT.", modelo: "TOYOTA COROLLA", transmision: "AUTOMATICO", seguro_basico: 1224, full_cover: 1824 },
+    { categoria: "ECONOMY SUV 4X2", modelo: "TOYOTA YARIS CROSS", transmision: null, seguro_basico: 1170, full_cover: 1840 },
+    { categoria: "COMPACTO SUV 4X2", modelo: "TOYOTA COROLLA CROSS", transmision: "AUTOMATICO", seguro_basico: 1218, full_cover: 1818 },
+    { categoria: "MID SIZE 4X4", modelo: "SUZUKI VITARA", transmision: "AUTOMATICO", seguro_basico: 1578, full_cover: 2248 },
+    { categoria: "STANDARD 4X4", modelo: "TOYOTA RAV4", transmision: "AUTOMATICO", seguro_basico: 1746, full_cover: 2346 },
+    { categoria: "SPECIAL 4X2", modelo: "TOYOTA RUSH 4X2", transmision: "AUTOMATICO", seguro_basico: 1746, full_cover: 2346 },
+    { categoria: "STANDARD 4X4 SPORT", modelo: "FORD BRONCO", transmision: null, seguro_basico: 2262, full_cover: 2952 },
+    { categoria: "STANDARD 4X4 ELECTRIC", modelo: "TOYOTA BZ4X 4X4", transmision: "AUTOMATICO", seguro_basico: 2262, full_cover: 2862 },
+    { categoria: "PICK-UP 4X4", modelo: "TOYOTA HILUX", transmision: "MAN/AUT", seguro_basico: 2070, full_cover: 2670 },
+    { categoria: "FULL SIZE 4X4", modelo: "TOYOTA FORTUNER", transmision: "AUTOMATICO", seguro_basico: 2478, full_cover: 3168 },
+    { categoria: "PREMIUM 4X4", modelo: "FORD EVEREST", transmision: "AUTOMATICO", seguro_basico: 2766, full_cover: 3366 },
+    { categoria: "MICROBUS 4X2", modelo: "TOYOTA HIACE", transmision: "MANUAL", seguro_basico: 2766, full_cover: 3456 },
+    { categoria: "MICROBUS 4X2", modelo: "TOYOTA HIACE", transmision: null, seguro_basico: 2886, full_cover: 3486 },
+    { categoria: "MICROBUS 4X4", modelo: "HYUNDAI STARIA", transmision: "AUTOMATICO", seguro_basico: 3006, full_cover: 3606 },
+    { categoria: "LUXURY", modelo: "FORD EXPEDITION", transmision: "AUTOMATICO", seguro_basico: 5190, full_cover: 5790 }
   ]
 };
+
+export function getRentalRateBreakdown(category, transmission, coverage, rentalDays) {
+  const days = Math.max(0, Number(rentalDays) || 0);
+  const findRate = (period) => rentACarRates[period].find(
+    (item) => item.categoria === category && item.transmision === transmission
+  )?.[coverage] || 0;
+
+  const months = Math.floor(days / 30);
+  const afterMonths = days % 30;
+  const weeks = Math.floor(afterMonths / 7);
+  const remainingDays = afterMonths % 7;
+  const rates = {
+    monthly: findRate("mensual"),
+    weekly: findRate("semanal"),
+    daily: findRate("diario")
+  };
+
+  return {
+    months,
+    weeks,
+    days: remainingDays,
+    rates,
+    total: months * rates.monthly + weeks * rates.weekly + remainingDays * rates.daily
+  };
+}

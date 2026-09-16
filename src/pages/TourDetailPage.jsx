@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { A11y, Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -35,6 +35,17 @@ export function TourDetailPage() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(null);
   const tour = findTourBySlug(tourSlug);
+  const activeTourSlug = tour?.slug;
+
+  useLayoutEffect(() => {
+    if (!activeTourSlug) return;
+
+    setBookingOpen(false);
+    setGalleryIndex(null);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [activeTourSlug]);
 
   useEffect(() => {
     if (tour) {
@@ -106,6 +117,7 @@ export function TourDetailPage() {
             <article className="tour-detail-main">
               <div className="tour-detail-gallery" aria-label={`${t(tour.title)} ${t("gallery")}`}>
                 <Swiper
+                  key={tour.slug}
                   modules={[A11y, Autoplay, Navigation, Pagination]}
                   className="tour-gallery-carousel"
                   slidesPerView={1}
@@ -177,6 +189,7 @@ export function TourDetailPage() {
               <span className="tour-booking-card__label">{t("Show Prices")}</span>
               <strong>{formatUSD(tour.price)}</strong>
               <p>{t("/ Adult")}</p>
+              <p className="muted">{t("Costa Rican nationals get 10% off this tour with cedula.")}</p>
               <dl>
                 <div>
                   <dt>{t("Duration")}</dt>

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
 import { ImageGalleryModal } from "../components/ImageGalleryModal";
+import { NationalDiscountBanner } from "../components/NationalDiscountBanner";
 import { SiteLayout } from "../components/SiteLayout";
 import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
@@ -152,6 +153,11 @@ export function ToursPage() {
               Choose your departure area and compare tours from San Jose or Jaco in one place.
             </p>
 
+            <NationalDiscountBanner
+              className="national-discount-banner--hero"
+              serviceText="tours"
+              note="Tours from San Jose and Jaco"
+            />
             <div className="service-pills" aria-label="Tour departure options">
               {origins.map((item) => (
                 <button
@@ -217,8 +223,8 @@ export function ToursPage() {
               <p className="muted">Select where you are staying and see the tours that make sense from that area.</p>
             </article>
             <article className="summary-card">
-              <h3>Build one cart</h3>
-              <p className="muted">Add tours, rent a car and other services to request everything together.</p>
+              <h3>10% national discount</h3>
+              <p className="muted">Costa Rican nationals can request 10% off tours with cedula.</p>
             </article>
           </div>
         </section>

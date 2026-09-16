@@ -23,11 +23,15 @@ import {
   UsersRound
 } from "lucide-react";
 import { ContactForm } from "../components/ContactForm";
+import { LimitedPromosSection } from "../components/LimitedPromosSection";
+import { NationalDiscountBanner } from "../components/NationalDiscountBanner";
 import { SiteLayout } from "../components/SiteLayout";
 import { Button } from "../components/ui/button";
 import { Map, MapControls, MapMarker, MapRoute, MarkerContent, MarkerPopup } from "../components/ui/map";
 import {
   asset,
+  getAllTours,
+  getTourDetailPath,
   homeLinks,
   jacoFeaturedTours,
   routes,
@@ -35,6 +39,7 @@ import {
 } from "../lib/site";
 
 const trustHighlights = [
+  { icon: Sparkles, title: "10% national discount" },
   { icon: Leaf, title: "Authentic experiences" },
   { icon: UsersRound, title: "Local expert guides" },
   { icon: ShieldCheck, title: "Safe, reliable service" },
@@ -262,7 +267,17 @@ const costaRicaMapStyle = {
   ]
 };
 
-const featuredPicks = [...sanJoseFeaturedTours.slice(0, 2), ...jacoFeaturedTours.slice(0, 2)];
+const allTours = getAllTours();
+const featuredPicks = [
+  ...sanJoseFeaturedTours.slice(0, 2).map((tour) => ({ ...tour, origin: "san-jose" })),
+  ...jacoFeaturedTours.slice(0, 2).map((tour) => ({ ...tour, origin: "jaco" }))
+].map((tour) => {
+  const catalogTour = allTours.find((item) => item.origin === tour.origin && item.title === tour.title);
+  return {
+    ...tour,
+    detailPath: catalogTour ? getTourDetailPath(catalogTour) : routes.tours
+  };
+});
 
 const tripadvisorUrl =
   "https://www.tripadvisor.es/Attraction_Review-g309293-d23810882-Reviews-Alsama_Tours-San_Jose_San_Jose_Metro_Province_of_San_Jose.html";
@@ -565,8 +580,7 @@ export function HomePage() {
         <section className="home-section home-section--intro">
           <div className="container home-intro">
             <MotionBlock className="home-intro__copy">
-              <span className="home-eyebrow">Plan less, see more</span>
-              <h2>Your trip, coordinated end to end.</h2>
+              <NationalDiscountBanner className="national-discount-banner--home" />
             </MotionBlock>
             <MotionBlock className="home-intro__stats" delay={0.08}>
               <div>
@@ -584,6 +598,8 @@ export function HomePage() {
             </MotionBlock>
           </div>
         </section>
+
+        <LimitedPromosSection />
 
         <section className="home-section home-section--promise" id="response-time">
           <div className="container home-promise">
@@ -698,22 +714,25 @@ export function HomePage() {
                 <span className="home-eyebrow">Popular picks</span>
                 <h2>Start with a proven favorite.</h2>
               </div>
-              <Link className="home-btn home-btn--light" to={routes.tours}>
-                View all tours <ArrowRight size={18} aria-hidden="true" />
-              </Link>
+
             </MotionBlock>
 
             <div className="home-picks">
               {featuredPicks.map((tour, index) => (
-                <MotionBlock className="home-pick" delay={index * 0.05} key={`${tour.title}-${tour.location}`}>
-                  <img src={tour.image} alt={`${tour.title} tour from ${tour.location}, Costa Rica`} style={{ objectPosition: tour.imagePosition }} />
-                  <div>
-                    <span>{tour.location}</span>
-                    <h3>{tour.title}</h3>
-                    <p>{tour.duration}</p>
-                  </div>
+                <MotionBlock className="home-pick-shell" delay={index * 0.05} key={`${tour.title}-${tour.origin}`}>
+                  <Link className="home-pick" to={tour.detailPath} aria-label={`View ${tour.title} tour details`}>
+                    <img src={tour.image} alt={`${tour.title} tour from ${tour.location}, Costa Rica`} style={{ objectPosition: tour.imagePosition }} />
+                    <div>
+                      <span>{tour.location}</span>
+                      <h3>{tour.title}</h3>
+                      <p>{tour.duration}</p>
+                    </div>
+                  </Link>
                 </MotionBlock>
               ))}
+              <Link className="home-btn home-btn--light home-picks__all" to={routes.tours}>
+                View all tours <ArrowRight size={18} aria-hidden="true" />
+              </Link>
             </div>
           </div>
         </section>

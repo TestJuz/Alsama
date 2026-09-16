@@ -1,4 +1,4 @@
-import { tourGalleryManifest } from "./tourGalleryManifest";
+﻿import { tourGalleryManifest } from "./tourGalleryManifest";
 
 export function asset(path) {
   return `${import.meta.env.BASE_URL}${path}`;
@@ -168,7 +168,7 @@ function makeTour(title, price, options = {}) {
     durationText,
     durationHours: options.durationHours || (durationText === "Half day" ? 5 : durationText === "2 Hours" ? 2 : durationText === "1.5 Hours" ? 1.5 : 10),
     price,
-    nextDepartures: onRequestDepartures,
+    nextDepartures: options.nextDepartures || onRequestDepartures,
     availabilityMonths
   };
 }
@@ -176,18 +176,18 @@ function makeTour(title, price, options = {}) {
 export const sanJoseFeaturedTours = [
   {
     title: "Manuel Antonio",
-    summary: "National park trails, white sand beaches and tropical wildlife in one classic Costa Rica day trip.",
+    summary: "Guided national park trails, Pacific coast scenery, tropical wildlife and beach time.",
     location: "San Jose",
     difficulty: "Easy",
-    people: "2 People",
-    duration: "13 Hours",
+    people: "",
+    duration: "14 Hours",
     price: 173.94,
     image: sourceTourImages.manuelAntonio,
     imagePosition: "center 52%"
   },
   {
     title: "Arenal Volcano and Hot Springs",
-    summary: "Arenal Volcano scenery, La Fortuna views and time to relax in volcanic hot springs.",
+    summary: "Arenal views, Sarchi culture, volcano viewpoint stops and time to relax in hot springs.",
     location: "San Jose",
     difficulty: "Easy",
     people: "",
@@ -198,11 +198,11 @@ export const sanJoseFeaturedTours = [
   },
   {
     title: "Nature Combo",
-    summary: "Coffee, Poas Volcano, waterfalls and wildlife combined into one varied day from San Jose.",
+    summary: "Coffee culture, Poas Volcano, La Paz waterfalls, wildlife sanctuary trails and buffet lunch.",
     location: "Alajuela",
     difficulty: "Easy",
     people: "",
-    duration: "12 Hours",
+    duration: "10 Hours",
     price: 207.29,
     image: sourceTourImages.natureCombo,
     imagePosition: "center 44%"
@@ -212,25 +212,14 @@ export const sanJoseFeaturedTours = [
 export const jacoFeaturedTours = [
   {
     title: "Half day pass: Aerial Tram and High Rope Circuit",
-    summary: "A central Pacific adventure park combo with aerial tram views and a high rope challenge circuit.",
+    summary: "Aerial tram forest views paired with canopy-style adventure and a high rope circuit.",
     location: "Jaco",
     difficulty: "Medium",
     people: "",
-    duration: "9 Hours",
+    duration: "4 Hours",
     price: 92.69,
     image: sourceTourImages.aerialTramHighRope,
     imagePosition: "center 44%"
-  },
-  {
-    title: "Sea Kayak & Snorkel Tour",
-    summary: "A compact ocean outing with kayaking, snorkeling and beach wildlife options near Jaco.",
-    location: "Jaco",
-    difficulty: "Easy",
-    people: "",
-    duration: "3 Hours",
-    price: 175.71,
-    image: sourceTourImages.seaKayakSnorkel,
-    imagePosition: "center 38%"
   },
   {
     title: "White Water Rafting",
@@ -246,34 +235,28 @@ export const jacoFeaturedTours = [
 ];
 
 export const sanJoseTours = [
-  makeTour("Manuel Antonio", 173.94, { origin: "san-jose", galleryFolder: "sj/Manuel_Antonio", durationText: "13 Hours", durationHours: 13, image: sourceTourImages.manuelAntonio, locations: ["Manuel Antonio"], people: "2 People", excerpt: "National park trails, white sand beaches and tropical wildlife in one classic Costa Rica day trip.", sourceUrl: "https://alsamatourscr.com/trip/manuel-antonio/" }),
-  makeTour("Beach Day", 198.56, { origin: "san-jose", galleryFolder: "sj/Beach_Day", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.beachDay, locations: ["Jaco"], excerpt: "A Pacific beach escape with Crocodile Bridge, resort time, beach chairs and buffet lunch.", sourceUrl: "https://alsamatourscr.com/trip/beach-day/" }),
-  makeTour("Nature Combo", 207.29, { origin: "san-jose", galleryFolder: "sj/Natural_Combo", durationText: "12 Hours", durationHours: 12, image: sourceTourImages.natureCombo, locations: ["Alajuela", "Poas", "La Paz"], excerpt: "Coffee, Poas Volcano, waterfalls and wildlife combined into one varied day from San Jose.", sourceUrl: "https://alsamatourscr.com/trip/nature-combo/" }),
-  makeTour("City Bus", 87.86, { origin: "san-jose", galleryFolder: "sj/City_Bus", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.cityBus, locations: ["San Jose"], excerpt: "A panoramic San Jose sightseeing route by double decker bus with cultural stops and local history.", sourceUrl: "https://alsamatourscr.com/trip/city-bus/" }),
-  makeTour("La Paz Waterfall Gardens", 142.96, { origin: "san-jose", galleryFolder: "sj/La_Paz_Waterfall_Gardens", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.laPazWaterfall, locations: ["Alajuela", "Vara Blanca"], excerpt: "Five waterfalls, lush rainforest and one of Costa Rica's best wildlife sanctuary visits.", sourceUrl: "https://alsamatourscr.com/trip/la-paz-waterfall-gardens/" }),
+  makeTour("Manuel Antonio", 173.94, { origin: "san-jose", galleryFolder: "sj/Manuel_Antonio", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.manuelAntonio, locations: ["Manuel Antonio", "Quepos"], people: "", excerpt: "Guided national park trails, Pacific coast scenery, tropical wildlife and beach time.", sourceUrl: "https://alsamatourscr.com/trip/manuel-antonio/" }),
+  makeTour("Beach Day", 198.56, { origin: "san-jose", galleryFolder: "sj/Beach_Day", durationText: "12 Hours", durationHours: 12, image: sourceTourImages.beachDay, locations: ["Central Pacific"], excerpt: "A relaxed Pacific beach day with resort access, lunch, natural trails and butterfly garden time.", sourceUrl: "https://alsamatourscr.com/trip/beach-day/" }),
+  makeTour("Nature Combo", 207.29, { origin: "san-jose", galleryFolder: "sj/Natural_Combo", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.natureCombo, locations: ["Alajuela", "Poas", "La Paz"], excerpt: "Coffee culture, Poas Volcano, La Paz waterfalls, wildlife sanctuary trails and buffet lunch.", sourceUrl: "https://alsamatourscr.com/trip/nature-combo/" }),
+  makeTour("City Bus", 87.86, { origin: "san-jose", galleryFolder: "sj/City_Bus", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.cityBus, locations: ["San Jose"], excerpt: "A double-decker San Jose city tour with museums, markets, historic stops and a local meal.", sourceUrl: "https://alsamatourscr.com/trip/city-bus/" }),
+  makeTour("La Paz Waterfall Gardens", 142.96, { origin: "san-jose", galleryFolder: "sj/La_Paz_Waterfall_Gardens", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.laPazWaterfall, locations: ["Alajuela", "Vara Blanca", "La Paz"], excerpt: "Waterfall trails, lush rainforest and a wildlife sanctuary with lunch from San Jose.", sourceUrl: "https://alsamatourscr.com/trip/la-paz-waterfall-gardens/" }),
   makeTour("Irazu Volcano, Orosi Valley & Lankester Botanic Garden", 142.89, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Orisi_Valley_&_Lankester_Botanic_Garden", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.irazuOrosi, locations: ["Cartago", "Irazu", "Orosi", "Lankester"], excerpt: "Cartago history, Irazu Volcano, Orosi Valley and Lankester Botanic Garden in one scenic route.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-orosi-valley-lankester-botanic-garden/" }),
   makeTour("Premium Tortuga Island Tour", 172.08, { origin: "san-jose", galleryFolder: "sj/Premium Tortuga Island_Tour", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.premiumTortuga, locations: ["Isla Tortuga", "Gulf of Nicoya"], excerpt: "A premium island day with turquoise water, beach time, ocean views and activities in the Gulf of Nicoya.", sourceUrl: "https://alsamatourscr.com/trip/premium-tortuga-island-tour/" }),
-  makeTour("Arenal Volcano and Hot Springs", 208.49, { origin: "san-jose", galleryFolder: "sj/Arenal_Volcano_and_Hot_Springs", durationText: "13 Hours", durationHours: 13, image: sourceTourImages.arenal, locations: ["Arenal", "La Fortuna", "San Carlos"], excerpt: "Arenal Volcano scenery, La Fortuna views and time to relax in volcanic hot springs.", sourceUrl: "https://alsamatourscr.com/trip/arenal-volcano-and-hot-springs/" }),
-  makeTour("Typical Dinner and Folklore Show", 99.28, { origin: "san-jose", galleryFolder: "sj/Typical_Dinner_and_Folklore_Show", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.folklore, locations: ["San Jose", "Central Valley"], excerpt: "An evening of Central Valley views, Costa Rican folklore, marimba music and traditional buffet dinner.", sourceUrl: "https://alsamatourscr.com/trip/typical-dinner-and-folklore-show/" }),
-  makeTour("Irazu Volcano Halfday", 90.46, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A half-day volcano route from San Jose toward Cartago and the summit landscapes of Irazu.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
+  makeTour("Arenal Volcano and Hot Springs", 208.49, { origin: "san-jose", galleryFolder: "sj/Arenal_Volcano_and_Hot_Springs", durationText: "13 Hours", durationHours: 13, image: sourceTourImages.arenal, locations: ["Arenal", "La Fortuna", "Sarchi"], excerpt: "Arenal views, Sarchi culture, volcano viewpoint stops and time to relax in hot springs.", sourceUrl: "https://alsamatourscr.com/trip/arenal-volcano-and-hot-springs/" }),
+  makeTour("Typical Dinner and Folklore Show", 99.28, { origin: "san-jose", galleryFolder: "sj/Typical_Dinner_and_Folklore_Show", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.folklore, locations: ["San Jose", "Central Valley"], excerpt: "A traditional Costa Rican evening with local dinner, music, dance and cultural performances.", sourceUrl: "https://alsamatourscr.com/trip/typical-dinner-and-folklore-show/" }),
+  makeTour("Irazu Volcano Halfday", 90.46, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A shorter route to Irazu Volcano with Cartago scenery, crater views and Basilica history.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
 ];
 
 export const jacoTours = [
-  makeTour("White Water Rafting", 182.42, { origin: "jaco", galleryFolder: "jaco/White _Water_Rafting", durationText: "1 Day", durationHours: 24, difficulty: "Medium", image: sourceTourImages.whiteWaterRafting, locations: ["Jaco", "Rio Savegre"], excerpt: "A family-friendly Savegre River rafting day with rainforest scenery, river time and organized logistics.", sourceUrl: "https://alsamatourscr.com/trip/white-water-rafting/" }),
-  makeTour("Half day pass: Aerial Tram and High Rope Circuit", 92.69, { origin: "jaco", galleryFolder: "jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", durationText: "9 Hours", durationHours: 9, difficulty: "Medium", image: sourceTourImages.aerialTramHighRope, locations: ["Jaco"], excerpt: "A central Pacific adventure park combo with aerial tram views and a high rope challenge circuit.", sourceUrl: "https://alsamatourscr.com/trip/half-day-pass-aerial-tram-and-high-rope-circuit/" }),
-  makeTour("Sea Kayak & Snorkel Tour", 175.71, { origin: "jaco", galleryFolder: "jaco/Sea_Kayak_&_Snorkel_Tour", durationText: "3 Hours", durationHours: 3, image: sourceTourImages.seaKayakSnorkel, locations: ["Jaco"], excerpt: "A compact ocean outing with kayaking, snorkeling and beach wildlife options near Jaco.", sourceUrl: "https://alsamatourscr.com/trip/sea-kayak-snorkel-tour/" }),
-  makeTour("Canyoning Tour", 107.55, { origin: "jaco", galleryFolder: "jaco/Canyoning_Tour", durationText: "2 Hours", durationHours: 2, difficulty: "Hard", image: sourceTourImages.canyoning, locations: ["Jaco"], excerpt: "A rainforest canyoning adventure with rappelling, waterfalls, natural pools and a high-adrenaline route.", sourceUrl: "https://alsamatourscr.com/trip/canyoning-tour/" }),
-  makeTour("Extreme Adrenaline 5 in 1", 86.54, { origin: "jaco", galleryFolder: "jaco/Extreme_Adrenaline_5_in_1", durationText: "5 Hours", durationHours: 5, difficulty: "Medium", image: sourceTourImages.extremeAdrenaline, locations: ["Jaco"], excerpt: "A complete Jaco adventure experience with aerial tram, canopy, hiking, ocean views and forest challenge elements.", sourceUrl: "https://alsamatourscr.com/trip/extreme-adrenaline-5-in-1/" }),
-  makeTour("Carara National Park", 115.83, { origin: "jaco", galleryFolder: "jaco/Carara_National_Park", durationText: "5 Hours", durationHours: 5, difficulty: "Medium", image: sourceTourImages.carara, locations: ["Jaco", "Carara"], excerpt: "A Central Pacific national park visit known for transitional forest and scarlet macaw habitat.", sourceUrl: "https://alsamatourscr.com/trip/carara-national-park/" }),
-  makeTour("Poas Volcano & La Paz Waterfall", 239.92, { origin: "jaco", galleryFolder: "jaco/Poas_Volcano_&_La_Paz_Waterfall", durationText: "10 Hours", durationHours: 10, difficulty: "Medium", image: sourceTourImages.poasLaPaz, locations: ["Jaco", "Poas", "La Paz"], excerpt: "A volcano and waterfall route from Jaco with Poas cloud forest scenery and La Paz trails.", sourceUrl: "https://alsamatourscr.com/trip/poas-volcano-la-paz-waterfall/" }),
-  makeTour("Safari Adventure", 107.55, { origin: "jaco", galleryFolder: "jaco/Safari_Adventure", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.safariAdventure, locations: ["Jaco"], excerpt: "A Jaco-area sightseeing day with monkeys, crocodile river cruise, countryside visits and beach time.", sourceUrl: "https://alsamatourscr.com/trip/safari-adventure/" }),
-  makeTour("Aerial Tram", 113.19, { origin: "jaco", galleryFolder: "jaco/Aerial_Tram", durationText: "2 Hours", durationHours: 2, difficulty: "Medium", image: sourceTourImages.aerialTram, locations: ["Jaco"], excerpt: "A treetop aerial tram ride that lets travelers see the Central Pacific forest from above.", sourceUrl: "https://alsamatourscr.com/trip/aerial-tram/" }),
-  makeTour("Horseback Riding & Waterfalls", 82.73, { origin: "jaco", galleryFolder: "jaco/Horseback_Riding_&_Waterfalls", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.horsebackWaterfalls, locations: ["Jaco"], excerpt: "A horseback route near Jaco with waterfall and pool time, plus chances to spot tropical wildlife.", sourceUrl: "https://alsamatourscr.com/trip/horseback-riding-waterfalls/" }),
-  makeTour("Monkey Mangrove Tour", 91.01, { origin: "jaco", galleryFolder: "jaco/Monkey_Mangrove_Tour", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.monkeyMangrove, locations: ["Jaco", "Los Suenos"], excerpt: "A family-friendly mangrove riverboat experience with white-faced capuchin monkey sightings.", sourceUrl: "https://alsamatourscr.com/trip/monkey-mangrove-tour/" }),
-  makeTour("Waterfall Experience Tour", 108.36, { origin: "jaco", galleryFolder: "jaco/Waterfall_Experience_Tour", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.waterfallExperience, locations: ["Jaco", "Manuel Antonio"], excerpt: "A guided rainforest waterfall trip above the Pacific with pools, trails and mountain views.", sourceUrl: "https://alsamatourscr.com/trip/waterfall-experience-tour/" }),
-  makeTour("Tranopy Tour", 85.08, { origin: "jaco", galleryFolder: "jaco/Tranopy_Tour", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.tranopy, locations: ["Jaco"], excerpt: "A Jaco adventure mix with aerial tram scenery and zipline-style forest excitement.", sourceUrl: "https://alsamatourscr.com/trip/tranopy-tour/" }),
-  makeTour("Tortuga Island Tour", 182.01, { origin: "jaco", galleryFolder: "jaco/Tortuga_Island_Tour", durationText: "1 Day", durationHours: 24, image: sourceTourImages.tortugaIsland, locations: ["Jaco", "Isla Tortuga", "Puntarenas"], excerpt: "A classic Gulf of Nicoya cruise to Tortuga Island with white sand beach and turquoise water.", sourceUrl: "https://alsamatourscr.com/trip/tortuga-island-tour/" }),
-  makeTour("Chocolate Tour", 41.37, { origin: "jaco", galleryFolder: "jaco/Chocolate_Tour", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.chocolate, locations: ["Puntarenas", "Jaco"], excerpt: "A short walk and chocolate experience focused on cacao, forest scenery and local flavors.", sourceUrl: "https://alsamatourscr.com/trip/chocolate-tour/" })
+  makeTour("White Water Rafting", 182.42, { origin: "jaco", galleryFolder: "jaco/White _Water_Rafting", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.whiteWaterRafting, locations: ["Central Pacific", "Rio Savegre", "Rio Naranjo"], excerpt: "Rafting routes for families or adrenaline seekers with river scenery, guide support and meals.", sourceUrl: "https://alsamatourscr.com/trip/white-water-rafting/" }),
+  makeTour("Half day pass: Aerial Tram and High Rope Circuit", 92.69, { origin: "jaco", galleryFolder: "jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.aerialTramHighRope, locations: ["Jaco", "Central Pacific"], excerpt: "Aerial tram forest views paired with canopy-style adventure and a high rope circuit.", sourceUrl: "https://alsamatourscr.com/trip/half-day-pass-aerial-tram-and-high-rope-circuit/" }),
+  makeTour("Carara National Park", 115.83, { origin: "jaco", galleryFolder: "jaco/Carara_National_Park", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.carara, locations: ["Jaco", "Carara", "Tarcoles"], excerpt: "Guided trails through transitional forest with birdlife, scarlet macaws and a Tarcoles River stop.", sourceUrl: "https://alsamatourscr.com/trip/carara-national-park/" }),
+  makeTour("Aerial Tram", 113.19, { origin: "jaco", galleryFolder: "jaco/Aerial_Tram", durationText: "2 Hours", durationHours: 2, difficulty: "Medium", image: sourceTourImages.aerialTram, locations: ["Jaco", "Central Pacific"], excerpt: "A peaceful aerial tram ride through transitional rainforest with Pacific views and guided nature insight.", sourceUrl: "https://alsamatourscr.com/trip/aerial-tram/" }),
+  makeTour("Monkey Mangrove Tour", 91.01, { origin: "jaco", galleryFolder: "jaco/Monkey_Mangrove_Tour", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.monkeyMangrove, locations: ["Jaco", "Los Suenos", "Mangroves"], excerpt: "A mangrove boat tour with white-faced monkeys, birds, reptiles and tropical river scenery.", sourceUrl: "https://alsamatourscr.com/trip/monkey-mangrove-tour/" }),
+  makeTour("Waterfall Experience Tour", 108.36, { origin: "jaco", galleryFolder: "jaco/Waterfall_Experience_Tour", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.waterfallExperience, locations: ["Jaco", "Central Pacific"], excerpt: "A 4x4 waterfall adventure with jungle scenery, natural pools, swimming and optional jumps.", sourceUrl: "https://alsamatourscr.com/trip/waterfall-experience-tour/" }),
+  makeTour("Tranopy Tour", 85.08, { origin: "jaco", galleryFolder: "jaco/Tranopy_Tour", durationText: "4 Hours", durationHours: 4, image: sourceTourImages.tranopy, locations: ["Jaco", "Central Pacific"], excerpt: "Canopy-style forest adventure with elevated platforms, Pacific views and aerial tram scenery.", sourceUrl: "https://alsamatourscr.com/trip/tranopy-tour/" }),
+  makeTour("Tortuga Island Tour", 182.01, { origin: "jaco", galleryFolder: "jaco/Tortuga_Island_Tour", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.tortugaIsland, locations: ["Jaco", "Los Suenos", "Isla Tortuga"], excerpt: "A yacht or catamaran trip from the Jaco area to Tortuga Island with beach time and lunch.", sourceUrl: "https://alsamatourscr.com/trip/tortuga-island-tour/" }),
+  makeTour("Chocolate Tour", 41.37, { origin: "jaco", galleryFolder: "jaco/Chocolate_Tour", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.chocolate, locations: ["Puntarenas", "Jaco"], excerpt: "A chocolate experience with a forest walk, cacao history, hands-on production and tasting.", sourceUrl: "https://alsamatourscr.com/trip/chocolate-tour/" })
 ];
 
 
@@ -288,26 +271,26 @@ export function getTourDetailPath(tour) {
 
 const tourDetailTemplates = {
   "manuel-antonio": {
-    subtitle: "National park trails, white sand beaches and tropical wildlife in one classic Costa Rica day trip.",
+    subtitle: "Guided national park trails, Pacific coast scenery, tropical wildlife and beach time.",
     overview: [
-      "This tour follows the spirit of the Manuel Antonio reference itinerary: a scenic route built around nature, beach time and relaxed exploration.",
-      "Alsama can coordinate pickup details, hotel location, traveler count and seasonal timing before confirming the final operating schedule."
+      "This tour travels along the Pacific coast toward Quepos and Manuel Antonio, passing ocean views, coastal towns and palm plantations before reaching the park.",
+      "Inside the park, a bilingual guide leads the trail walk with chances to see monkeys, iguanas, tropical birds and sloths, followed by time to relax on the beach."
     ],
-    highlights: ["Swimming", "Beach", "Hiking trails", "Wildlife viewing", "Rainforest scenery", "Photo stops"],
-    included: ["Transportation service", "Entrance coordination", "Bilingual guide", "Breakfast", "Lunch"],
-    paid: ["Drinks", "Liquors", "Watersports", "Extra snacks"],
-    recommendations: ["Closed toe shoes", "Towels", "Sunscreen", "Swim clothes", "Comfortable walking shoes", "Smartphone or camera"]
+    highlights: ["Manuel Antonio", "Quepos", "Hiking trails", "Wildlife viewing", "Beach time", "Pacific views"],
+    included: ["Transportation service", "Entrance coordination", "Bilingual guide", "Beach time", "Lunch"],
+    paid: ["Extra drinks", "Souvenirs", "Personal expenses"],
+    recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Swim clothes", "Camera"]
   },
   "nature-combo": {
-    subtitle: "Coffee, waterfalls and scenic stops combined into one balanced day from San Jose.",
+    subtitle: "Coffee culture, Poas Volcano, La Paz waterfalls, wildlife sanctuary trails and buffet lunch.",
     overview: [
-      "Nature Combo brings together several Costa Rican highlights in a single route, ideal for travelers who want variety without changing hotels.",
-      "The experience can connect with lodging, onward transfers and broader vacation planning through Alsama Tours."
+      "Nature Combo brings together three classic Costa Rica stops: a coffee experience with breakfast, the crater area of Poas Volcano and the La Paz Waterfall Gardens.",
+      "The La Paz visit includes rainforest paths, the Magia Blanca waterfall area, wildlife sanctuary exhibits and a buffet-style lunch."
     ],
-    highlights: ["Coffee experience", "Waterfalls", "Nature stops", "Scenic viewpoints", "Easy walking", "Photo moments"],
-    included: ["Transportation service", "Tour coordination", "Bilingual guide", "Breakfast", "Lunch"],
-    paid: ["Souvenirs", "Specialty coffee", "Extra drinks", "Optional activities"],
-    recommendations: ["Light jacket", "Closed toe shoes", "Sunscreen", "Comfortable clothes", "Camera", "Reusable water bottle"]
+    highlights: ["Coffee experience", "Poas Volcano", "La Paz Waterfall", "Waterfalls", "Animal sanctuary", "Buffet lunch"],
+    included: ["Transportation service", "Breakfast", "Lunch", "Tickets", "Bilingual guide"],
+    paid: ["Souvenirs", "Specialty coffee", "Extra drinks", "Personal expenses"],
+    recommendations: ["Raincoat", "Comfortable walking shoes", "Long pants", "Insect repellent", "Camera"]
   },
   "savegre-river-rafting": {
     subtitle: "A full-day river adventure for travelers who want movement, scenery and adrenaline.",
@@ -343,259 +326,216 @@ const tourDetailTemplates = {
     recommendations: ["Comfortable clothes", "Sunscreen", "Insect repellent", "Camera", "Hat", "Reusable water bottle"]
   },
   "beach-day": {
-    subtitle: "White sand beach time, Crocodile Bridge and resort comfort from San Jose.",
+    subtitle: "A relaxed Pacific beach day with resort access, lunch, natural trails and butterfly garden time.",
     overview: [
-      "The experience begins with pickup from main San Jose hotels and hotels near Juan Santamaria airport before heading toward the Pacific coast.",
-      "The route includes a stop at the famous Crocodile Bridge, beach chairs and umbrellas at the resort, a buffet lunch, and time for beach, trails and the butterfly garden."
+      "Beach Day is designed for travelers who want an easy Pacific escape with resort access, calm beach time and a relaxed lunch included.",
+      "The resort setting can include natural trails and a butterfly garden, giving the day a simple mix of beach, rest and light nature exploration."
     ],
-    highlights: ["Swimming", "Beach sports", "Hiking trails", "Crocodile Bridge", "Beach chairs", "Buffet lunch"],
-    included: ["Transportation service", "Bilingual guide", "Breakfast", "Lunch"],
-    paid: ["Drinks", "Liquors", "Watersports", "Juice"],
-    recommendations: ["Closed toe shoes", "Towels", "Sunscreen", "Swim clothes", "Comfortable walking shoes"]
+    highlights: ["Beach", "Swimming", "Resort access", "Lunch", "Hiking trails", "Butterfly garden"],
+    included: ["Transportation service", "Resort access", "Lunch"],
+    paid: ["Drinks", "Watersports", "Extra snacks", "Personal expenses"],
+    recommendations: ["Hat", "Light clothes", "Sunscreen", "Swim clothes", "Towels", "Camera"]
   },
   "city-bus": {
-    subtitle: "A panoramic cultural route through San Jose aboard a sightseeing double decker bus.",
+    subtitle: "A double-decker San Jose city tour with museums, markets, historic stops and a local meal.",
     overview: [
-      "This sightseeing bus tour takes travelers from their hotel into downtown San Jose to see the city's main historic landmarks and understand Costa Rica's evolution.",
-      "Stops and route highlights may include the National Theater lobby, Art Museum, Metropolitan Cathedral, Central Market, National Stadium, National Monument and Democracy Plaza."
+      "This San Jose city tour uses a double-decker sightseeing bus to connect the capital's main cultural and historic highlights.",
+      "The route can include the Central Market, National Theater lobby, Gold Museum, Art Museum, Central Avenue and a typical lunch or dinner according to the selected schedule."
     ],
-    highlights: ["Capital landmarks", "Guided city walk", "Local history", "Architecture", "Panoramic bus route"],
-    included: ["Transportation service", "Local drinks", "Lunch or dinner according to schedule", "Bilingual guide", "Museum tickets"],
-    paid: ["Liquors", "Snacks"],
-    recommendations: ["Closed toe shoes", "Sunscreen", "Hat", "Raincoat", "Cash", "Comfortable walking shoes"]
+    highlights: ["Capital landmarks", "Central Market", "Museum tickets", "Local history", "Panoramic bus route", "Local drinks"],
+    included: ["Transportation service", "Lunch or dinner according to schedule", "Museum tickets", "Bilingual guide"],
+    paid: ["Liquors", "Snacks", "Souvenirs"],
+    recommendations: ["Comfortable walking shoes", "Long pants", "Camera"]
   },
   "la-paz-waterfall-gardens": {
-    subtitle: "Five waterfalls, lush rainforest and one of Costa Rica's best wildlife sanctuary visits.",
+    subtitle: "Waterfall trails, lush rainforest and a wildlife sanctuary with lunch from San Jose.",
     overview: [
-      "La Paz Waterfall Gardens is one of the most popular nature attractions in the San Jose area, featuring five famous waterfalls and a large animal sanctuary.",
-      "The visit is focused on Costa Rican wildlife, rainforest scenery, flowing rivers, birds, butterflies, monkeys, hummingbirds, snakes, felines, frogs and more."
+      "La Paz Waterfall Gardens is one of Costa Rica's most scenic nature stops, combining rainforest trails, waterfalls and a wildlife sanctuary in one visit.",
+      "The tour is ideal for travelers who want to see waterfalls, tropical plants and rescued wildlife such as sloths, monkeys and exotic birds without changing hotels."
     ],
-    highlights: ["Waterfalls", "Animal sanctuary", "Bird watching", "Wildlife viewing", "Rainforest scenery"],
+    highlights: ["Waterfalls", "Animal sanctuary", "Bird watching", "Wildlife viewing", "Rainforest scenery", "Lunch"],
     included: ["Transportation service", "Lunch", "Tickets", "Bilingual guide"],
-    paid: ["Snacks", "Souvenirs"],
-    recommendations: ["Sunscreen", "Hat", "Insect repellent", "Raincoat", "Sunglasses", "Closed toe shoes", "Jacket"]
+    paid: ["Snacks", "Souvenirs", "Extra drinks"],
+    recommendations: ["Raincoat", "Comfortable walking shoes", "Long pants", "Camera", "Jacket"]
   },
   "white-water-rafting": {
-    subtitle: "A Savegre River rafting day with jungle scenery, waterfalls and Class II-IV rapids.",
+    subtitle: "Rafting routes for families or adrenaline seekers with river scenery, guide support and meals.",
     overview: [
-      "This family-friendly full-day rafting trip begins with a 4x4 ride into the tropical jungle and remote Savegre scenery before reaching the river route.",
-      "The Savegre River offers Class II, III and IV rapids, waterfall stops, tropical wildlife sightings, fruit by the river and a hot Tico-style lunch after the run."
+      "The rafting program offers options for travelers who want either a family-friendly river experience or a stronger adrenaline route.",
+      "The Savegre route is known for class II and III rapids with rainforest scenery, while the Naranjo option can bring class III and IV rapids through canyon and rural landscapes."
     ],
-    highlights: ["Rafting", "Savegre River", "Class II-IV rapids", "Waterfall stop", "Wildlife viewing", "Tico-style lunch"],
-    included: ["Transportation service", "Rafting equipment coordination", "Guide support", "Lunch"],
-    paid: ["Photos", "Extra drinks", "Private guide upgrades", "Additional snacks"],
-    recommendations: ["Water shoes", "Quick-dry clothes", "Sunscreen", "Change of clothes", "Towel", "Secure strap for glasses"]
+    highlights: ["Rafting", "River scenery", "Class II-IV rapids", "Adventure", "Guide support", "Lunch"],
+    included: ["Transportation service", "Rafting equipment coordination", "Guide support", "Breakfast", "Lunch", "Snacks"],
+    paid: ["Photos", "Extra drinks", "Personal expenses"],
+    recommendations: ["Water shoes", "Swim clothes", "Sunscreen", "Towels", "Change of clothes", "Camera"]
   },
   "half-day-pass-aerial-tram-and-high-rope-circuit": {
-    subtitle: "Aerial tram views and a high rope challenge circuit in the Central Pacific forest.",
+    subtitle: "Aerial tram forest views paired with canopy-style adventure and a high rope circuit.",
     overview: [
-      "This package combines relaxation and adrenaline in a Central Pacific adventure park with beach, mountain, waterfall and forest scenery.",
-      "Travelers ride the aerial tram, enjoy Sky Deck views, visit the butterfly garden and take on a high rope circuit with bridges, balance challenges and a descent wall."
+      "This Jaco-area adventure combines forest scenery with a more active route through the Central Pacific canopy.",
+      "The experience can include an aerial tram, canopy-style sections, natural trails and a high rope circuit set above the forest floor."
     ],
-    highlights: ["Aerial tram", "High rope circuit", "Sky Deck", "Butterfly garden", "Hanging bridges", "Descent wall"],
-    included: ["Helmet"],
-    paid: ["Snacks", "Beverages", "Breakfast", "Lunch", "Fast food", "Tea", "Juice"],
-    recommendations: ["Closed toe shoes", "Sunscreen", "Insect repellent", "Raincoat", "Sunglasses", "Comfortable walking shoes"]
-  },
-  "sea-kayak-snorkel-tour": {
-    subtitle: "A compact ocean adventure with kayaking, snorkeling and beach wildlife options.",
-    overview: [
-      "The Sea Kayak and Snorkel Tour is designed for active travelers, families and small groups who want an ocean activity without needing prior experience.",
-      "The tour uses easy-to-paddle equipment and can include snorkeling when conditions permit, with options for beachcombing, monkey watching and bird watching."
-    ],
-    highlights: ["Kayak tour", "Snorkeling", "Swimming", "Beach scenery", "Wildlife viewing"],
-    included: ["Fruits", "Water"],
-    paid: ["Snacks", "Drinks"],
-    recommendations: ["Water shoes", "Sunscreen", "Hat", "Swim clothes", "Insect repellent", "Sunglasses", "Change of clothes and towel"]
-  },
-  "canyoning-tour": {
-    subtitle: "Rainforest hiking, waterfall rappels, natural pools and high-adrenaline canyoning.",
-    overview: [
-      "The canyoning experience includes rainforest hiking, rappelling down waterfalls, walking through riverbeds and jumping into natural pools.",
-      "The route can include a tractor ride, safety briefing, multiple rappel descents, a cannonball jump, guided zip line option and waterfall features."
-    ],
-    highlights: ["Canyoning", "Waterfall rappels", "Natural pools", "Cannonball jump", "Tractor ride", "Waterfall avalanche"],
-    included: ["Fruits", "Water", "Snacks", "Lunch", "Helmet"],
-    paid: ["Souvenirs", "Photographs", "Juice", "GoPro during the tour"],
-    recommendations: ["Closed toe shoes", "Sunscreen", "Hat", "Insect repellent", "Sunglasses", "Adventure clothes"]
-  },
-  "extreme-adrenaline-5-in-1": {
-    subtitle: "A complete Jaco adventure day with tram, canopy, hiking, rope challenges and ocean views.",
-    overview: [
-      "Extreme Adrenaline 5 in 1 combines several activities inside a private reserve near Jaco beach for travelers who want a full adventure experience.",
-      "The route includes aerial tram views, canopy lines, jungle trekking, rope circuit challenges, bridges, balance elements and a descent wall in the forest."
-    ],
-    highlights: ["Bird watching", "Ocean and mountain views", "Aerial tram", "Butterfly garden", "Zipline", "Hike", "Canopy"],
-    included: ["Water", "Lunch", "Helmet"],
-    paid: ["Snacks", "Beverages", "Breakfast", "Juice"],
-    recommendations: ["Sunscreen", "Insect repellent", "Sunglasses", "Comfortable walking shoes", "Closed toe shoes", "Waterproof coat", "Camera"]
+    highlights: ["Aerial tram", "Canopy", "High rope circuit", "Forest views", "Ocean and mountain views", "Adventure"],
+    included: ["Transportation service", "Bilingual guide", "Aerial tram", "Helmet"],
+    paid: ["Snacks", "Beverages", "Breakfast", "Lunch", "Photos"],
+    recommendations: ["Closed toe shoes", "Sunscreen", "Insect repellent", "Sunglasses", "Comfortable walking shoes", "Camera"]
   },
   "premium-tortuga-island-tour": {
-    subtitle: "A premium Gulf of Nicoya island day with beach time, ocean views and a relaxed boat experience.",
+    subtitle: "A Gulf of Nicoya catamaran day with beach time, lunch, live music and island activities.",
     overview: [
-      "Premium Tortuga Island Tour is built around a full Pacific island escape from San Jose with turquoise water, white sand and time to enjoy the beach.",
-      "Alsama can coordinate pickup, supplier confirmation and any optional beach activities before booking."
+      "The Tortuga Island catamaran departs toward the Gulf of Nicoya for white sand, turquoise water and about five hours to enjoy the island.",
+      "The onboard and beach experience can include light breakfast, fruit, ceviche, refreshments, live music, lunch and optional island activities such as snorkeling, kayaking or banana boat."
     ],
-    highlights: ["Isla Tortuga", "Gulf of Nicoya", "Boat ride", "Beach time", "Swimming", "Pacific views"],
-    included: ["Transportation coordination", "Boat tour coordination", "Bilingual support", "Lunch"],
-    paid: ["Watersports", "Extra drinks", "Souvenirs", "Optional beach activities"],
-    recommendations: ["Sunscreen", "Towels", "Swim clothes", "Sandals", "Dry bag", "Camera"]
+    highlights: ["Isla Tortuga", "Gulf of Nicoya", "Boat ride", "Beach time", "Swimming", "Watersports"],
+    included: ["Transportation service", "Boat tour coordination", "Bilingual guide", "Breakfast", "Lunch", "Drinks"],
+    paid: ["Souvenirs", "Optional beach activities", "Personal expenses"],
+    recommendations: ["Light clothes", "Swim clothes", "Towels", "Sunscreen", "Hat", "Camera"]
   },
   "arenal-volcano-and-hot-springs": {
-    subtitle: "Arenal Volcano scenery, La Fortuna views and hot springs relaxation in one full-day route.",
+    subtitle: "Arenal views, Sarchi culture, volcano viewpoint stops and time to relax in hot springs.",
     overview: [
-      "This San Jose departure heads toward La Fortuna for views of Arenal Volcano and time in volcanic hot springs.",
-      "The tour is a good fit for travelers who want mountain scenery, relaxation and a full-day nature experience without changing hotels."
+      "This full-day route visits one of Costa Rica's most famous areas, with cultural time in Sarchi and views of Arenal Volcano and Lake Arenal along the way.",
+      "The day finishes with time in natural hot spring pools and a buffet-style meal in a resort setting before returning to San Jose."
     ],
-    highlights: ["Arenal Volcano", "La Fortuna", "Hot springs", "Mountain scenery", "Relaxation", "Photo stops"],
-    included: ["Transportation service", "Tour coordination", "Bilingual guide", "Lunch"],
+    highlights: ["Arenal Volcano", "La Fortuna", "Sarchi", "Hot springs", "Mountain scenery", "Relaxation"],
+    included: ["Transportation service", "Bilingual guide", "Lunch", "Dinner", "Tickets"],
     paid: ["Extra drinks", "Spa upgrades", "Souvenirs", "Personal expenses"],
-    recommendations: ["Swim clothes", "Towel", "Sandals", "Light jacket", "Sunscreen", "Camera"]
+    recommendations: ["Swim clothes", "Sandals", "Sunscreen", "Insect repellent", "Change of clothes", "Camera"]
   },
   "typical-dinner-and-folklore-show": {
-    subtitle: "Costa Rican folklore, Central Valley views and a traditional evening dinner experience.",
+    subtitle: "A traditional Costa Rican evening with local dinner, music, dance and cultural performances.",
     overview: [
-      "Typical Dinner and Folklore Show is an evening cultural experience with local music, traditional food and Costa Rican dance.",
-      "It works well as a lighter San Jose night activity after arrival, meetings or a daytime tour."
+      "This cultural evening combines local gastronomy with a colorful traditional show in a warm, festive setting.",
+      "Guests enjoy a typical dinner while music, folkloric dances, costumes and cultural performances bring Costa Rican traditions to life."
     ],
-    highlights: ["Folklore show", "Traditional dinner", "Marimba music", "Costa Rican culture", "Central Valley views"],
+    highlights: ["Folklore show", "Traditional dinner", "Costa Rican culture", "Local history", "Marimba music"],
     included: ["Transportation service", "Dinner coordination", "Bilingual support", "Show admission"],
     paid: ["Liquors", "Souvenirs", "Extra drinks"],
     recommendations: ["Comfortable shoes", "Light jacket", "Camera", "Casual evening clothes"]
   },
   "irazu-volcano-halfday": {
-    subtitle: "A half-day volcano route from San Jose toward Cartago and the summit landscapes of Irazu.",
+    subtitle: "A shorter route to Irazu Volcano with Cartago scenery, crater views and Basilica history.",
     overview: [
-      "Irazu Volcano Halfday focuses on the high-elevation volcano landscapes near Cartago in a shorter format than the full Orosi and Lankester route.",
-      "It is useful when travelers want a volcano visit while keeping the rest of the day flexible."
+      "This route climbs toward Irazu Volcano through farms and changing mountain scenery before reaching the crater area.",
+      "On clear days the summit can offer long-distance views, and the route continues toward Cartago with time around the Basilica of Our Lady of the Angels."
     ],
-    highlights: ["Irazu Volcano", "Cartago", "Volcanic crater", "Mountain views", "Half-day route"],
+    highlights: ["Irazu Volcano", "Cartago", "Volcanic crater", "Mountain views", "Basilica"],
     included: ["Transportation service", "Entrance coordination", "Bilingual guide"],
     paid: ["Meals", "Snacks", "Souvenirs", "Extra drinks"],
-    recommendations: ["Jacket", "Closed toe shoes", "Sunscreen", "Hat", "Camera"]
+    recommendations: ["Jacket", "Comfortable walking shoes", "Raincoat", "Long pants", "Camera"]
   },
   "irazu-volcano-orosi-valley-lankester-botanic-garden": {
-    subtitle: "Cartago history, Irazu Volcano, Orosi Valley and Lankester Botanic Garden in one scenic route.",
+    subtitle: "Irazu Volcano, Cartago, Lankester Botanic Garden and Orosi Valley in one scenic route.",
     overview: [
-      "This full route combines the summit scenery of Irazu Volcano with Cartago, Orosi Valley and the botanical collection at Lankester.",
-      "It is a strong San Jose day trip for travelers who want volcano views, gardens, culture and countryside scenery."
+      "This Cartago route begins at Irazu Volcano, where visitors can see the main crater areas and high-elevation landscapes.",
+      "The day continues through Cartago, Lankester Botanic Garden and the scenic Orosi Valley, with colonial history, orchids and a typical lunch in the region."
     ],
     highlights: ["Irazu Volcano", "Orosi Valley", "Lankester Botanic Garden", "Cartago", "Scenic drive", "Orchids"],
     included: ["Transportation service", "Entrance coordination", "Bilingual guide", "Lunch"],
     paid: ["Souvenirs", "Extra drinks", "Snacks"],
-    recommendations: ["Jacket", "Closed toe shoes", "Sunscreen", "Camera", "Comfortable clothes"]
+    recommendations: ["Jacket", "Comfortable walking shoes", "Raincoat", "Long pants", "Camera"]
   },
   "carara-national-park": {
-    subtitle: "A Central Pacific national park visit known for transitional forest and scarlet macaw habitat.",
+    subtitle: "Guided trails through transitional forest with birdlife, scarlet macaws and a Tarcoles River stop.",
     overview: [
-      "Carara National Park is a Jaco-area nature tour focused on tropical forest, birdlife and an accessible national park experience.",
-      "It is a good match for travelers looking for wildlife, easy hiking and a shorter nature outing from the Central Pacific."
+      "Carara National Park protects a transitional forest known for rich biodiversity and a large percentage of Costa Rica's bird species.",
+      "The guided walk focuses on birds, forest sounds and wildlife, with possible stops around viewpoints and the Tarcoles River bridge to observe crocodiles safely from above."
     ],
-    highlights: ["Carara National Park", "Scarlet macaws", "Bird watching", "Forest trails", "Wildlife viewing"],
+    highlights: ["Carara National Park", "Scarlet macaws", "Bird watching", "Forest trails", "Tarcoles", "Wildlife viewing"],
     included: ["Transportation service", "Entrance coordination", "Bilingual guide"],
     paid: ["Meals", "Snacks", "Souvenirs", "Extra drinks"],
-    recommendations: ["Closed toe shoes", "Insect repellent", "Sunscreen", "Hat", "Camera", "Reusable water bottle"]
-  },
-  "poas-volcano-la-paz-waterfall": {
-    subtitle: "A volcano and waterfall route from Jaco with Poas cloud forest scenery and La Paz trails.",
-    overview: [
-      "Poas Volcano and La Paz Waterfall connects the Central Pacific with one of Costa Rica's classic volcano and waterfall areas.",
-      "The tour suits travelers who want a long scenic day with crater views, cool mountain weather, waterfalls and nature stops."
-    ],
-    highlights: ["Poas Volcano", "La Paz Waterfall", "Cloud forest", "Waterfall trails", "Mountain scenery"],
-    included: ["Transportation service", "Entrance coordination", "Bilingual guide", "Lunch"],
-    paid: ["Souvenirs", "Extra drinks", "Snacks"],
-    recommendations: ["Jacket", "Closed toe shoes", "Raincoat", "Sunscreen", "Camera"]
-  },
-  "safari-adventure": {
-    subtitle: "A Jaco-area sightseeing day with wildlife, river scenery, countryside stops and beach time.",
-    overview: [
-      "Safari Adventure combines several easy Central Pacific stops into one relaxed day from Jaco.",
-      "The experience can include monkey viewing, a crocodile river cruise, local countryside scenery and time along the coast."
-    ],
-    highlights: ["Wildlife viewing", "Crocodile river cruise", "Monkey sightings", "Countryside stops", "Beach time"],
-    included: ["Transportation service", "Activity coordination", "Bilingual support"],
-    paid: ["Meals", "Extra drinks", "Photos", "Optional activities"],
-    recommendations: ["Comfortable clothes", "Sunscreen", "Hat", "Insect repellent", "Camera"]
+    recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"]
   },
   "aerial-tram": {
-    subtitle: "A treetop aerial tram ride through Central Pacific forest near Jaco.",
+    subtitle: "A peaceful aerial tram ride through transitional rainforest with Pacific views and guided nature insight.",
     overview: [
-      "Aerial Tram is a shorter Jaco nature activity that lets travelers see the forest canopy from above.",
-      "It is a gentler adventure option for travelers who want rainforest scenery without a long or difficult hike."
+      "Aerial Tram explores the forest from the ground level up into the treetops, offering a calm way to see the Central Pacific rainforest canopy.",
+      "During the ride, travelers can enjoy forest and ocean views while learning about the biodiversity of the region."
     ],
-    highlights: ["Aerial tram", "Rainforest canopy", "Forest views", "Bird watching", "Photo stops"],
-    included: ["Tram coordination", "Bilingual support", "Supplier confirmation"],
+    highlights: ["Aerial tram", "Rainforest canopy", "Forest views", "Pacific views", "Bird watching", "Photo stops"],
+    included: ["Transportation service", "Bilingual guide", "Aerial tram"],
     paid: ["Meals", "Snacks", "Beverages", "Souvenirs"],
-    recommendations: ["Comfortable walking shoes", "Sunscreen", "Insect repellent", "Camera", "Light raincoat"]
-  },
-  "horseback-riding-waterfalls": {
-    subtitle: "A horseback route near Jaco with waterfall and pool time in a tropical setting.",
-    overview: [
-      "Horseback Riding and Waterfalls is a relaxed adventure tour that combines riding, nature scenery and time around waterfalls.",
-      "It is a good option for travelers looking for an outdoor activity that feels active but approachable."
-    ],
-    highlights: ["Horseback riding", "Waterfalls", "Natural pools", "Tropical scenery", "Wildlife viewing"],
-    included: ["Activity coordination", "Guide support", "Helmet"],
-    paid: ["Photos", "Extra drinks", "Snacks", "Souvenirs"],
-    recommendations: ["Long pants", "Closed toe shoes", "Sunscreen", "Insect repellent", "Towel", "Camera"]
+    recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"]
   },
   "monkey-mangrove-tour": {
-    subtitle: "A family-friendly mangrove riverboat experience with white-faced capuchin monkey sightings.",
+    subtitle: "A mangrove boat tour with white-faced monkeys, birds, reptiles and tropical river scenery.",
     overview: [
-      "Monkey Mangrove Tour is an easy wildlife outing from Jaco focused on mangrove canals, river scenery and monkey sightings.",
-      "It is a good fit for families, photographers and travelers who prefer a lighter nature activity."
+      "This mangrove tour navigates a river ecosystem where freshwater and saltwater meet, surrounded by lush vegetation and abundant wildlife.",
+      "The main attraction is the white-faced capuchin monkey, while the route can also reveal birds, turtles, crocodiles, termite nests and other species in their natural habitat."
     ],
-    highlights: ["Mangrove boat tour", "Capuchin monkeys", "River scenery", "Wildlife viewing", "Family friendly"],
-    included: ["Transportation coordination", "Boat tour coordination", "Bilingual support"],
+    highlights: ["Mangrove boat tour", "Capuchin monkeys", "River scenery", "Wildlife viewing", "Bird watching", "Family friendly"],
+    included: ["Transportation service", "Boat tour coordination", "Bilingual guide"],
     paid: ["Photos", "Extra drinks", "Snacks", "Private pickup upgrades"],
-    recommendations: ["Comfortable clothes", "Sunscreen", "Insect repellent", "Hat", "Camera"]
+    recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"]
   },
   "waterfall-experience-tour": {
-    subtitle: "A guided rainforest waterfall trip above the Pacific with pools, trails and mountain views.",
+    subtitle: "A 4x4 waterfall adventure with jungle scenery, natural pools, swimming and optional jumps.",
     overview: [
-      "Waterfall Experience Tour is a Jaco-area nature outing focused on waterfalls, forest scenery and natural pools.",
-      "It works well for travelers who want a refreshing half-day adventure with swimming and easy exploration."
+      "This waterfall adventure starts with a safari-style 4x4 route through jungle landscapes and Pacific viewpoints.",
+      "After a short walk into a river canyon, travelers can swim in spring-fed natural pools, stand beneath waterfalls and, for the more adventurous, jump into pools from different heights."
     ],
-    highlights: ["Waterfalls", "Natural pools", "Rainforest trails", "Swimming", "Mountain views"],
-    included: ["Transportation coordination", "Guide support", "Activity confirmation"],
-    paid: ["Meals", "Extra drinks", "Photos", "Souvenirs"],
-    recommendations: ["Swim clothes", "Towel", "Closed toe shoes", "Sunscreen", "Insect repellent", "Camera"]
+    highlights: ["Waterfalls", "Natural pools", "Swimming", "Mountain views", "Adventure", "Rainforest scenery"],
+    included: ["Transportation service", "Bilingual guide", "Breakfast", "Lunch"],
+    paid: ["Extra drinks", "Photos", "Souvenirs"],
+    recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"]
   },
   "tranopy-tour": {
-    subtitle: "A Jaco adventure mix with aerial tram scenery and zipline-style forest excitement.",
+    subtitle: "Canopy-style forest adventure with elevated platforms, Pacific views and aerial tram scenery.",
     overview: [
-      "Tranopy Tour combines canopy-style adventure with aerial tram scenery in the Central Pacific forest.",
-      "It is a compact activity for travelers who want forest views and a dose of adrenaline near Jaco."
+      "Tranopy combines the feeling of flying over the treetops with the scenery of the Central Pacific forest.",
+      "The route is designed for adventure and safety, using elevated platforms, forest views and Pacific scenery for a compact adrenaline experience near Jaco."
     ],
-    highlights: ["Tranopy", "Aerial tram", "Canopy", "Zipline-style adventure", "Forest views"],
-    included: ["Activity coordination", "Guide support", "Helmet"],
+    highlights: ["Tranopy", "Canopy", "Aerial tram", "Zipline-style adventure", "Forest views", "Pacific views"],
+    included: ["Transportation service", "Bilingual guide", "Aerial tram", "Helmet"],
     paid: ["Meals", "Snacks", "Beverages", "Photos"],
-    recommendations: ["Closed toe shoes", "Sunscreen", "Insect repellent", "Comfortable clothes", "Camera"]
+    recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"]
   },
   "tortuga-island-tour": {
-    subtitle: "A classic Gulf of Nicoya cruise to Tortuga Island with white sand beach and turquoise water.",
+    subtitle: "A yacht or catamaran trip from the Jaco area to Tortuga Island with beach time and lunch.",
     overview: [
-      "Tortuga Island Tour from Jaco is a full-day coastal escape with boat travel, island scenery and relaxed beach time.",
-      "It is easy to combine with Jaco lodging, private transportation and other Pacific coast services."
+      "This Jaco-area Tortuga Island trip starts with transportation toward Los Suenos, then a boat crossing of about 45 minutes to the island.",
+      "Once on the island, travelers have about five hours for beach time, swimming, relaxing under the palms and optional activities such as snorkeling, ecological walks or banana boat."
     ],
     highlights: ["Isla Tortuga", "Boat ride", "Beach", "Swimming", "Gulf of Nicoya", "Coastal views"],
-    included: ["Transportation coordination", "Boat tour coordination", "Bilingual support", "Lunch"],
+    included: ["Transportation service", "Boat tour coordination", "Bilingual guide", "Breakfast", "Lunch", "Drinks"],
     paid: ["Watersports", "Extra drinks", "Optional beach activities", "Souvenirs"],
-    recommendations: ["Sunscreen", "Towels", "Swim clothes", "Sandals", "Dry bag", "Camera"]
+    recommendations: ["Light clothes", "Swim clothes", "Towels", "Sunscreen", "Hat", "Camera"]
   },
   "chocolate-tour": {
-    subtitle: "A short cacao and chocolate experience near Jaco with forest scenery and local flavors.",
+    subtitle: "A chocolate experience with a forest walk, cacao history, hands-on production and tasting.",
     overview: [
-      "Chocolate Tour introduces travelers to cacao, local chocolate flavors and a shorter educational activity near Jaco.",
-      "It is a practical choice for families or travelers who want a lighter activity between beach, hotel and transport plans."
+      "The chocolate experience begins with an easy forest walk through the Central Pacific transition forest, with time to learn about the area's flora and fauna.",
+      "The cacao portion explores varieties, history, traditional production and tasting, including cacao fruit and different chocolates paired with tropical fruit."
     ],
-    highlights: ["Chocolate tasting", "Cacao", "Local flavors", "Short activity", "Forest scenery"],
-    included: ["Activity coordination", "Guide support", "Chocolate tasting"],
+    highlights: ["Chocolate tasting", "Cacao", "Forest scenery", "Local flavors", "Short activity", "Easy walking"],
+    included: ["Bilingual guide", "Chocolate tasting", "Fruits", "Lunch"],
     paid: ["Souvenirs", "Extra snacks", "Additional drinks"],
-    recommendations: ["Comfortable shoes", "Sunscreen", "Insect repellent", "Camera", "Reusable water bottle"]
+    recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"]
   }
 };
+
+const pdfTourDetailUpdates = {
+  "manuel-antonio": { overview: ["This tour travels along the Pacific coast toward Quepos and Manuel Antonio, passing ocean views, coastal towns and palm plantations before reaching the park.", "Inside the park, a bilingual guide leads the trail walk with chances to see monkeys, iguanas, tropical birds and sloths, followed by time to relax on the beach."], highlights: ["Manuel Antonio", "Quepos", "Hiking trails", "Wildlife viewing", "Beach time", "Pacific views"], included: ["Transportation service", "Entrance coordination", "Bilingual guide", "Beach time", "Lunch"], paid: ["Extra drinks", "Souvenirs", "Personal expenses"], recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"] },
+  "nature-combo": { overview: ["Nature Combo brings together three classic Costa Rica stops: a coffee experience with breakfast, the crater area of Poas Volcano and the La Paz Waterfall Gardens.", "The La Paz visit includes rainforest paths, the Magia Blanca waterfall area, wildlife sanctuary exhibits and a buffet-style lunch."], highlights: ["Coffee experience", "Poas Volcano", "La Paz Waterfall", "Waterfalls", "Animal sanctuary", "Buffet lunch"], included: ["Transportation service", "Breakfast", "Lunch", "Tickets", "Bilingual guide"], paid: ["Souvenirs", "Specialty coffee", "Extra drinks", "Personal expenses"], recommendations: ["Raincoat", "Comfortable walking shoes", "Long pants", "Insect repellent", "Camera"] },
+  "beach-day": { overview: ["Beach Day is designed for travelers who want an easy Pacific escape with resort access, calm beach time and a relaxed lunch included.", "The resort setting can include natural trails and a butterfly garden, giving the day a simple mix of beach, rest and light nature exploration."], highlights: ["Beach", "Swimming", "Resort access", "Lunch", "Hiking trails", "Butterfly garden"], included: ["Transportation service", "Resort access", "Lunch"], paid: ["Drinks", "Watersports", "Extra snacks", "Personal expenses"], recommendations: ["Hat", "Light clothes", "Sunscreen", "Swim clothes", "Towels", "Camera"] },
+  "city-bus": { overview: ["This San Jose city tour uses a double-decker sightseeing bus to connect the capital's main cultural and historic highlights.", "The route can include the Central Market, National Theater lobby, Gold Museum, Art Museum, Central Avenue and a typical lunch or dinner according to the selected schedule."], highlights: ["Capital landmarks", "Central Market", "Museum tickets", "Local history", "Panoramic bus route", "Local drinks"], included: ["Transportation service", "Lunch or dinner according to schedule", "Museum tickets", "Bilingual guide"], paid: ["Liquors", "Snacks", "Souvenirs"], recommendations: ["Comfortable walking shoes", "Long pants", "Camera"] },
+  "la-paz-waterfall-gardens": { overview: ["La Paz Waterfall Gardens is one of the most popular nature attractions in the San Jose area, featuring five famous waterfalls and a large animal sanctuary.", "The visit is focused on Costa Rican wildlife, rainforest scenery, flowing rivers, birds, butterflies, monkeys, hummingbirds, snakes, felines, frogs and more."], highlights: ["Waterfalls", "Animal sanctuary", "Bird watching", "Wildlife viewing", "Rainforest scenery", "Lunch"], included: ["Transportation service", "Lunch", "Tickets", "Bilingual guide"], paid: ["Snacks", "Souvenirs", "Extra drinks"], recommendations: ["Raincoat", "Comfortable walking shoes", "Long pants", "Camera", "Jacket"] },
+  "white-water-rafting": { overview: ["The rafting program offers options for travelers who want either a family-friendly river experience or a stronger adrenaline route.", "The Savegre route is known for class II and III rapids with rainforest scenery, while the Naranjo option can bring class III and IV rapids through canyon and rural landscapes."], highlights: ["Rafting", "River scenery", "Class II-IV rapids", "Adventure", "Guide support", "Lunch"], included: ["Transportation service", "Rafting equipment coordination", "Guide support", "Breakfast", "Lunch", "Snacks"], paid: ["Photos", "Extra drinks", "Personal expenses"], recommendations: ["Light clothes", "Swim clothes", "Towels", "Sunscreen", "Hat", "Camera"] },
+  "half-day-pass-aerial-tram-and-high-rope-circuit": { overview: ["This package combines relaxation and adrenaline in a Central Pacific adventure park with beach, mountain, waterfall and forest scenery.", "Travelers ride the aerial tram, enjoy Sky Deck views, visit the butterfly garden and take on a high rope circuit with bridges, balance challenges and a descent wall."], highlights: ["Aerial tram", "Canopy", "High rope circuit", "Sky Deck", "Butterfly garden", "Ocean and mountain views"], included: ["Transportation service", "Bilingual guide", "Aerial tram", "Helmet"], paid: ["Snacks", "Beverages", "Breakfast", "Lunch", "Photos"], recommendations: ["Closed toe shoes", "Sunscreen", "Insect repellent", "Sunglasses", "Comfortable walking shoes", "Camera"] },
+  "premium-tortuga-island-tour": { overview: ["Premium Tortuga Island Tour is built around a full Pacific island escape from San Jose with turquoise water, white sand and time to enjoy the beach.", "Alsama can coordinate pickup, supplier confirmation and any optional beach activities before booking."], highlights: ["Isla Tortuga", "Gulf of Nicoya", "Boat ride", "Beach time", "Swimming", "Watersports"], included: ["Transportation service", "Boat tour coordination", "Bilingual guide", "Breakfast", "Lunch", "Drinks"], paid: ["Souvenirs", "Optional beach activities", "Personal expenses"], recommendations: ["Light clothes", "Swim clothes", "Towels", "Sunscreen", "Hat", "Camera"] },
+  "arenal-volcano-and-hot-springs": { overview: ["This San Jose departure heads toward La Fortuna for views of Arenal Volcano and time in volcanic hot springs.", "The tour is a good fit for travelers who want mountain scenery, relaxation and a full-day nature experience without changing hotels."], highlights: ["Arenal Volcano", "La Fortuna", "Sarchi", "Hot springs", "Mountain scenery", "Relaxation"], included: ["Transportation service", "Bilingual guide", "Lunch", "Dinner", "Tickets"], paid: ["Extra drinks", "Spa upgrades", "Souvenirs", "Personal expenses"], recommendations: ["Swim clothes", "Sandals", "Sunscreen", "Insect repellent", "Change of clothes", "Camera"] },
+  "typical-dinner-and-folklore-show": { overview: ["Typical Dinner and Folklore Show is an evening cultural experience with local music, traditional food and Costa Rican dance.", "It works well as a lighter San Jose night activity after arrival, meetings or a daytime tour."], highlights: ["Folklore show", "Traditional dinner", "Costa Rican culture", "Local history", "Marimba music"], included: ["Transportation service", "Dinner coordination", "Bilingual support", "Show admission"], paid: ["Liquors", "Souvenirs", "Extra drinks"], recommendations: ["Comfortable shoes", "Light jacket", "Camera", "Casual evening clothes"] },
+  "irazu-volcano-halfday": { overview: ["Irazu Volcano Halfday focuses on the high-elevation volcano landscapes near Cartago in a shorter format than the full Orosi and Lankester route.", "It is useful when travelers want a volcano visit while keeping the rest of the day flexible."], highlights: ["Irazu Volcano", "Cartago", "Volcanic crater", "Mountain views", "Basilica"], included: ["Transportation service", "Entrance coordination", "Bilingual guide"], paid: ["Meals", "Snacks", "Souvenirs", "Extra drinks"], recommendations: ["Jacket", "Comfortable walking shoes", "Raincoat", "Long pants", "Camera"] },
+  "irazu-volcano-orosi-valley-lankester-botanic-garden": { overview: ["This full route combines the summit scenery of Irazu Volcano with Cartago, Orosi Valley and the botanical collection at Lankester.", "It is a strong San Jose day trip for travelers who want volcano views, gardens, culture and countryside scenery."], highlights: ["Irazu Volcano", "Orosi Valley", "Lankester Botanic Garden", "Cartago", "Scenic drive", "Orchids"], included: ["Transportation service", "Entrance coordination", "Bilingual guide", "Lunch"], paid: ["Souvenirs", "Extra drinks", "Snacks"], recommendations: ["Jacket", "Comfortable walking shoes", "Raincoat", "Long pants", "Camera"] },
+  "carara-national-park": { overview: ["Carara National Park is a Jaco-area nature tour focused on tropical forest, birdlife and an accessible national park experience.", "It is a good match for travelers looking for wildlife, easy hiking and a shorter nature outing from the Central Pacific."], highlights: ["Carara National Park", "Scarlet macaws", "Bird watching", "Forest trails", "Tarcoles", "Wildlife viewing"], included: ["Transportation service", "Entrance coordination", "Bilingual guide"], paid: ["Meals", "Snacks", "Souvenirs", "Extra drinks"], recommendations: ["Comfortable clothes", "Closed toe shoes", "Insect repellent", "Water", "Camera"] },
+  "aerial-tram": { overview: ["Aerial Tram is a shorter Jaco nature activity that lets travelers see the forest canopy from above.", "It is a gentler adventure option for travelers who want rainforest scenery without a long or difficult hike."], highlights: ["Aerial tram", "Rainforest canopy", "Forest views", "Pacific views", "Bird watching", "Photo stops"], included: ["Transportation service", "Bilingual guide", "Aerial tram"], paid: ["Meals", "Snacks", "Beverages", "Souvenirs"], recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"] },
+  "monkey-mangrove-tour": { overview: ["Monkey Mangrove Tour is an easy wildlife outing from Jaco focused on mangrove canals, river scenery and monkey sightings.", "It is a good fit for families, photographers and travelers who prefer a lighter nature activity."], highlights: ["Mangrove boat tour", "Capuchin monkeys", "River scenery", "Wildlife viewing", "Bird watching", "Family friendly"], included: ["Transportation service", "Boat tour coordination", "Bilingual guide"], paid: ["Photos", "Extra drinks", "Snacks", "Private pickup upgrades"], recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"] },
+  "waterfall-experience-tour": { overview: ["Waterfall Experience Tour is a Jaco-area nature outing focused on waterfalls, forest scenery and natural pools.", "It works well for travelers who want a refreshing half-day adventure with swimming and easy exploration."], highlights: ["Waterfalls", "Natural pools", "Swimming", "Mountain views", "Adventure", "Rainforest scenery"], included: ["Transportation service", "Bilingual guide", "Breakfast", "Lunch"], paid: ["Extra drinks", "Photos", "Souvenirs"], recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"] },
+  "tranopy-tour": { overview: ["Tranopy Tour combines canopy-style adventure with aerial tram scenery in the Central Pacific forest.", "It is a compact activity for travelers who want forest views and a dose of adrenaline near Jaco."], highlights: ["Tranopy", "Canopy", "Aerial tram", "Zipline-style adventure", "Forest views", "Pacific views"], included: ["Transportation service", "Bilingual guide", "Aerial tram", "Helmet"], paid: ["Meals", "Snacks", "Beverages", "Photos"], recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"] },
+  "tortuga-island-tour": { overview: ["Tortuga Island Tour from Jaco is a full-day coastal escape with boat travel, island scenery and relaxed beach time.", "It is easy to combine with Jaco lodging, private transportation and other Pacific coast services."], highlights: ["Isla Tortuga", "Boat ride", "Beach", "Swimming", "Gulf of Nicoya", "Coastal views"], included: ["Transportation service", "Boat tour coordination", "Bilingual guide", "Breakfast", "Lunch", "Drinks"], paid: ["Watersports", "Extra drinks", "Optional beach activities", "Souvenirs"], recommendations: ["Light clothes", "Swim clothes", "Towels", "Sunscreen", "Hat", "Camera"] },
+  "chocolate-tour": { overview: ["Chocolate Tour introduces travelers to cacao, local chocolate flavors and a shorter educational activity near Jaco.", "It is a practical choice for families or travelers who want a lighter activity between beach, hotel and transport plans."], highlights: ["Chocolate tasting", "Cacao", "Forest scenery", "Local flavors", "Short activity", "Easy walking"], included: ["Bilingual guide", "Chocolate tasting", "Fruits", "Lunch"], paid: ["Souvenirs", "Extra snacks", "Additional drinks"], recommendations: ["Comfortable clothes", "Closed toe shoes", "Sunscreen", "Sunglasses", "Camera"] }
+};
+
 
 function getDefaultTourDetail(tour) {
   return {
@@ -617,7 +557,7 @@ function getToursWithOrigin() {
       ...tour,
       origin: origin.value,
       originLabel: origin.label,
-      detail: { ...getDefaultTourDetail(tour), ...(tourDetailTemplates[slugify(tour.title)] || {}) }
+      detail: { ...getDefaultTourDetail(tour), ...(tourDetailTemplates[slugify(tour.title)] || {}), ...(pdfTourDetailUpdates[slugify(tour.title)] || {}) }
     }))
   );
 }
@@ -650,3 +590,4 @@ export function getAllTours() {
 export function findTourBySlug(slug) {
   return getAllTours().find((tour) => tour.slug === slug);
 }
+

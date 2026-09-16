@@ -51,7 +51,11 @@ function ScrollManager() {
       return;
     }
 
-    window.scrollTo({ top: 0, left: 0 });
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    });
   }, [location.pathname, location.hash]);
 
   return null;
@@ -84,4 +88,3 @@ export function App() {
     </Suspense>
   );
 }
-

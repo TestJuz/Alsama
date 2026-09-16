@@ -3,6 +3,12 @@ import { getPrivateTransportPriceLabel, privateTransportRoutes } from "./private
 import { rentACarRates } from "./rentacarRates";
 import { shuttleRoutes } from "./shuttles";
 import { getAllTours, getTourDetailPath, routes, slugify, tourOrigins } from "./site";
+import {
+  getActivePromotion,
+  getPromotionCopy,
+  limitedPromotions,
+  promotionSearchTerms
+} from "./promotions";
 
 function formatUSD(value) {
   if (typeof value !== "number") return "On request";
@@ -269,7 +275,9 @@ const spanishSignalPhrases = [
 const assistantCopy = {
   en: {
     askTitle: "Ask me about the catalog",
-    askBody: "You can ask about tours, hotels, rent a car rates, shuttles or private transport routes.",
+    askBody: "You can ask about tours, hotels, rent a car rates, shuttles or private transport routes. Costa Rican nationals get 10% off tours and private transport with cedula.",
+    discountTitle: "10% national discount",
+    discountBody: "Costa Rican nationals get 10% off tours and private transport. Select that you are national at checkout and add your cedula.",
     hotelFound: "Hotel options found",
     hotelNotFound: "No hotel match found",
     hotelBody: "I found these hotel options:",
@@ -296,12 +304,14 @@ const assistantCopy = {
     catalogFound: "Catalog matches",
     catalogMore: "I need a bit more detail",
     catalogBody: "I found this in the travel catalog:",
-    catalogFallback: "Ask me about tours, hotels, rent a car, shuttles or private transport routes.",
+    catalogFallback: "Ask me about tours, hotels, rent a car, shuttles or private transport routes. Costa Rican nationals get 10% off tours and private transport with cedula.",
     rentDescription: (period, basic, full) => `${period} rate with basic insurance ${basic} and full cover ${full}.`
   },
   es: {
     askTitle: "Preguntame sobre el catalogo",
-    askBody: "Puedes preguntar por tours, hoteles, rent a car, shuttles o transporte privado.",
+    askBody: "Puedes preguntar por tours, hoteles, rent a car, shuttles o transporte privado. Nacionales tienen 10% de descuento en tours y transporte privado con cedula.",
+    discountTitle: "10% de descuento nacional",
+    discountBody: "Nacionales tienen 10% de descuento en tours y transporte privado. Al finalizar, indica que eres nacional y agrega tu cedula.",
     hotelFound: "Hoteles encontrados",
     hotelNotFound: "No encontre hoteles",
     hotelBody: "Encontre estas opciones de hotel:",
@@ -328,12 +338,14 @@ const assistantCopy = {
     catalogFound: "Coincidencias del catalogo",
     catalogMore: "Necesito un poco mas de detalle",
     catalogBody: "Encontre esto en el catalogo:",
-    catalogFallback: "Preguntame por tours, hoteles, rent a car, shuttles o transporte privado.",
+    catalogFallback: "Preguntame por tours, hoteles, rent a car, shuttles o transporte privado. Nacionales tienen 10% de descuento en tours y transporte privado con cedula.",
     rentDescription: (period, basic, full) => `Tarifa ${period} con seguro basico ${basic} y full cover ${full}.`
   },
   fr: {
     askTitle: "Posez-moi une question sur le catalogue",
-    askBody: "Vous pouvez demander des excursions, hotels, locations de voiture, navettes ou transports prives.",
+    askBody: "Vous pouvez demander des excursions, hotels, locations de voiture, navettes ou transports prives. Les nationaux costariciens ont 10% de reduction sur les excursions et transports prives avec cedula.",
+    discountTitle: "10% de reduction nationale",
+    discountBody: "Les nationaux costariciens ont 10% de reduction sur les excursions et transports prives. Au checkout, indiquez que vous etes national et ajoutez votre cedula.",
     hotelFound: "Options d'hotel trouvees",
     hotelNotFound: "Aucun hotel trouve",
     hotelBody: "J'ai trouve ces options d'hotel:",
@@ -360,7 +372,7 @@ const assistantCopy = {
     catalogFound: "Resultats du catalogue",
     catalogMore: "J'ai besoin d'un peu plus de detail",
     catalogBody: "J'ai trouve ceci dans le catalogue:",
-    catalogFallback: "Demandez-moi des excursions, hotels, locations de voiture, navettes ou transports prives.",
+    catalogFallback: "Demandez-moi des excursions, hotels, locations de voiture, navettes ou transports prives. Les nationaux costariciens ont 10% de reduction sur les excursions et transports prives avec cedula.",
     rentDescription: (period, basic, full) => `Tarif ${period} avec assurance de base ${basic} et couverture complete ${full}.`
   }
 };
@@ -893,6 +905,59 @@ export function searchTravelAssistantItems(query, category = "all", limit = 12) 
     .slice(0, limit)
     .map(({ normalizedHaystack, ...item }) => item);
 }
+function getPromotionPriceSummary(promotion) {
+  return promotion.packages
+    .map((item) => {
+      const prices = item.prices.map((rate) => formatUSD(rate.price)).join(" / ");
+      return `${item.id === "two-days" ? "2D/1N" : "3D/2N"}: ${prices}`;
+    })
+    .join(" | ");
+}
+
+function getPromotionRateLines(promotion, copy) {
+  return promotion.packages
+    .map((item) => {
+      const prices = item.prices
+        .map((rate) => `${copy.rooms[rate.room]} ${formatUSD(rate.price)}`)
+        .join(", ");
+      return `${copy.packages[item.id]} - ${prices}`;
+    })
+    .join("\n");
+}
+
+function hasPromotionIntent(text) {
+  return includesAnyWholeTerm(text, promotionSearchTerms);
+}
+
+function answerPromotionQuestion(language) {
+  const promotion = getActivePromotion();
+  const fallbackPromotion = promotion || limitedPromotions[0];
+  const copy = getPromotionCopy(fallbackPromotion, language);
+
+  if (!promotion) {
+    return {
+      title: copy.expiredTitle,
+      body: copy.expiredBody,
+      items: []
+    };
+  }
+
+  return {
+    title: copy.eyebrow,
+    body: `${copy.title} - ${copy.validUntil}\n${getPromotionRateLines(promotion, copy)}\n${copy.includesTitle}: ${copy.includes.join(", ")}. ${copy.excludesTitle}: ${copy.excludes.join(", ")}.`,
+    items: [
+      {
+        type: "promotion",
+        label: copy.title,
+        eyebrow: copy.eyebrow,
+        description: copy.intro,
+        price: getPromotionPriceSummary(promotion),
+        meta: [copy.validUntil, ...copy.highlights],
+        href: { pathname: routes.home, hash: "#promos" }
+      }
+    ]
+  };
+}
 function summarizeItems(items) {
   return items
     .slice(0, 4)
@@ -913,7 +978,21 @@ export function answerTravelQuestion(question, preferredLanguage) {
     };
   }
 
-  if (includesAny(text, ["hotel", "hoteles", "stay", "lodging", "habitacion", "habitaciones", "hospedaje", "alojamiento", "room", "rooms", "resort"])) {
+  if (hasPromotionIntent(text)) {
+    return answerPromotionQuestion(language);
+  }
+
+    if (includesAnyWholeTerm(text, ["discount", "discounts", "descuento", "descuentos", "national", "nacional", "nacionales", "cedula", "costarricense", "tico", "tica", "reduction", "remise", "nationalite"])) {
+    return {
+      title: copy.discountTitle,
+      body: copy.discountBody,
+      items: [
+        ...searchTravelAssistantItems("", "tour", 3),
+        ...searchTravelAssistantItems("", "private", 3)
+      ]
+    };
+  }
+if (includesAny(text, ["hotel", "hoteles", "stay", "lodging", "habitacion", "habitaciones", "hospedaje", "alojamiento", "room", "rooms", "resort"])) {
     const items = searchTravelAssistantItems(question, "hotel", 6);
     return {
       title: items.length ? copy.hotelFound : copy.hotelNotFound,

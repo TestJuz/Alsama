@@ -11,6 +11,7 @@ import {
   SAME_DAY_OR_FUTURE_ERROR
 } from "../lib/bookingDates";
 import { buildTourMeta, getTourBookingTotal } from "../lib/tourBooking";
+import { getRentalRateBreakdown } from "../lib/rentacarRates";
 
 const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
 const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
@@ -20,23 +21,43 @@ const coverageOptions = [
   { value: "full_cover", label: "Full cover" }
 ];
 
+const IVA_RATE = 0.07;
+
 function formatUSD(value) {
   if (typeof value !== "number") return "";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
+function needsTeamValidation(item) {
+  return String(item.id || "").startsWith("promotion-");
+}
+
+function getCartTotals(items) {
+  const subtotal = items.reduce((sum, item) => {
+    if (needsTeamValidation(item) || typeof item.price !== "number") return sum;
+    return sum + item.price * Math.max(1, Number(item.quantity) || 1);
+  }, 0);
+  const iva = subtotal * IVA_RATE;
+
+  return { subtotal, iva, total: subtotal + iva };
+}
 
 function formatCartItems(items) {
   if (!items.length) return "No selected items.";
 
-  return items
+  const lines = items
     .map((item) => {
       const quantity = item.quantity > 1 ? ` x${item.quantity}` : "";
-      const price = typeof item.price === "number" ? ` - ${formatUSD(item.price)}` : "";
+      const price = needsTeamValidation(item)
+        ? " - Need to validate with the team"
+        : typeof item.price === "number" ? ` - ${formatUSD(item.price)}` : " - Price on request";
       const meta = item.meta?.length ? `\n  Details: ${item.meta.join(" | ")}` : "";
       return `${item.type}: ${item.title}${quantity}${price}${meta}`;
     })
     .join("\n\n");
+  const { subtotal, iva, total } = getCartTotals(items);
+
+  return `${lines}\n\nSubtotal: ${formatUSD(subtotal)}\nIVA (7%): ${formatUSD(iva)}\nTotal: ${formatUSD(total)}\nPromotional offers pending validation are not included in this total.`;
 }
 function getHotelRoomPrice(room) {
   if (!room) return undefined;
@@ -83,6 +104,30 @@ function getBillingUnits(period, days) {
   return days;
 }
 
+function formatRentalBreakdown(breakdown) {
+  return [
+    [breakdown.months, "month", "months"],
+    [breakdown.weeks, "week", "weeks"],
+    [breakdown.days, "day", "days"]
+  ]
+    .filter(([count]) => count > 0)
+    .map(([count, singular, plural]) => `${count} ${count === 1 ? singular : plural}`)
+    .join(" + ");
+}
+
+function getCartRentalPricing(details, coverage, days) {
+  if (details?.category && Object.prototype.hasOwnProperty.call(details, "transmissionCode")) {
+    return getRentalRateBreakdown(details.category, details.transmissionCode, coverage, days);
+  }
+
+  const units = getBillingUnits(details?.period, days);
+  return {
+    months: 0,
+    weeks: 0,
+    days,
+    total: (details?.rates?.[coverage] || 0) * units
+  };
+}
 function getMinimumPeriodError(period, days) {
   if (period === "semanal" && days < 7) return "Weekly rentals require at least 7 days.";
   if (period === "mensual" && days < 30) return "Monthly rentals require at least 30 days.";
@@ -119,20 +164,25 @@ export function CartWidget() {
   const [requestOpen, setRequestOpen] = useState(false);
   const [requestHint, setRequestHint] = useState("");
   const [requestSending, setRequestSending] = useState(false);
+  const [requestNational, setRequestNational] = useState("no");
   const minGeneralDate = getOneBusinessDayAdvanceDateInputValue();
   const minRentDateTime = getOneBusinessDayAdvanceDateTimeInputValue();
   const minTransportDate = getTodayDateInputValue();
+  const hasNationalDiscountEligibleItems = items.some((item) => item.type === "Tour" || item.type === "Private transport");
+  const { subtotal, iva, total } = getCartTotals(items);
 
   function openRequest() {
     setOpen(false);
     setRequestOpen(true);
     setRequestHint("");
+    setRequestNational("no");
   }
 
   function closeRequest() {
     if (requestSending) return;
     setRequestOpen(false);
     setRequestHint("");
+    setRequestNational("no");
   }
 
   async function submitRequest(event) {
@@ -146,6 +196,13 @@ export function CartWidget() {
     const fullName = String(data.get("fullName") || "").trim();
     const email = String(data.get("email") || "").trim();
     const phone = String(data.get("phone") || "").trim();
+    const isCostaRicanNational = String(data.get("isCostaRicanNational") || "no");
+    const nationalCedula = String(data.get("nationalCedula") || "").trim();
+
+    if (hasNationalDiscountEligibleItems && isCostaRicanNational === "yes" && !nationalCedula) {
+      setRequestHint("Cedula is required to apply the 10% national discount.");
+      return;
+    }
 
     setRequestSending(true);
     setRequestHint("Sending your service request...");
@@ -161,6 +218,9 @@ export function CartWidget() {
           full_name: fullName,
           email,
           phone,
+          national_discount: hasNationalDiscountEligibleItems ? "10% for Costa Rican nationals" : "Not applicable to selected services",
+          costa_rican_national: isCostaRicanNational === "yes" ? "Yes" : "No",
+          cedula: isCostaRicanNational === "yes" ? nationalCedula : "Not provided",
           selected_items: formatCartItems(items),
           _replyto: email,
           _subject: SERVICE_REQUEST_SUBJECT,
@@ -175,6 +235,7 @@ export function CartWidget() {
 
       setRequestHint("Thanks. Your service request was sent to Alsama Tours.");
       form.reset();
+      setRequestNational("no");
       clearCart();
       window.setTimeout(() => {
         setRequestOpen(false);
@@ -324,13 +385,12 @@ export function CartWidget() {
     }
 
     const rentalDays = getRentalDays(draft.startDateTime, draft.endDateTime, minRentDateTime);
-    const periodError = getMinimumPeriodError(editingItem.details.period, rentalDays);
-    if (!rentalDays || periodError) return;
+    if (!rentalDays) return;
 
     const coverageLabel = coverageOptions.find((option) => option.value === draft.coverage)?.label || "Full cover";
     const deliveryLabel = draft.deliveryType === "delivery" ? "Needs delivery" : "Pickup at nearest point";
-    const billingUnits = getBillingUnits(editingItem.details.period, rentalDays);
-    const total = editingItem.details.rates[draft.coverage] * billingUnits;
+    const pricing = getCartRentalPricing(editingItem.details, draft.coverage, rentalDays);
+    const total = pricing.total;
     const nextDetails = {
       ...editingItem.details,
       coverage: draft.coverage,
@@ -341,7 +401,7 @@ export function CartWidget() {
       startDateTime: draft.startDateTime,
       endDateTime: draft.endDateTime,
       rentalDays,
-      billingUnits
+      pricingBreakdown: pricing
     };
 
     updateItem(editingItem.id, {
@@ -350,7 +410,7 @@ export function CartWidget() {
       details: nextDetails,
       meta: [
         `${rentalDays} day${rentalDays === 1 ? "" : "s"}`,
-        `${billingUnits} ${editingItem.details.periodLabel.toLowerCase()} unit${billingUnits === 1 ? "" : "s"}`,
+        formatRentalBreakdown(pricing),
         coverageLabel,
         editingItem.details.transmission,
         draft.hotel,
@@ -364,11 +424,11 @@ export function CartWidget() {
   }
 
   const editDays = draft ? getRentalDays(draft.startDateTime, draft.endDateTime, minRentDateTime) : 0;
-  const editPeriodError = editingItem?.details ? getMinimumPeriodError(editingItem.details.period, editDays) : "";
-  const editUnits = editingItem?.details ? getBillingUnits(editingItem.details.period, editDays) : 0;
-  const editPrice = editingItem?.type === "Rent a car" && editingItem?.details && draft
-    ? editingItem.details.rates[draft.coverage] * editUnits
-    : editingItem?.price || 0;
+  const editPeriodError = "";
+  const editPricing = editingItem?.type === "Rent a car" && editingItem?.details && draft
+    ? getCartRentalPricing(editingItem.details, draft.coverage, editDays)
+    : null;
+  const editPrice = editPricing?.total ?? editingItem?.price ?? 0;
   const editHotelRoom = editingItem?.type === "Hotel" && editingItem?.details && Array.isArray(editingItem.details.rooms) && draft
     ? editingItem.details.rooms.find((item) => item.tipo === draft.roomType) || editingItem.details.rooms[0]
     : null;
@@ -427,11 +487,19 @@ export function CartWidget() {
                       </div>
                     </div>
                     <div className="cart-item__side">
-                      {item.price ? <strong>{formatUSD(item.price)}</strong> : null}
+                      {needsTeamValidation(item) ? (
+                        <span className="cart-item__pending">Need to validate with the team</span>
+                      ) : typeof item.price === "number" ? (
+                        <strong>{formatUSD(item.price)}</strong>
+                      ) : (
+                        <span className="cart-item__pending">Price on request</span>
+                      )}
                       {item.quantity > 1 ? <span className="muted">x{item.quantity}</span> : null}
-                      <button type="button" aria-label={`Edit ${item.title}`} onClick={() => openEdit(item)}>
-                        <Pencil size={16} />
-                      </button>
+                      {!needsTeamValidation(item) ? (
+                        <button type="button" aria-label={`Edit ${item.title}`} onClick={() => openEdit(item)}>
+                          <Pencil size={16} />
+                        </button>
+                      ) : null}
                       <button type="button" aria-label={`Remove ${item.title}`} onClick={() => removeItem(item.id)}>
                         <Trash2 size={16} />
                       </button>
@@ -440,6 +508,12 @@ export function CartWidget() {
                 ))}
               </div>
 
+              <div className="cart-totals" aria-label="Cart totals">
+                <div><span>Subtotal</span><strong>{formatUSD(subtotal)}</strong></div>
+                <div><span>IVA (7%)</span><strong>{formatUSD(iva)}</strong></div>
+                <div className="cart-totals__final"><span>Total</span><strong>{formatUSD(total)}</strong></div>
+                {items.some(needsTeamValidation) ? <small>Promotional offer not included until the team validates its price.</small> : null}
+              </div>
               <div className="cart-panel__actions">
                 <button className="btn btn--primary" type="button" onClick={openRequest}>Request all</button>
                 <button className="btn btn--ghost" type="button" onClick={clearCart}>Clear cart</button>
@@ -492,6 +566,44 @@ export function CartWidget() {
                   <input name="phone" type="tel" required placeholder="Phone number" autoComplete="tel" />
                 </div>
               </label>
+              {hasNationalDiscountEligibleItems ? (
+                <>
+                  <p className="form__hint muted">Costa Rican nationals get 10% off tours and private transport. Cedula is required.</p>
+                  <label className="control">
+                    Are you a Costa Rican national?
+                    <div className="rate-choice">
+                      <label>
+                        <input
+                          type="radio"
+                          name="isCostaRicanNational"
+                          value="yes"
+                          checked={requestNational === "yes"}
+                          onChange={(event) => setRequestNational(event.target.value)}
+                        />
+                        <span>Yes, apply 10% national discount</span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="isCostaRicanNational"
+                          value="no"
+                          checked={requestNational === "no"}
+                          onChange={(event) => setRequestNational(event.target.value)}
+                        />
+                        <span>No</span>
+                      </label>
+                    </div>
+                  </label>
+                  {requestNational === "yes" ? (
+                    <label className="form__field">
+                      <span>Cedula</span>
+                      <div className="form__control">
+                        <input name="nationalCedula" required placeholder="Cedula number" autoComplete="off" />
+                      </div>
+                    </label>
+                  ) : null}
+                </>
+              ) : null}
             </div>
 
             <div className="cart-request__summary">
@@ -504,6 +616,12 @@ export function CartWidget() {
                   </li>
                 ))}
               </ul>
+              <div className="cart-totals cart-totals--request">
+                <div><span>Subtotal</span><strong>{formatUSD(subtotal)}</strong></div>
+                <div><span>IVA (7%)</span><strong>{formatUSD(iva)}</strong></div>
+                <div className="cart-totals__final"><span>Total</span><strong>{formatUSD(total)}</strong></div>
+                {items.some(needsTeamValidation) ? <small>Promotional offer pending team validation and excluded from total.</small> : null}
+              </div>
             </div>
 
             <div className="rate-modal__actions">

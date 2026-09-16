@@ -9,6 +9,7 @@ import {
   MarkerPopup
 } from "@/components/ui/map";
 import { ContactForm } from "../components/ContactForm";
+import { NationalDiscountBanner } from "../components/NationalDiscountBanner";
 import { SiteLayout } from "../components/SiteLayout";
 import { useCart } from "../context/CartContext";
 import {
@@ -180,6 +181,11 @@ export function PrivateTransportPage() {
                 Browse private transfers from San Jose and Jaco, compare rates by group size and add the route to your trip cart.
               </p>
 
+              <NationalDiscountBanner
+                className="national-discount-banner--hero national-discount-banner--private"
+                serviceText="private transport"
+                note="Private routes from San Jose and Jaco"
+              />
               <div className="hero__actions">
                 <a className="btn btn--primary" href="#private-rates">View routes</a>
                 <a className="btn btn--ghost" href="#contact">Request private transport</a>
@@ -193,9 +199,9 @@ export function PrivateTransportPage() {
                 <p className="muted">Useful when you need direct pickup, flexible time and a dedicated vehicle.</p>
               </div>
               <div className="transport-highlight__card">
-                <p className="transport-highlight__eyebrow">Rates</p>
-                <h3>Based on route and passengers</h3>
-                <p className="muted">San Jose uses 1-5 and 6+ passenger pricing. Jaco adds an extra passenger rate after 5 people.</p>
+                <p className="transport-highlight__eyebrow">10% off</p>
+                <h3>National discount</h3>
+                <p className="muted">Costa Rican nationals can apply with cedula at checkout.</p>
               </div>
             </div>
           </div>

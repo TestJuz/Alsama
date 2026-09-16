@@ -1,11 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { motion } from "motion/react";
+import { Briefcase, CarFront, Cog, DoorOpen, Search, Users } from "lucide-react";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 import {
   getOneBusinessDayAdvanceDateTimeInputValue,
   isDateTimeBeforeMinimumInput
 } from "../lib/bookingDates";
-import { rentACarRates } from "../lib/rentacarRates";
+import { getRentalRateBreakdown, rentACarRates } from "../lib/rentacarRates";
+import { asset } from "../lib/site";
 
 const periods = [
   { value: "diario", label: "Daily" },
@@ -13,17 +17,52 @@ const periods = [
   { value: "mensual", label: "Monthly" }
 ];
 
-const sortOptions = [
-  { value: "category", label: "Category" },
-  { value: "price_asc", label: "Lowest price" },
-  { value: "price_desc", label: "Highest price" },
-  { value: "full_asc", label: "Lowest full cover" }
+const vehicleTypes = [
+  { value: "sedan", label: "Sedan" },
+  { value: "suv", label: "SUV" },
+  { value: "pickup", label: "Pickup" },
+  { value: "van", label: "Van" }
+];
+
+const passengerOptions = [
+  { value: "", label: "Quantity" },
+  { value: "4", label: "4+ passengers" },
+  { value: "5", label: "5+ passengers" },
+  { value: "7", label: "7+ passengers" },
+  { value: "9", label: "9+ passengers" }
 ];
 
 const coverageOptions = [
   { value: "seguro_basico", label: "Basic insurance" },
   { value: "full_cover", label: "Full cover" }
 ];
+
+const vehicleTypeOrder = {
+  sedan: 1,
+  suv: 2,
+  pickup: 3,
+  van: 4
+};
+
+const vehicleImages = {
+  "TOYOTA AGYA": asset("img/Rent-a-car/toyota-agya-auto.avif"),
+  "SUZUKI SWIFT": asset("img/Rent-a-car/suzuki-swift-dzire-auto.avif"),
+  "VOLKSWAGEN NIVUS": asset("img/Rent-a-car/VOLKSWAGEN-NIVUS.avif"),
+  "TOYOTA COROLLA": asset("img/Rent-a-car/toyota-corolla-auto.avif"),
+  "TOYOTA YARIS CROSS": asset("img/Rent-a-car/Toyota-Yaris-Cross.avif"),
+  "TOYOTA COROLLA CROSS": asset("img/Rent-a-car/TOYOTA-COROLLA-CROSS.avif"),
+  "SUZUKI VITARA": asset("img/Rent-a-car/SUZUKI-VITARA.avif"),
+  "TOYOTA RAV4": asset("img/Rent-a-car/TOYOTA-RAV4.avif"),
+  "TOYOTA RUSH 4X2": asset("img/Rent-a-car/TOYOTA-RUSH-4X2.avif"),
+  "FORD BRONCO": asset("img/Rent-a-car/Ford-Broncos.avif"),
+  "TOYOTA BZ4X 4X4": asset("img/Rent-a-car/TOYOTA-BZ4X-4X4.avif"),
+  "TOYOTA HILUX": asset("img/Rent-a-car/TOYOTA-HILUX.avif"),
+  "TOYOTA FORTUNER": asset("img/Rent-a-car/TOYOTA-fortuner.avif"),
+  "FORD EVEREST": asset("img/Rent-a-car/FORD-EVEREST.avif"),
+  "TOYOTA HIACE": asset("img/Rent-a-car/TOYOTA-HIACE.avif"),
+  "HYUNDAI STARIA": asset("img/Rent-a-car/HYUNDAI-STARIA.avif"),
+  "FORD EXPEDITION": asset("img/Rent-a-car/FORD-EXPEDITION.avif")
+};
 
 function formatUSD(value) {
   return new Intl.NumberFormat("en-US", {
@@ -34,23 +73,126 @@ function formatUSD(value) {
 }
 
 function transmissionLabel(value) {
-  return value || "Ask";
+  if (value === "AUTOMATICO") return "Automatic";
+  if (value === "MANUAL") return "Manual";
+  if (value === "MAN/AUT") return "Manual / automatic";
+  return "Ask us";
 }
 
-function matchesTransmission(value, selectedTransmission) {
-  if (!selectedTransmission) return true;
-  if (value === "MAN/AUT") return selectedTransmission === "MANUAL" || selectedTransmission === "AUTOMATICO";
-  return transmissionLabel(value) === selectedTransmission;
+function getVehicleMeta(item) {
+  const category = item.categoria.toUpperCase();
+
+  if (category.includes("MICROBUS")) {
+    return {
+      type: "van",
+      title: "Van",
+      model: item.modelo,
+      passengers: 9,
+      luggage: 5,
+      doors: 4
+    };
+  }
+
+  if (category.includes("PICK")) {
+    return {
+      type: "pickup",
+      title: "Pickup",
+      model: item.modelo,
+      passengers: 5,
+      luggage: 4,
+      doors: 4
+    };
+  }
+
+  if (category.includes("SUV") || category.includes("4X4") || category.includes("4X2")) {
+    return {
+      type: "suv",
+      title: category.includes("FULL") || category.includes("PREMIUM") ? "Premium SUV" : "SUV",
+      model: item.modelo,
+      passengers: 5,
+      luggage: 3,
+      doors: 4
+    };
+  }
+
+  if (category.includes("MINI")) {
+    return {
+      type: "sedan",
+      title: "Mini vehicle",
+      model: item.modelo,
+      passengers: 4,
+      luggage: 2,
+      doors: 4
+    };
+  }
+
+  if (category.includes("ECONOMICO")) {
+    return {
+      type: "sedan",
+      title: "Economy vehicle",
+      model: item.modelo,
+      passengers: 4,
+      luggage: 2,
+      doors: 4
+    };
+  }
+
+  if (category.includes("COMPACTO")) {
+    return {
+      type: "sedan",
+      title: "Compact vehicle",
+      model: item.modelo,
+      passengers: 5,
+      luggage: 2,
+      doors: 4
+    };
+  }
+
+  return {
+    type: "sedan",
+    title: category.includes("LUXURY") ? "Premium vehicle" : "Intermediate vehicle",
+    model: item.modelo,
+    passengers: 5,
+    luggage: 2,
+    doors: 4
+  };
 }
 
+function enrichVehicle(item, index) {
+  const meta = getVehicleMeta(item);
+
+  return {
+    ...item,
+    ...meta,
+    image: vehicleImages[item.modelo],
+    key: `${item.categoria}-${item.transmision || "ask"}-${item.seguro_basico}-${index}`
+  };
+}
+
+function formatPricingBreakdown(breakdown, language) {
+  const labels = {
+    en: { month: ["month", "months"], week: ["week", "weeks"], day: ["day", "days"] },
+    es: { month: ["mes", "meses"], week: ["semana", "semanas"], day: ["día", "días"] },
+    fr: { month: ["mois", "mois"], week: ["semaine", "semaines"], day: ["jour", "jours"] }
+  }[language] || { month: ["month", "months"], week: ["week", "weeks"], day: ["day", "days"] };
+
+  return [
+    [breakdown.months, labels.month],
+    [breakdown.weeks, labels.week],
+    [breakdown.days, labels.day]
+  ]
+    .filter(([count]) => count > 0)
+    .map(([count, unit]) => `${count} ${unit[count === 1 ? 0 : 1]}`)
+    .join(" + ");
+}
 export function RentACarRates() {
   const { addItem } = useCart();
+  const { language, t } = useLanguage();
   const [searchParams] = useSearchParams();
   const initialPeriod = periods.some((item) => item.value === searchParams.get("period")) ? searchParams.get("period") : "diario";
   const [period, setPeriod] = useState(initialPeriod);
-  const [query, setQuery] = useState(searchParams.get("query") || "");
-  const [transmission, setTransmission] = useState(searchParams.get("transmission") || "");
-  const [sort, setSort] = useState("category");
+  const [activeTypes, setActiveTypes] = useState(vehicleTypes.map((item) => item.value));
+  const [passengers, setPassengers] = useState("");
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const [requestDetails, setRequestDetails] = useState({
     coverage: "full_cover",
@@ -61,51 +203,40 @@ export function RentACarRates() {
   });
   const [requestError, setRequestError] = useState("");
 
-  const transmissionOptions = useMemo(() => {
-    const values = new Set(
-      Object.values(rentACarRates)
-        .flat()
-        .flatMap((item) => item.transmision === "MAN/AUT"
-          ? ["MANUAL", "AUTOMATICO"]
-          : [transmissionLabel(item.transmision)]
-        )
-    );
-
-    return [...values].sort();
-  }, []);
-
   useEffect(() => {
     const nextPeriod = periods.some((item) => item.value === searchParams.get("period")) ? searchParams.get("period") : "diario";
-    const nextTransmission = searchParams.get("transmission") || "";
     setPeriod(nextPeriod);
-    setQuery(searchParams.get("query") || "");
-    setTransmission(nextTransmission);
   }, [searchParams]);
 
   const filteredRates = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
+    const minPassengers = passengers ? Number(passengers) : 0;
 
-    const items = rentACarRates[period].filter((item) => {
-      const vehicleTransmission = transmissionLabel(item.transmision);
-      const haystack = `${item.categoria} ${vehicleTransmission}`.toLowerCase();
+    return rentACarRates[period]
+      .map(enrichVehicle)
+      .filter((item) => {
+        const matchesType = activeTypes.length === 0 || activeTypes.includes(item.type);
+        const matchesPassengers = !minPassengers || item.passengers >= minPassengers;
 
-      if (normalizedQuery && !haystack.includes(normalizedQuery)) return false;
-      if (!matchesTransmission(item.transmision, transmission)) return false;
-
-      return true;
-    });
-
-    return [...items].sort((a, b) => {
-      if (sort === "price_asc") return a.seguro_basico - b.seguro_basico;
-      if (sort === "price_desc") return b.seguro_basico - a.seguro_basico;
-      if (sort === "full_asc") return a.full_cover - b.full_cover;
-      return a.categoria.localeCompare(b.categoria);
-    });
-  }, [period, query, sort, transmission]);
+        return matchesType && matchesPassengers;
+      })
+      .sort((a, b) => {
+        const typeDiff = vehicleTypeOrder[a.type] - vehicleTypeOrder[b.type];
+        if (typeDiff) return typeDiff;
+        return a.seguro_basico - b.seguro_basico;
+      });
+  }, [activeTypes, passengers, period]);
 
   const cheapest = filteredRates[0];
-  const periodLabel = periods.find((item) => item.value === period)?.label || period;
+  const periodLabel = t(periods.find((item) => item.value === period)?.label || period);
   const minDateTime = getOneBusinessDayAdvanceDateTimeInputValue();
+
+  function toggleVehicleType(type) {
+    setActiveTypes((current) =>
+      current.includes(type)
+        ? current.filter((item) => item !== type)
+        : [...current, type]
+    );
+  }
 
   function getRentalDays() {
     const start = new Date(requestDetails.startDateTime);
@@ -122,12 +253,6 @@ export function RentACarRates() {
     return Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
   }
 
-  function getBillingUnits(days) {
-    if (!days) return 0;
-    if (period === "semanal") return Math.max(1, Math.ceil(days / 7));
-    if (period === "mensual") return Math.max(1, Math.ceil(days / 30));
-    return days;
-  }
 
   function openRequestModal(item) {
     setSelectedVehicle(item);
@@ -151,23 +276,6 @@ export function RentACarRates() {
     setRequestDetails((current) => ({ ...current, [field]: value }));
   }
 
-  function getMinimumDaysForPeriod() {
-    if (period === "semanal") return 7;
-    if (period === "mensual") return 30;
-    return 1;
-  }
-
-  function getMinimumPeriodError(days) {
-    if (period === "semanal" && days < 7) {
-      return "Weekly rentals require at least 7 days.";
-    }
-
-    if (period === "mensual" && days < 30) {
-      return "Monthly rentals require at least 30 days.";
-    }
-
-    return "";
-  }
 
   function addRateToCart(event) {
     event.preventDefault();
@@ -176,28 +284,28 @@ export function RentACarRates() {
 
     const rentalDays = getRentalDays();
     if (!rentalDays) {
-      setRequestError("Please select a valid start and end date.");
-      return;
-    }
-
-    const periodError = getMinimumPeriodError(rentalDays);
-    if (periodError) {
-      setRequestError(periodError);
+      setRequestError(t("Please select a valid start and end date."));
       return;
     }
 
     const coverageLabel = coverageOptions.find((option) => option.value === requestDetails.coverage)?.label || "Full cover";
-    const billingUnits = getBillingUnits(rentalDays);
-    const total = selectedVehicle[requestDetails.coverage] * billingUnits;
+    const pricing = getRentalRateBreakdown(
+      selectedVehicle.categoria,
+      selectedVehicle.transmision,
+      requestDetails.coverage,
+      rentalDays
+    );
+    const pricingLabel = formatPricingBreakdown(pricing, language);
+    const total = pricing.total;
     const deliveryLabel = requestDetails.deliveryType === "delivery"
-      ? "Needs delivery"
-      : "Pickup at nearest point";
+      ? t("Needs delivery")
+      : t("Pickup at nearest point");
 
     addItem({
       id: `rent-${period}-${selectedVehicle.categoria}-${transmissionLabel(selectedVehicle.transmision)}-${requestDetails.coverage}-${requestDetails.startDateTime}-${requestDetails.endDateTime}-${requestDetails.deliveryType}`,
       type: "Rent a car",
-      title: selectedVehicle.categoria,
-      subtitle: transmissionLabel(selectedVehicle.transmision),
+      title: selectedVehicle.title,
+      subtitle: selectedVehicle.model,
       price: total,
       details: {
         period,
@@ -214,18 +322,20 @@ export function RentACarRates() {
         startDateTime: requestDetails.startDateTime,
         endDateTime: requestDetails.endDateTime,
         rentalDays,
-        billingUnits,
-        transmission: transmissionLabel(selectedVehicle.transmision)
+        pricingBreakdown: pricing,
+        transmission: transmissionLabel(selectedVehicle.transmision),
+        transmissionCode: selectedVehicle.transmision,
+        category: selectedVehicle.categoria
       },
       meta: [
-        `${rentalDays} day${rentalDays === 1 ? "" : "s"}`,
-        `${billingUnits} ${periodLabel.toLowerCase()} unit${billingUnits === 1 ? "" : "s"}`,
+        t(`${rentalDays} day${rentalDays === 1 ? "" : "s"}`),
+        pricingLabel,
         coverageLabel,
         transmissionLabel(selectedVehicle.transmision),
         requestDetails.hotel,
         deliveryLabel,
         `From ${requestDetails.startDateTime}`,
-        `To ${requestDetails.endDateTime}`
+        `Until ${requestDetails.endDateTime}`
       ].filter(Boolean)
     });
 
@@ -233,128 +343,132 @@ export function RentACarRates() {
   }
 
   const modalDays = getRentalDays();
-  const modalUnits = getBillingUnits(modalDays);
-  const modalMinimumDays = getMinimumDaysForPeriod();
-  const modalMinimumError = modalDays ? getMinimumPeriodError(modalDays) : "";
   const modalCoverageLabel = coverageOptions.find((option) => option.value === requestDetails.coverage)?.label || "Full cover";
-  const modalUnitPrice = selectedVehicle ? selectedVehicle[requestDetails.coverage] : 0;
-  const modalTotal = modalUnitPrice * modalUnits;
+  const modalPricing = selectedVehicle
+    ? getRentalRateBreakdown(selectedVehicle.categoria, selectedVehicle.transmision, requestDetails.coverage, modalDays)
+    : { months: 0, weeks: 0, days: 0, total: 0 };
+  const modalPricingLabel = formatPricingBreakdown(modalPricing, language);
+  const modalTotal = modalPricing.total;
 
   return (
-    <section className="section section--alt" id="rates">
-      <div className="container">
-        <div className="sectionHead">
-          <div>
-            <h2>Rent a car rates</h2>
-            <p className="muted">
-              Compare vehicle categories by rental period, transmission and coverage option.
-            </p>
-          </div>
-          <a className="btn btn--ghost" href="#contact">Request selected option</a>
-        </div>
+    <section className="rent-catalog-section" id="rates">
+      <div className="container rent-catalog">
+        <aside className="rent-filter-panel" aria-label="Vehicle filters">
+          <h2>Filters</h2>
 
-        <div className="rate-panel">
-          <div className="rate-tabs" aria-label="Rental period">
-            {periods.map((item) => (
-              <button
-                key={item.value}
-                className={`rate-tab${period === item.value ? " rate-tab--active" : ""}`}
-                type="button"
-                onClick={() => setPeriod(item.value)}
-              >
-                {item.label}
-              </button>
+          <div className="rent-filter-panel__group">
+            {vehicleTypes.map((type) => (
+              <label className="rent-check" key={type.value}>
+                <input
+                  type="checkbox"
+                  checked={activeTypes.includes(type.value)}
+                  onChange={() => toggleVehicleType(type.value)}
+                />
+                <span>{type.label}</span>
+              </label>
             ))}
           </div>
 
-          <div className="rate-controls">
-            <label className="control">
-              Search vehicle
-              <input
-                type="search"
-                placeholder="Category or transmission..."
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-              />
-            </label>
+          <label className="rent-filter-panel__field">
+            Passengers
+            <select value={passengers} onChange={(event) => setPassengers(event.target.value)}>
+              {passengerOptions.map((item) => (
+                <option key={item.value} value={item.value}>{item.label}</option>
+              ))}
+            </select>
+          </label>
 
-            <label className="control">
-              Transmission
-              <select value={transmission} onChange={(event) => setTransmission(event.target.value)}>
-                <option value="">All</option>
-                {transmissionOptions.map((item) => (
-                  <option key={item} value={item}>{item}</option>
-                ))}
-              </select>
-            </label>
-
-            <label className="control">
-              Sort
-              <select value={sort} onChange={(event) => setSort(event.target.value)}>
-                {sortOptions.map((item) => (
-                  <option key={item.value} value={item.value}>{item.label}</option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-          <div className="rate-summary">
-            <div>
-              <span className="rate-summary__label">Showing</span>
-              <strong>{filteredRates.length} options</strong>
+          <div className="rent-filter-panel__group rent-filter-panel__group--period">
+            <span>Rate</span>
+            <div className="rent-periods" aria-label="Rental period">
+              {periods.map((item) => (
+                <button
+                  key={item.value}
+                  className={`rent-period${period === item.value ? " rent-period--active" : ""}`}
+                  type="button"
+                  onClick={() => setPeriod(item.value)}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
+          </div>
+        </aside>
+
+        <div className="rent-catalog__main">
+          <div className="rent-catalog__head">
             <div>
-              <span className="rate-summary__label">Lowest from</span>
-              <strong>{cheapest ? formatUSD(cheapest.seguro_basico) : "-"}</strong>
+              <h2>Vehicle rental options</h2>
+              <p>Car rental in Costa Rica.</p>
             </div>
-            <p className="muted">Prices are shown in USD and may vary by dates, availability and final rental conditions.</p>
+            <div className="rent-catalog__summary">
+              <span>{filteredRates.length} options</span>
+              <strong>From {cheapest ? formatUSD(cheapest.seguro_basico) : "-"}</strong>
+            </div>
           </div>
 
-          <div className="rate-tableWrap">
-            <table className="rate-table">
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Transmission</th>
-                  <th>Basic insurance</th>
-                  <th>Full cover</th>
-                  <th>Cart</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredRates.map((item) => (
-                  <tr key={`${period}-${item.categoria}-${transmissionLabel(item.transmision)}-${item.seguro_basico}`}>
-                    <td data-label="Category">
-                      <strong>{item.categoria}</strong>
-                    </td>
-                    <td data-label="Transmission">
-                      <span className="rate-pill">{transmissionLabel(item.transmision)}</span>
-                    </td>
-                    <td data-label="Basic insurance">{formatUSD(item.seguro_basico)}</td>
-                    <td data-label="Full cover">
-                      <strong>{formatUSD(item.full_cover)}</strong>
-                    </td>
-                    <td data-label="Cart">
-                      <button
-                        className="btn btn--ghost rate-addBtn"
-                        type="button"
-                        onClick={() => openRequestModal(item)}
-                      >
-                        Add
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <motion.div
+            className="rent-vehicle-grid"
+            initial={false}
+            animate="show"
+            variants={{
+              hidden: {},
+              show: {
+                transition: {
+                  staggerChildren: 0.055
+                }
+              }
+            }}
+          >
+            {filteredRates.map((item) => (
+              <motion.article
+                className="rent-vehicle-card"
+                key={item.key}
+                variants={{
+                  hidden: { opacity: 1, y: 0 },
+                  show: { opacity: 1, y: 0 }
+                }}
+                transition={{ duration: 0.34, ease: "easeOut" }}
+                whileHover={{ y: -4 }}
+              >
+                <div className="rent-vehicle-card__media">
+                  <img src={item.image} alt={item.title} loading="lazy" />
+                </div>
 
-            {filteredRates.length === 0 ? (
-              <div className="empty">
-                <h3>No vehicle results</h3>
-                <p className="muted">Try another search term or change the filters.</p>
-              </div>
-            ) : null}
-          </div>
+                <div className="rent-vehicle-card__body">
+                  <h3>{item.title}</h3>
+                  <p>{item.model}</p>
+
+                  <div className="rent-vehicle-card__transmission">
+                    <Cog aria-hidden="true" size={16} />
+                    <span>{t(transmissionLabel(item.transmision))}</span>
+                  </div>
+
+                  <div className="rent-vehicle-card__specs" aria-label="Vehicle capacity">
+                    <span><Users aria-hidden="true" size={16} />{item.passengers}</span>
+                    <span><Briefcase aria-hidden="true" size={16} />{item.luggage}</span>
+                    <span><DoorOpen aria-hidden="true" size={16} />{item.doors}</span>
+                  </div>
+
+                  <div className="rent-vehicle-card__footer">
+                    <span>From {formatUSD(item.seguro_basico)}</span>
+                    <button type="button" onClick={() => openRequestModal(item)}>
+                      Add
+                      <Search aria-hidden="true" size={13} />
+                    </button>
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </motion.div>
+
+          {filteredRates.length === 0 ? (
+            <div className="empty rent-catalog__empty">
+              <CarFront aria-hidden="true" size={28} />
+              <h3>No vehicles match these filters</h3>
+              <p className="muted">Try another passenger count or select more categories.</p>
+            </div>
+          ) : null}
         </div>
       </div>
 
@@ -365,8 +479,8 @@ export function RentACarRates() {
             <div className="rate-modal__head">
               <div>
                 <p className="rent-card__tag">Rent a car</p>
-                <h3 id="rateModalTitle">{selectedVehicle.categoria}</h3>
-                <p className="muted">{transmissionLabel(selectedVehicle.transmision)}</p>
+                <h3 id="rateModalTitle">{selectedVehicle.title}</h3>
+                <p className="muted">{selectedVehicle.model} · {transmissionLabel(selectedVehicle.transmision)}</p>
               </div>
               <button className="rate-modal__close" type="button" aria-label="Close" onClick={closeRequestModal}>x</button>
             </div>
@@ -445,7 +559,7 @@ export function RentACarRates() {
             <div className="rate-total">
               <div>
                 <span className="rate-summary__label">Duration</span>
-                <strong>{modalDays ? `${modalDays} day${modalDays === 1 ? "" : "s"}` : "Select dates"}</strong>
+                <strong>{modalDays ? t(`${modalDays} day${modalDays === 1 ? "" : "s"}`) : t("Select dates")}</strong>
               </div>
               <div>
                 <span className="rate-summary__label">Coverage</span>
@@ -458,16 +572,15 @@ export function RentACarRates() {
             </div>
 
             <p className="muted rate-modal__note">
-              Total uses the selected {periodLabel.toLowerCase()} rate and rounds the rental duration up to the next billing unit.
-              {period !== "diario" ? ` Minimum duration: ${modalMinimumDays} days.` : ""}
+              {modalDays ? `${modalPricingLabel}. ` : ""}Pricing automatically combines complete months, complete weeks and remaining days.
             </p>
 
-            {requestError || modalMinimumError ? (
-              <p className="rate-modal__error" role="alert">{requestError || modalMinimumError}</p>
+            {requestError ? (
+              <p className="rate-modal__error" role="alert">{requestError}</p>
             ) : null}
 
             <div className="rate-modal__actions">
-              <button className="btn btn--primary" type="submit" disabled={!modalDays || Boolean(modalMinimumError)}>Add to cart</button>
+              <button className="btn btn--primary" type="submit" disabled={!modalDays}>Add to cart</button>
               <button className="btn btn--ghost" type="button" onClick={closeRequestModal}>Cancel</button>
             </div>
           </form>

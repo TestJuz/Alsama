@@ -43,6 +43,7 @@ function buildAgentContact(question, language) {
 }
 
 const suggestions = [
+  "Promo Tortuguero",
   "Tours de playa",
   "Tours from Jaco",
   "Hoteles en Arenal",

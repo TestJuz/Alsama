@@ -1271,6 +1271,57 @@ img{ max-width:100%; display:block; }
   gap: 8px;
 }
 
+.cart-item__pending{
+  max-width:150px;
+  color:var(--brand-dark);
+  font-size:12px;
+  font-weight:800;
+  line-height:1.3;
+  text-align:right;
+}
+
+.cart-totals{
+  display:grid;
+  gap:7px;
+  margin-top:12px;
+  border-top:1px solid var(--line);
+  padding-top:12px;
+}
+
+.cart-totals > div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.cart-totals > div strong{
+  color:var(--text);
+}
+
+.cart-totals__final{
+  margin-top:2px;
+  border-top:1px solid var(--line);
+  padding-top:9px;
+  color:var(--text) !important;
+  font-size:16px !important;
+}
+
+.cart-totals__final strong{
+  color:var(--brand-dark) !important;
+  font-size:18px;
+}
+
+.cart-totals small{
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.cart-totals--request{
+  margin-top:2px;
+}
 .cart-panel__actions{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -1939,7 +1990,58 @@ input:focus, textarea:focus{
     width:calc(100vw - 24px);
   }
 
-  .cart-panel__actions{
+  .cart-item__pending{
+  max-width:150px;
+  color:var(--brand-dark);
+  font-size:12px;
+  font-weight:800;
+  line-height:1.3;
+  text-align:right;
+}
+
+.cart-totals{
+  display:grid;
+  gap:7px;
+  margin-top:12px;
+  border-top:1px solid var(--line);
+  padding-top:12px;
+}
+
+.cart-totals > div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.cart-totals > div strong{
+  color:var(--text);
+}
+
+.cart-totals__final{
+  margin-top:2px;
+  border-top:1px solid var(--line);
+  padding-top:9px;
+  color:var(--text) !important;
+  font-size:16px !important;
+}
+
+.cart-totals__final strong{
+  color:var(--brand-dark) !important;
+  font-size:18px;
+}
+
+.cart-totals small{
+  color:var(--muted);
+  line-height:1.4;
+}
+
+.cart-totals--request{
+  margin-top:2px;
+}
+.cart-panel__actions{
     grid-template-columns: 1fr;
   }
 
@@ -3690,5 +3792,520 @@ body,
 
   .shuttle-flow-card{
     min-height:auto;
+  }
+}
+.national-discount-banner{
+  display:grid;
+  grid-template-columns:auto minmax(0, 1fr) auto;
+  gap:16px;
+  align-items:center;
+  width:100%;
+  padding:16px;
+  border:1px solid rgba(214,170,72,.48);
+  border-radius:8px;
+  background:linear-gradient(135deg, rgba(255,250,232,.98), rgba(228,249,241,.98));
+  color:var(--text);
+  box-shadow:0 18px 44px rgba(9,28,31,.2);
+}
+
+.national-discount-banner__badge{
+  display:grid;
+  grid-template-columns:auto auto;
+  grid-template-rows:auto auto;
+  align-items:center;
+  column-gap:8px;
+  min-width:106px;
+  padding:10px 12px;
+  border-radius:8px;
+  background:#176f62;
+  color:#fff;
+}
+
+.national-discount-banner__badge svg{
+  grid-row:1 / 3;
+  color:#f2cf70;
+}
+
+.national-discount-banner__badge strong{
+  font-size:28px;
+  line-height:1;
+}
+
+.national-discount-banner__badge span{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:0;
+}
+
+.national-discount-banner__copy{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+
+.national-discount-banner__copy p,
+.national-discount-banner__copy strong,
+.national-discount-banner__copy span,
+.national-discount-banner__note span{
+  margin:0;
+}
+
+.national-discount-banner__copy p{
+  color:#8a6419;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+
+.national-discount-banner__copy strong{
+  color:#153d38;
+  font-size:20px;
+  line-height:1.15;
+}
+
+.national-discount-banner__copy span{
+  color:#52615e;
+  font-size:14px;
+  line-height:1.4;
+}
+
+.national-discount-banner__note{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  max-width:190px;
+  color:#176f62;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.3;
+}
+
+.national-discount-banner__note svg{
+  flex:0 0 auto;
+}
+
+.national-discount-banner--hero{
+  max-width:760px;
+  margin:20px 0;
+}
+
+.national-discount-banner--home{
+  min-height:100%;
+}
+
+@media (max-width: 760px){
+  .national-discount-banner{
+    grid-template-columns:auto minmax(0, 1fr);
+    gap:12px;
+    padding:14px;
+  }
+
+  .national-discount-banner__note{
+    grid-column:1 / -1;
+    max-width:none;
+  }
+
+  .national-discount-banner__copy strong{
+    font-size:18px;
+  }
+}
+
+@media (max-width: 440px){
+  .national-discount-banner{
+    grid-template-columns:1fr;
+  }
+
+  .national-discount-banner__badge{
+    width:max-content;
+  }
+
+  .national-discount-banner__note{
+    grid-column:auto;
+  }
+}
+
+.rent-catalog-section{
+  background:#ffffff;
+  padding:44px 0 48px;
+}
+
+.rent-catalog{
+  display:grid;
+  grid-template-columns:270px minmax(0, 1fr);
+  gap:44px;
+  align-items:start;
+}
+
+.rent-filter-panel{
+  position:sticky;
+  top:92px;
+  display:grid;
+  gap:24px;
+  min-height:346px;
+  border-radius:8px;
+  background:#176f62;
+  color:#ffffff;
+  padding:32px 24px;
+}
+
+.rent-filter-panel h2{
+  margin:0;
+  color:inherit;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:0;
+  text-transform:uppercase;
+}
+
+.rent-filter-panel__group{
+  display:grid;
+  gap:13px;
+}
+
+.rent-filter-panel__group--period{
+  gap:9px;
+}
+
+.rent-filter-panel__group--period > span,
+.rent-filter-panel__field{
+  color:#ffffff;
+  font-size:16px;
+  font-weight:700;
+}
+
+.rent-check{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  max-width:100%;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:800;
+  line-height:1.2;
+}
+
+.rent-check input{
+  width:18px;
+  height:18px;
+  flex:0 0 18px;
+  margin:0;
+  appearance:none;
+  border:2px solid rgba(255,255,255,.95);
+  border-radius:2px;
+  background:transparent;
+  cursor:pointer;
+}
+
+.rent-check input:checked{
+  background:
+    linear-gradient(135deg, transparent 0 44%, #176f62 44% 56%, transparent 56% 100%),
+    #ffffff;
+  box-shadow:inset 0 0 0 3px #ffffff;
+}
+
+.rent-filter-panel__field{
+  display:grid;
+  gap:10px;
+}
+
+.rent-filter-panel__field select{
+  width:100%;
+  min-height:39px;
+  border:0;
+  border-radius:7px;
+  background:#ffffff;
+  color:#263248;
+  padding:0 16px;
+  font:inherit;
+  font-size:15px;
+  font-weight:500;
+}
+
+.rent-periods{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:6px;
+}
+
+.rent-period{
+  min-width:0;
+  min-height:34px;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:7px;
+  background:rgba(255,255,255,.08);
+  color:#ffffff;
+  padding:6px 7px;
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.rent-period--active{
+  background:#ffffff;
+  color:#176f62;
+}
+
+.rent-catalog__main{
+  min-width:0;
+}
+
+.rent-catalog__head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:34px;
+}
+
+.rent-catalog__head h2,
+.rent-catalog__head p{
+  margin:0;
+}
+
+.rent-catalog__head h2{
+  color:#073574;
+  font-size:clamp(26px, 3vw, 31px);
+  line-height:1.08;
+  font-weight:950;
+  letter-spacing:0;
+}
+
+.rent-catalog__head p{
+  margin-top:7px;
+  color:#263248;
+  font-size:18px;
+  line-height:1.35;
+}
+
+.rent-catalog__summary{
+  display:grid;
+  gap:4px;
+  min-width:132px;
+  border-left:1px solid #e6e9ee;
+  padding-left:16px;
+  color:#516078;
+  text-align:right;
+}
+
+.rent-catalog__summary span{
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.rent-catalog__summary strong{
+  color:#073574;
+  font-size:16px;
+}
+
+.rent-vehicle-grid{
+  display:grid;
+  grid-template-columns:repeat(3, minmax(0, 1fr));
+  gap:30px;
+}
+
+.rent-vehicle-card{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid #e8ebef;
+  border-radius:8px;
+  background:#edf0f2;
+  box-shadow:0 8px 18px rgba(14,38,66,.06);
+  transform-origin:center;
+}
+
+.rent-vehicle-card__media{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  aspect-ratio:1.45 / 1;
+  padding:24px 24px 8px;
+  background:#edf0f2;
+}
+
+.rent-vehicle-card__media img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  filter:drop-shadow(0 18px 13px rgba(13,36,62,.16));
+}
+
+.rent-vehicle-card__body{
+  display:grid;
+  gap:12px;
+  padding:0 24px 28px;
+}
+
+.rent-vehicle-card__body h3,
+.rent-vehicle-card__body p{
+  margin:0;
+}
+
+.rent-vehicle-card__body h3{
+  color:#073574;
+  font-size:22px;
+  line-height:1.08;
+  font-weight:950;
+  letter-spacing:0;
+}
+
+.rent-vehicle-card__body p{
+  color:#2d3a50;
+  font-size:16px;
+  line-height:1.35;
+}
+
+.rent-vehicle-card__transmission,
+.rent-vehicle-card__specs,
+.rent-vehicle-card__footer,
+.rent-vehicle-card__footer button{
+  display:flex;
+  align-items:center;
+}
+
+.rent-vehicle-card__transmission{
+  gap:8px;
+  color:#173d74;
+  font-size:16px;
+  line-height:1.2;
+}
+
+.rent-vehicle-card__transmission svg,
+.rent-vehicle-card__specs svg{
+  color:#073574;
+  stroke-width:2.4;
+}
+
+.rent-vehicle-card__specs{
+  gap:14px;
+  color:#42506a;
+  font-size:16px;
+  line-height:1;
+}
+
+.rent-vehicle-card__specs span{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+}
+
+.rent-vehicle-card__footer{
+  justify-content:space-between;
+  gap:12px;
+  margin-top:12px;
+}
+
+.rent-vehicle-card__footer > span{
+  color:#073574;
+  font-size:13px;
+  font-weight:950;
+  white-space:nowrap;
+}
+
+.rent-vehicle-card__footer button{
+  gap:3px;
+  min-height:28px;
+  border:0;
+  background:transparent;
+  color:#44a6ab;
+  padding:0;
+  font:inherit;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:0;
+  text-transform:uppercase;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.rent-vehicle-card__footer button:hover{
+  color:#7430a7;
+}
+
+.rent-catalog__empty{
+  margin-top:18px;
+  border:1px solid #e8ebef;
+  border-radius:8px;
+  background:#edf0f2;
+  padding:24px;
+  text-align:center;
+}
+
+.rent-catalog__empty svg{
+  margin-inline:auto;
+  color:#073574;
+}
+
+@media (max-width: 1120px){
+  .rent-catalog{
+    grid-template-columns:240px minmax(0, 1fr);
+    gap:28px;
+  }
+
+  .rent-vehicle-grid{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap:24px;
+  }
+}
+
+@media (max-width: 860px){
+  .rent-catalog{
+    grid-template-columns:1fr;
+    gap:26px;
+  }
+
+  .rent-filter-panel{
+    position:relative;
+    top:auto;
+    min-height:auto;
+  }
+
+  .rent-filter-panel__group:first-of-type{
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+  }
+
+  .rent-catalog__head{
+    margin-bottom:22px;
+  }
+}
+
+@media (max-width: 620px){
+  .rent-catalog-section{
+    padding:32px 0 36px;
+  }
+
+  .rent-catalog__head{
+    display:grid;
+  }
+
+  .rent-catalog__summary{
+    width:100%;
+    border-left:0;
+    border-top:1px solid #e6e9ee;
+    padding:12px 0 0;
+    text-align:left;
+  }
+
+  .rent-vehicle-grid,
+  .rent-filter-panel__group:first-of-type{
+    grid-template-columns:1fr;
+  }
+
+  .rent-vehicle-card__media{
+    aspect-ratio:1.55 / 1;
+    padding:22px 20px 6px;
+  }
+
+  .rent-vehicle-card__body{
+    padding:0 22px 24px;
+  }
+
+  .rent-vehicle-card__footer{
+    align-items:flex-start;
+    flex-direction:column;
   }
 }
