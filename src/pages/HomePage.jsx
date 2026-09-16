@@ -541,19 +541,6 @@ export function HomePage() {
               </MagneticAction>
 
             </motion.div>
-
-            <motion.div
-              className="home-hero__response"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <Clock3 size={22} aria-hidden="true" />
-              <div>
-                <strong>Response time commitment</strong>
-                <span>First reply within 2 business hours for complete quote requests.</span>
-              </div>
-            </motion.div>
           </div>
 
           <div className="home-hero__trust" aria-label="Travel benefits">

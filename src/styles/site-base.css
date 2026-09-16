@@ -1370,8 +1370,15 @@ input:focus, textarea:focus{
   gap: 12px;
 }
 
-.shuttle-controls{
+.controls.shuttle-controls{
   margin-bottom: 18px;
+  grid-template-columns: minmax(0, 1.35fr) repeat(3, minmax(0, 1fr));
+}
+
+.controls.shuttle-controls .control,
+.controls.shuttle-controls input,
+.controls.shuttle-controls select{
+  min-width: 0;
 }
 
 .shuttle-explorer{
@@ -1711,6 +1718,10 @@ input:focus, textarea:focus{
   .private-transport-controls,
   .private-rate-card{
     grid-template-columns: 1fr;
+  }
+
+  .controls.shuttle-controls{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .private-rate-card__side{

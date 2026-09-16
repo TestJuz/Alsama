@@ -4,8 +4,6 @@ export const homeFixTranslations = {
   },
   es: {
     "2-hour response window": "Respuesta en un plazo de 2 horas",
-    "Response time commitment": "Compromiso de tiempo de respuesta",
-    "First reply within 2 business hours for complete quote requests.": "Primera respuesta dentro de 2 horas habiles para solicitudes completas de cotizacion.",
     "Response commitment": "Compromiso de respuesta",
     "Clear answers before your travel plan gets complicated.": "Respuestas claras antes de que tu plan de viaje se complique.",
     "Send your dates, pickup point and destination. Alsama aims to answer complete quote requests within 2 business hours.": "Envia tus fechas, punto de recogida y destino. Alsama procura responder las solicitudes completas de cotizacion dentro de 2 horas habiles.",
@@ -78,8 +76,6 @@ export const homeFixTranslations = {
   },
   fr: {
     "2-hour response window": "Reponse sous 2 heures",
-    "Response time commitment": "Engagement de delai de reponse",
-    "First reply within 2 business hours for complete quote requests.": "Premiere reponse sous 2 heures ouvrables pour les demandes de devis completes.",
     "Response commitment": "Engagement de reponse",
     "Clear answers before your travel plan gets complicated.": "Des reponses claires avant que votre itineraire ne se complique.",
     "Send your dates, pickup point and destination. Alsama aims to answer complete quote requests within 2 business hours.": "Envoyez vos dates, point de prise en charge et destination. Alsama vise a repondre aux demandes de devis completes sous 2 heures ouvrables.",
