@@ -1,6 +1,8 @@
 export const supplementalTranslations = {
   es: {
     "Pricing automatically combines complete months, complete weeks and remaining days.": "El precio combina automáticamente meses completos, semanas completas y días restantes.",
+    "Taxes + platform (15.5%)": "Impuestos + plataforma (15.5%)",
+    "Costa Rican nationals get 10% off selected services. Cedula is required.": "Los nacionales de Costa Rica reciben 10% de descuento en los servicios seleccionados. Se requiere cédula.",
     "Filters": "Filtros",
     "Vehicle filters": "Filtros de vehículos",
     "Sedan": "Sedán",
@@ -379,6 +381,8 @@ export const supplementalTranslations = {
   },
   fr: {
     "Pricing automatically combines complete months, complete weeks and remaining days.": "Le prix combine automatiquement les mois complets, les semaines complètes et les jours restants.",
+    "Taxes + platform (15.5%)": "Taxes + plateforme (15,5 %)",
+    "Costa Rican nationals get 10% off selected services. Cedula is required.": "Les nationaux costariciens bénéficient de 10 % de réduction sur les services sélectionnés. La cédula est requise.",
     "Filters": "Filtres",
     "Vehicle filters": "Filtres de véhicules",
     "Sedan": "Berline",

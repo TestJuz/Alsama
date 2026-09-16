@@ -21,7 +21,8 @@ const coverageOptions = [
   { value: "full_cover", label: "Full cover" }
 ];
 
-const IVA_RATE = 0.07;
+const TAXES_AND_PLATFORM_RATE = 0.155;
+const NATIONAL_DISCOUNT_RATE = 0.10;
 
 function formatUSD(value) {
   if (typeof value !== "number") return "";
@@ -32,17 +33,25 @@ function needsTeamValidation(item) {
   return String(item.id || "").startsWith("promotion-");
 }
 
-function getCartTotals(items) {
-  const subtotal = items.reduce((sum, item) => {
-    if (needsTeamValidation(item) || typeof item.price !== "number") return sum;
-    return sum + item.price * Math.max(1, Number(item.quantity) || 1);
-  }, 0);
-  const iva = subtotal * IVA_RATE;
+function getCartTotals(items, applyNationalDiscount = false) {
+  const pricedItems = items.filter((item) => !needsTeamValidation(item) && typeof item.price === "number");
+  const itemTotal = (item) => item.price * Math.max(1, Number(item.quantity) || 1);
+  const subtotal = pricedItems.reduce((sum, item) => sum + itemTotal(item), 0);
+  const eligibleSubtotal = subtotal;
+  const nationalDiscount = applyNationalDiscount ? eligibleSubtotal * NATIONAL_DISCOUNT_RATE : 0;
+  const discountedSubtotal = subtotal - nationalDiscount;
+  const taxesAndPlatform = discountedSubtotal * TAXES_AND_PLATFORM_RATE;
 
-  return { subtotal, iva, total: subtotal + iva };
+  return {
+    subtotal,
+    nationalDiscount,
+    discountedSubtotal,
+    taxesAndPlatform,
+    total: discountedSubtotal + taxesAndPlatform
+  };
 }
 
-function formatCartItems(items) {
+function formatCartItems(items, applyNationalDiscount = false) {
   if (!items.length) return "No selected items.";
 
   const lines = items
@@ -55,9 +64,11 @@ function formatCartItems(items) {
       return `${item.type}: ${item.title}${quantity}${price}${meta}`;
     })
     .join("\n\n");
-  const { subtotal, iva, total } = getCartTotals(items);
+  const { subtotal, nationalDiscount, taxesAndPlatform, total } = getCartTotals(items, applyNationalDiscount);
 
-  return `${lines}\n\nSubtotal: ${formatUSD(subtotal)}\nIVA (7%): ${formatUSD(iva)}\nTotal: ${formatUSD(total)}\nPromotional offers pending validation are not included in this total.`;
+  const discountLine = nationalDiscount > 0 ? `\nNational discount (10%): -${formatUSD(nationalDiscount)}` : "";
+
+  return `${lines}\n\nSubtotal: ${formatUSD(subtotal)}${discountLine}\nTaxes + platform (15.5%): ${formatUSD(taxesAndPlatform)}\nTotal: ${formatUSD(total)}\nPromotional offers pending validation are not included in this total.`;
 }
 function getHotelRoomPrice(room) {
   if (!room) return undefined;
@@ -168,8 +179,9 @@ export function CartWidget() {
   const minGeneralDate = getOneBusinessDayAdvanceDateInputValue();
   const minRentDateTime = getOneBusinessDayAdvanceDateTimeInputValue();
   const minTransportDate = getTodayDateInputValue();
-  const hasNationalDiscountEligibleItems = items.some((item) => item.type === "Tour" || item.type === "Private transport");
-  const { subtotal, iva, total } = getCartTotals(items);
+  const hasNationalDiscountEligibleItems = items.some((item) => !needsTeamValidation(item) && typeof item.price === "number");
+  const { subtotal, taxesAndPlatform, total } = getCartTotals(items);
+  const requestTotals = getCartTotals(items, requestNational === "yes");
 
   function openRequest() {
     setOpen(false);
@@ -218,10 +230,14 @@ export function CartWidget() {
           full_name: fullName,
           email,
           phone,
-          national_discount: hasNationalDiscountEligibleItems ? "10% for Costa Rican nationals" : "Not applicable to selected services",
+          national_discount: hasNationalDiscountEligibleItems ? "10% for Costa Rican nationals" : "Not applicable",
           costa_rican_national: isCostaRicanNational === "yes" ? "Yes" : "No",
           cedula: isCostaRicanNational === "yes" ? nationalCedula : "Not provided",
-          selected_items: formatCartItems(items),
+          subtotal: formatUSD(requestTotals.subtotal),
+          national_discount_amount: formatUSD(requestTotals.nationalDiscount),
+          taxes_and_platform_15_5_percent: formatUSD(requestTotals.taxesAndPlatform),
+          final_total: formatUSD(requestTotals.total),
+          selected_items: formatCartItems(items, isCostaRicanNational === "yes"),
           _replyto: email,
           _subject: SERVICE_REQUEST_SUBJECT,
           _template: "table",
@@ -510,7 +526,7 @@ export function CartWidget() {
 
               <div className="cart-totals" aria-label="Cart totals">
                 <div><span>Subtotal</span><strong>{formatUSD(subtotal)}</strong></div>
-                <div><span>IVA (7%)</span><strong>{formatUSD(iva)}</strong></div>
+                <div><span>Taxes + platform (15.5%)</span><strong>{formatUSD(taxesAndPlatform)}</strong></div>
                 <div className="cart-totals__final"><span>Total</span><strong>{formatUSD(total)}</strong></div>
                 {items.some(needsTeamValidation) ? <small>Promotional offer not included until the team validates its price.</small> : null}
               </div>
@@ -568,7 +584,7 @@ export function CartWidget() {
               </label>
               {hasNationalDiscountEligibleItems ? (
                 <>
-                  <p className="form__hint muted">Costa Rican nationals get 10% off tours and private transport. Cedula is required.</p>
+                  <p className="form__hint muted">Costa Rican nationals get 10% off selected services. Cedula is required.</p>
                   <label className="control">
                     Are you a Costa Rican national?
                     <div className="rate-choice">
@@ -617,9 +633,12 @@ export function CartWidget() {
                 ))}
               </ul>
               <div className="cart-totals cart-totals--request">
-                <div><span>Subtotal</span><strong>{formatUSD(subtotal)}</strong></div>
-                <div><span>IVA (7%)</span><strong>{formatUSD(iva)}</strong></div>
-                <div className="cart-totals__final"><span>Total</span><strong>{formatUSD(total)}</strong></div>
+                <div><span>Subtotal</span><strong>{formatUSD(requestTotals.subtotal)}</strong></div>
+                {requestTotals.nationalDiscount > 0 ? (
+                  <div><span>National discount (10%)</span><strong>-{formatUSD(requestTotals.nationalDiscount)}</strong></div>
+                ) : null}
+                <div><span>Taxes + platform (15.5%)</span><strong>{formatUSD(requestTotals.taxesAndPlatform)}</strong></div>
+                <div className="cart-totals__final"><span>Total</span><strong>{formatUSD(requestTotals.total)}</strong></div>
                 {items.some(needsTeamValidation) ? <small>Promotional offer pending team validation and excluded from total.</small> : null}
               </div>
             </div>
