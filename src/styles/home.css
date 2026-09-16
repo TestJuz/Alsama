@@ -12,7 +12,7 @@ body:has(.home-redesign) {
   --brand: #1d8e91;
   --brand-hover: #16787a;
   --gold: #d6aa48;
-  --forest: #153b30;
+  --forest: #16787a;
   background: var(--bg);
   overscroll-behavior-y: none;
 }
