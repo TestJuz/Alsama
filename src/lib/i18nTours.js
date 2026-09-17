@@ -306,7 +306,9 @@ export const tourTranslations = {
     "I am interested in": "Me interesa",
     "My travel dates are...": "Mis fechas de viaje son...",    "Tour request": "Solicitud de tour",
     "View": "Ver",
-    "image": "imagen"
+    "image": "imagen",
+    "Tour route": "Ruta del tour",
+    "route map": "mapa de ruta"
   },
   fr: {
     "Beach Day": "Journee plage",
@@ -397,6 +399,8 @@ export const tourTranslations = {
     "Book": "Reserver",
     "Send us your dates, departure area and number of travelers. We can combine this tour with transport, hotels or rent a car.": "Envoyez-nous vos dates, zone de depart et nombre de voyageurs. Nous pouvons combiner cette excursion avec transport, hotels ou location de voiture.",
     "I am interested in": "Je suis interesse par",
-    "My travel dates are...": "Mes dates de voyage sont...",    "Local flavors": "Saveurs locales"
+    "My travel dates are...": "Mes dates de voyage sont...",    "Local flavors": "Saveurs locales",
+    "Tour route": "Route de l excursion",
+    "route map": "carte de route"
   }
 };
