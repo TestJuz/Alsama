@@ -150,9 +150,16 @@ export function TourDetailPage() {
   const orderedSectionIds = [activeSection, ...sectionTabs.map(({ id }) => id).filter((id) => id !== activeSection)];
 
   function selectSection(sectionId) {
+    const filterBar = document.querySelector(".tour-detail-tabs");
+    const filterTop = filterBar
+      ? window.scrollY + filterBar.getBoundingClientRect().top - 88
+      : window.scrollY;
+
     setActiveSection(sectionId);
     window.requestAnimationFrame(() => {
-      document.getElementById("tour-sections")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.requestAnimationFrame(() => {
+        window.scrollTo({ top: Math.max(0, filterTop), behavior: "smooth" });
+      });
     });
   }
 
