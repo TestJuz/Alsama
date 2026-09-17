@@ -613,8 +613,8 @@ export function CartWidget() {
                   {requestNational === "yes" ? (
                     <label className="form__field">
                       <span>Cedula</span>
-                      <div className="form__control">
-                        <input name="nationalCedula" required placeholder="Cedula number" autoComplete="off" />
+                      <div className="form__control form__control--plain">
+                        <input name="nationalCedula" required placeholder="Cedula number" autoComplete="off" inputMode="numeric" />
                       </div>
                     </label>
                   ) : null}

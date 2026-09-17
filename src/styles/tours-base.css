@@ -494,6 +494,10 @@ input:focus, select:focus, textarea:focus{
   padding-top: 12px;
 }
 
+.form__control--plain{
+  grid-template-columns: 1fr;
+}
+
 .form__control input,
 .form__control textarea{
   width:100%;

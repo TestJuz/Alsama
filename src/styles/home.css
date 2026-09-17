@@ -1457,7 +1457,7 @@ body:has(.home-redesign) .language-switcher__menu{
   color: #fff;
 }
 
-.promo-visual__copy span:first-child {
+.promo-visual__copy > span:first-child {
   width: max-content;
   max-width: 100%;
   border-radius: 999px;
@@ -1507,6 +1507,17 @@ body:has(.home-redesign) .language-switcher__menu{
 
 .promo-word-loop > span {
   grid-area: 1 / 1;
+}
+
+.promo-word-loop__word {
+  display: inline-block;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-transform: none;
 }
 
 .promo-board,

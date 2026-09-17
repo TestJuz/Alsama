@@ -75,6 +75,11 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
     }
   }
 
+  function handleClearForm(event) {
+    event.currentTarget.form?.reset();
+    setHint("");
+    clearCart();
+  }
   return (
     <section className="section section--alt" id="contact">
       <div className="container contact">
@@ -119,7 +124,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
             <div className="form-cart">
               <div className="form-cart__head">
                 <strong>{t("Selected items")} ({count})</strong>
-                <button type="button" onClick={clearCart}>{t("Clear")}</button>
+                <button type="button" onClick={handleClearForm}>{t("Clear")}</button>
               </div>
               <ul>
                 {items.map((item) => (

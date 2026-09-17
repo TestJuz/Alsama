@@ -71,6 +71,7 @@ function PromoWordLoop({ words }) {
     <span className="promo-word-loop" aria-live="polite">
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
+          className="promo-word-loop__word"
           key={words[index]}
           initial={reducedMotion ? false : { opacity: 0, y: 14, filter: "blur(4px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
