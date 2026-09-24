@@ -20,7 +20,7 @@ import { hotelZones } from "../lib/hotels";
 import { asset, routes } from "../lib/site";
 
 function formatUSD(value) {
-  if (typeof value !== "number") return "Ask";
+  if (typeof value !== "number") return "Price on request";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 

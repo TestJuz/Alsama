@@ -168,56 +168,56 @@ const descriptions = {
 
 const hotelRows = {
   "manuel-antonio": [
-    ["Hotel Manuel Antonio", [["Sencilla", 193.59, 163.81], ["Doble", 211.79, 182.01], ["Triple", 230, 200.21], ["Cuadruple", 248.2, 209.31]]],
-    ["Divisamar", [["Sencilla", 194.75]]],
-    ["Kamuk BW", [["Standard", 168.77, 158.85], ["Superior", 311.07, 206.83]]],
-    ["Hotel Manuel Antonio Park", [["Habitacion Deluxe cama King", 297.84, 215.1], ["Habitacion Deluxe dos camas twin", 297.84, 215.1], ["Habitacion Deluxe dos camas triple", 364.02, 231.65]]],
+    ["Hotel Manuel Antonio", [["Sencilla", 167.14, 141.43], ["Doble", 182.86, 157.14], ["Triple", 198.57, 172.86], ["Cuadruple", 214.29, 180.71]]],
+    ["Divisamar", [["Sencilla", null]]],
+    ["Kamuk BW", [["Standard", 145.71, 137.14], ["Superior", 268.57, 178.57]]],
+    ["Hotel Manuel Antonio Park", [["Habitacion Deluxe cama King", 257.14, 185.71], ["Habitacion Deluxe dos camas twin", 257.14, 185.71], ["Habitacion Deluxe dos camas triple", 314.29, 200]]],
     ["La Vela Hotel", [["Sencilla", null]]],
     ["Hotel Parador", [["Sencilla", null]]]
   ],
   arenal: [
-    ["Arenal Manoa", [["Superior", 531.14, 208.49], ["Premium", 557.61, 208.49], ["Chato Suites", 1158.25, 208.49]]],
-    ["Las Colinas", [["Single estandar terraza", 198.84, 109.12], ["Single estandar balcon privado", 207.33, 116.4], ["Single estandar 1er nivel", 186.71, 96.99], ["Doble estandar terraza", 147.92, 122.46], ["Doble estandar balcon privado", 156.4, 128.52], ["Doble estandar 1er nivel", 135.8, 110.33]]],
-    ["La Fortuna Lodge", [["Superior queen", 198.56], ["Superior twin", 244.89], ["Superior", 185.32, 152.23], ["Premium", 218.41, 185.32]]],
-    ["Arenal Springs Resort & Spa", [["Master Suite hasta 10 personas", 1222.37, 1129.29]]],
-    ["Montana de Fuego", [["Estandar Sencilla", 194.75], ["Doble", 287, 194.75], ["Superior Sencilla", 219.64], ["Deluxe Jardin Sencilla", 266.5]]],
-    ["San Bosco Inn", [["Estandar Sencilla", 108.36, 79.07], ["Doble", 131.79, 92.25]]]
+    ["Arenal Manoa", [["Superior", 458.57, 180], ["Premium", 481.43, 180], ["Chato Suites", 1000, 180]]],
+    ["Las Colinas", [["Single estandar terraza", null, null], ["Single estandar balcon privado", null, null], ["Single estandar 1er nivel", null, null], ["Doble estandar terraza", null, null], ["Doble estandar balcon privado", null, null], ["Doble estandar 1er nivel", null, null]]],
+    ["La Fortuna Lodge", [["Superior queen", 171.43], ["Superior twin", 211.43], ["Superior", 160, 131.43], ["Premium", 188.57, 160]]],
+    ["Arenal Springs Resort & Spa", [["Master Suite hasta 10 personas", 1055.36, 975]]],
+    ["Montana de Fuego", [["Estandar Sencilla", null], ["Doble", null, null], ["Superior Sencilla", null], ["Deluxe Jardin Sencilla", null]]],
+    ["San Bosco Inn", [["Estandar Sencilla", null, null], ["Doble", null, null]]]
   ],
   monteverde: [
-    ["Country Lodge", [["Clasica queen", 194.59], ["Clasica twin", 250.18], ["Superior", 187.97, 178.7], ["Premium", 239.59, 232.97]]],
-    ["Poco a Poco", [["Bromelia", 397.11, 330.93], ["Quetzal", 463.3, 383.88], ["Garden Family", 595.67, 529.49], ["Forest Deluxe con Jacuzzi", 701.57], ["Garden Superior", 701.57, 602.29], ["Forest Deluxe", 655.24, 602.29]]],
-    ["Sibu Lodge", [["Lantana", 264.74, 238.27], ["Guaria", 397.11, 344.17], ["Forest Superior", 383.88, 330.93]]],
-    ["El Establo", [["Deluxe single o doble", 351.43, 256.25], ["Familiar single o doble", 497.86, 402.68]]]
+    ["Country Lodge", [["Clasica queen", 168], ["Clasica twin", 216], ["Superior", 162.29, 154.29], ["Premium", 206.86, 201.14]]],
+    ["Poco a Poco", [["Bromelia", 342.86, 285.71], ["Quetzal", 400, 331.43], ["Garden Family", 514.29, 457.14], ["Forest Deluxe con Jacuzzi", 605.71], ["Garden Superior", 605.71, 520], ["Forest Deluxe", 565.71, 520]]],
+    ["Sibu Lodge", [["Lantana", 228.57, 205.71], ["Guaria", 342.86, 297.14], ["Forest Superior", 331.43, 285.71]]],
+    ["El Establo", [["Deluxe single o doble", null, null], ["Familiar single o doble", null, null]]]
   ],
   sjo: [
-    ["Irazu Hotel & Studios", [["Estandar Sencilla", 147.26], ["Estandar Doble", 147.26]]],
-    ["Holiday Inn SJ La Sabana by IHG", [["Estandar Sencilla", 163.81], ["Estandar Doble", 163.81]]],
+    ["Irazu Hotel & Studios", [["Estandar Sencilla", 127.14], ["Estandar Doble", 127.14]]],
+    ["Holiday Inn SJ La Sabana by IHG", [["Estandar Sencilla", 141.43], ["Estandar Doble", 141.43]]],
   ],
   alajuela: [
-    ["Hampton by Hilton", [["Estandar Sencilla", 190.28], ["Estandar Doble", 190.28], ["Estandar Triple", 206.83], ["Estandar Cuadruple", 223.38], ["Studio Sencillo", 206.83], ["Studio Doble", 206.83]]],
+    ["Hampton by Hilton", [["Estandar Sencilla", 164.29], ["Estandar Doble", 164.29], ["Estandar Triple", 178.57], ["Estandar Cuadruple", 192.86], ["Studio Sencillo", 178.57], ["Studio Doble", 178.57]]],
     ["Holiday Inn Express de IHG", [["Estandar Sencilla", null], ["Estandar Doble", null], ["Estandar Triple", null], ["Estandar Cuadruple", null], ["Studio Sencillo", null], ["Studio Doble", null]]],
-    ["Hilton Garden Inn Aeropuerto", [["Habitacion Estandar", 203.52, 196.9], ["Triple", 16.55], ["Cuadruple", 33.09]]],
-    ["Hotel Martino Resort & Spa", [["Deluxe Suite", 205], ["Estandar sencilla", null]]]
+    ["Hilton Garden Inn Aeropuerto", [["Habitacion Estandar", 175.71, 170], ["Triple", 14.29], ["Cuadruple", 28.57]]],
+    ["Hotel Martino Resort & Spa", [["Deluxe Suite", null], ["Estandar sencilla", null]]]
   ],
   guanacaste: [
-    ["Hilton Garden Inn Aeropuerto Liberia", [["Estandar single", 206.83], ["Estandar Doble", 231.65], ["Triple", 256.47], ["Cuadruple", 281.29]]],
-    ["Hampton by Hilton Guanacaste Airport", [["Estandar single", 173.74], ["Estandar Doble", 173.74], ["Triple", 190.28], ["Cuadruple", 206.83]]],
-    ["Wyndham Tamarindo", [["Standard Ocean View", 388.84, 213.45]]],
-    ["Best Western El Sitio", [["Estandar single", 140.57], ["Estandar Doble", 180.11], ["Triple", 225.5], ["Cuadruple", 263.57]]],
-    ["Boyeros", [["Estandar single", 130.69], ["Estandar Doble", 148.11], ["Triple", 189.19, 180.47], ["Cuadruple", 226.53, 219.06], ["Quintuple", 261.38, 253.91], ["Sencilla", 121.98], ["Doble", 139.4]]]
+    ["Hilton Garden Inn Aeropuerto Liberia", [["Estandar single", 178.57], ["Estandar Doble", 200], ["Triple", 221.43], ["Cuadruple", 242.86]]],
+    ["Hampton by Hilton Guanacaste Airport", [["Estandar single", 150], ["Estandar Doble", 150], ["Triple", 164.29], ["Cuadruple", 178.57]]],
+    ["Wyndham Tamarindo", [["Standard Ocean View", 335.71, 184.29]]],
+    ["Best Western El Sitio", [["Estandar single", null], ["Estandar Doble", null], ["Triple", null], ["Cuadruple", null]]],
+    ["Boyeros", [["Estandar single", null], ["Estandar Doble", null], ["Triple", null, null], ["Cuadruple", null, null], ["Quintuple", null, null], ["Sencilla", null], ["Doble", null]]]
   ],
   jaco: [
-    ["Best Western Jaco Beach (edificio A)", [["Single", 225.5, 210.86], ["Doble", 383.64, 354.36], ["Triple", 553.5, 524.21], ["Cuadruple", 723.36, 694.07], ["Single fin de semana", 188.89, 165.46], ["Doble fin de semana", 328, 269.43], ["Triple fin de semana", 470.04, 396.82], ["Cuadruple fin de semana", 612.07, 524.21]]],
-    ["Terrazas del Pacifico", [["Estandar Sencilla", 190.94, 125.34], ["Estandar Doble", 190.94, 125.34], ["Estandar Triple", 243.66, 178.06], ["Estandar Cuadruple", 296.37, 230.77], ["Superior Sencilla", 214.37, 155.8], ["Superior Doble", 214.37, 155.8], ["Superior Triple", 267.09, 208.51], ["Superior Cuadruple", 319.8, 261.23]]],
-    ["Arenas, Punta Leona", [["Sencilla", 256.25, 174.25], ["Doble", 297.25, 202.07], ["Triple", 373.39, 253.32], ["Superior Sencilla", 284.07, 202.07], ["Superior Doble", 351.43, 197.68], ["Superior Triple", 455.39, 333.86]]]
+    ["Best Western Jaco Beach (edificio A)", [["Single", null, null], ["Doble", null, null], ["Triple", null, null], ["Cuadruple", null, null], ["Single fin de semana", null, null], ["Doble fin de semana", null, null], ["Triple fin de semana", null, null], ["Cuadruple fin de semana", null, null]]],
+    ["Terrazas del Pacifico", [["Estandar Sencilla", null, null], ["Estandar Doble", null, null], ["Estandar Triple", null, null], ["Estandar Cuadruple", null, null], ["Superior Sencilla", null, null], ["Superior Doble", null, null], ["Superior Triple", null, null], ["Superior Cuadruple", null, null]]],
+    ["Arenas, Punta Leona", [["Sencilla", null, null], ["Doble", null, null], ["Triple", null, null], ["Superior Sencilla", null, null], ["Superior Doble", null, null], ["Superior Triple", null, null]]]
   ],
   osa: [
-    ["Danta Corcovado Lodge", [["Doble o sencilla", 209.39, 153.75]]],
-    ["Peninsula Curio Collection by Hilton", [["Doble o sencilla", 1401.48, 339.2], ["Triple", 1444.5, 378.91], ["Cuadruple", 1485.87, 418.62]]]
+    ["Danta Corcovado Lodge", [["Doble o sencilla", null, null]]],
+    ["Peninsula Curio Collection by Hilton", [["Doble o sencilla", 1210, 292.86], ["Triple", 1247.14, 327.14], ["Cuadruple", 1282.86, 361.43]]]
   ],
   caribe: [
-    ["Hotel Cariblue Beach & Jungle Resort", [["Habitacion max 1 pax", 135.35, 102.59], ["Habitacion 3 pax", 140.64], ["Maximo dos habitaciones 4 pax", 167.12]]],
-    ["La Kukula", [["Standard Doble", 253.16, 190.28], ["Standard Triple", 256.47, 206.83]]]
+    ["Hotel Cariblue Beach & Jungle Resort", [["Habitacion max 1 pax", 116.86, 88.57], ["Habitacion 3 pax", 121.43], ["Maximo dos habitaciones 4 pax", 144.29]]],
+    ["La Kukula", [["Standard Doble", 218.57, 164.29], ["Standard Triple", 221.43, 178.57]]]
   ]
 };
 

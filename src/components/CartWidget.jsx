@@ -35,6 +35,8 @@ function needsTeamValidation(item) {
 
 function getCartTotals(items, applyNationalDiscount = false) {
   const pricedItems = items.filter((item) => !needsTeamValidation(item) && typeof item.price === "number");
+  const hasPendingPrices = items.some((item) => needsTeamValidation(item) || typeof item.price !== "number");
+  const hasPricedItems = pricedItems.length > 0;
   const itemTotal = (item) => item.price * Math.max(1, Number(item.quantity) || 1);
   const subtotal = pricedItems.reduce((sum, item) => sum + itemTotal(item), 0);
   const eligibleSubtotal = subtotal;
@@ -47,8 +49,14 @@ function getCartTotals(items, applyNationalDiscount = false) {
     nationalDiscount,
     discountedSubtotal,
     taxesAndPlatform,
-    total: discountedSubtotal + taxesAndPlatform
+    total: discountedSubtotal + taxesAndPlatform,
+    hasPendingPrices,
+    hasPricedItems
   };
+}
+
+function formatCartTotal(value, hasPricedItems) {
+  return hasPricedItems ? formatUSD(value) : "Price on request";
 }
 
 function formatCartItems(items, applyNationalDiscount = false) {
@@ -64,11 +72,12 @@ function formatCartItems(items, applyNationalDiscount = false) {
       return `${item.type}: ${item.title}${quantity}${price}${meta}`;
     })
     .join("\n\n");
-  const { subtotal, nationalDiscount, taxesAndPlatform, total } = getCartTotals(items, applyNationalDiscount);
+  const { subtotal, nationalDiscount, taxesAndPlatform, total, hasPendingPrices, hasPricedItems } = getCartTotals(items, applyNationalDiscount);
 
   const discountLine = nationalDiscount > 0 ? `\nNational discount (10%): -${formatUSD(nationalDiscount)}` : "";
 
-  return `${lines}\n\nSubtotal: ${formatUSD(subtotal)}${discountLine}\nTaxes + platform (15.5%): ${formatUSD(taxesAndPlatform)}\nTotal: ${formatUSD(total)}\nPromotional offers pending validation are not included in this total.`;
+  const pendingLine = hasPendingPrices ? "\nItems with prices on request are not included in this total." : "";
+  return `${lines}\n\nSubtotal: ${formatCartTotal(subtotal, hasPricedItems)}${discountLine}\nTaxes + platform (15.5%): ${formatCartTotal(taxesAndPlatform, hasPricedItems)}\nTotal: ${formatCartTotal(total, hasPricedItems)}${pendingLine}`;
 }
 function getHotelRoomPrice(room) {
   if (!room) return undefined;
@@ -180,7 +189,7 @@ export function CartWidget() {
   const minRentDateTime = getOneBusinessDayAdvanceDateTimeInputValue();
   const minTransportDate = getTodayDateInputValue();
   const hasNationalDiscountEligibleItems = items.some((item) => !needsTeamValidation(item) && typeof item.price === "number");
-  const { subtotal, taxesAndPlatform, total } = getCartTotals(items);
+  const { subtotal, taxesAndPlatform, total, hasPendingPrices, hasPricedItems } = getCartTotals(items);
   const requestTotals = getCartTotals(items, requestNational === "yes");
 
   function openRequest() {
@@ -235,10 +244,10 @@ export function CartWidget() {
           national_discount: hasNationalDiscountEligibleItems ? "10% for Costa Rican nationals" : "Not applicable",
           costa_rican_national: isCostaRicanNational === "yes" ? "Yes" : "No",
           cedula: isCostaRicanNational === "yes" ? nationalCedula : "Not provided",
-          subtotal: formatUSD(requestTotals.subtotal),
-          national_discount_amount: formatUSD(requestTotals.nationalDiscount),
-          taxes_and_platform_15_5_percent: formatUSD(requestTotals.taxesAndPlatform),
-          final_total: formatUSD(requestTotals.total),
+          subtotal: formatCartTotal(requestTotals.subtotal, requestTotals.hasPricedItems),
+          national_discount_amount: formatCartTotal(requestTotals.nationalDiscount, requestTotals.hasPricedItems),
+          taxes_and_platform_15_5_percent: formatCartTotal(requestTotals.taxesAndPlatform, requestTotals.hasPricedItems),
+          final_total: formatCartTotal(requestTotals.total, requestTotals.hasPricedItems),
           selected_items: formatCartItems(items, isCostaRicanNational === "yes"),
           _replyto: email,
           _subject: SERVICE_REQUEST_SUBJECT,
@@ -527,10 +536,10 @@ export function CartWidget() {
               </div>
 
               <div className="cart-totals" aria-label="Cart totals">
-                <div><span>Subtotal</span><strong>{formatUSD(subtotal)}</strong></div>
-                <div><span>Taxes + platform (15.5%)</span><strong>{formatUSD(taxesAndPlatform)}</strong></div>
-                <div className="cart-totals__final"><span>Total</span><strong>{formatUSD(total)}</strong></div>
-                {items.some(needsTeamValidation) ? <small>Promotional offer not included until the team validates its price.</small> : null}
+                <div><span>Subtotal</span><strong>{formatCartTotal(subtotal, hasPricedItems)}</strong></div>
+                <div><span>Taxes + platform (15.5%)</span><strong>{formatCartTotal(taxesAndPlatform, hasPricedItems)}</strong></div>
+                <div className="cart-totals__final"><span>Total</span><strong>{formatCartTotal(total, hasPricedItems)}</strong></div>
+                {hasPendingPrices ? <small>Items with prices on request are not included in this total.</small> : null}
               </div>
               <div className="cart-panel__actions">
                 <button className="btn btn--primary" type="button" onClick={openRequest}>Request all</button>
@@ -648,13 +657,13 @@ export function CartWidget() {
                 ))}
               </ul>
               <div className="cart-totals cart-totals--request">
-                <div><span>Subtotal</span><strong>{formatUSD(requestTotals.subtotal)}</strong></div>
+                <div><span>Subtotal</span><strong>{formatCartTotal(requestTotals.subtotal, requestTotals.hasPricedItems)}</strong></div>
                 {requestTotals.nationalDiscount > 0 ? (
                   <div><span>National discount (10%)</span><strong>-{formatUSD(requestTotals.nationalDiscount)}</strong></div>
                 ) : null}
-                <div><span>Taxes + platform (15.5%)</span><strong>{formatUSD(requestTotals.taxesAndPlatform)}</strong></div>
-                <div className="cart-totals__final"><span>Total</span><strong>{formatUSD(requestTotals.total)}</strong></div>
-                {items.some(needsTeamValidation) ? <small>Promotional offer pending team validation and excluded from total.</small> : null}
+                <div><span>Taxes + platform (15.5%)</span><strong>{formatCartTotal(requestTotals.taxesAndPlatform, requestTotals.hasPricedItems)}</strong></div>
+                <div className="cart-totals__final"><span>Total</span><strong>{formatCartTotal(requestTotals.total, requestTotals.hasPricedItems)}</strong></div>
+                {requestTotals.hasPendingPrices ? <small>Items with prices on request are not included in this total.</small> : null}
               </div>
             </div>
 
