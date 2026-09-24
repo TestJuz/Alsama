@@ -263,7 +263,7 @@ export function TravelAssistant() {
                     className={`assistant-message assistant-message--${message.role}`}
                   >
                     {message.title ? <strong>{message.title}</strong> : null}
-                    <p>{message.body}</p>
+                    <p style={{ whiteSpace: "pre-line" }}>{message.body}</p>
                     {message.items?.length ? (
                       <div className="assistant-message__results">
                         {message.items.slice(0, 3).map((item, resultIndex) => (
@@ -282,7 +282,7 @@ export function TravelAssistant() {
                 {typing ? (
                   <div className="assistant-message assistant-message--assistant assistant-message--typing">
                     {typing.title ? <strong>{typing.title}</strong> : null}
-                    {typing.body ? <p>{typing.body}</p> : <span className="assistant-typingDots" aria-label="Alsama is typing"><i /><i /><i /></span>}
+                    {typing.body ? <p style={{ whiteSpace: "pre-line" }}>{typing.body}</p> : <span className="assistant-typingDots" aria-label="Alsama is typing"><i /><i /><i /></span>}
                     {typing.done && typing.items?.length ? (
                       <div className="assistant-message__results">
                         {typing.items.slice(0, 3).map((item, resultIndex) => (
