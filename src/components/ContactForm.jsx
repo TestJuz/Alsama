@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Mail, MessageSquareText, Send, User } from "lucide-react";
+import { Mail, MessageSquareText, Phone, Send, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { routes } from "../lib/site";
 
-const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
+const CONTACT_EMAIL = "info@alsamatourscr.com";
 const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 function formatCartItems(items) {
   if (!items.length) return "No selected items.";
@@ -35,6 +35,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
 
     const name = String(data.get("name") || "").trim();
     const email = String(data.get("email") || "").trim();
+    const phone = String(data.get("phone") || "").trim();
     const message = String(data.get("message") || "").trim();
     const selectedItems = formatCartItems(items);
 
@@ -51,6 +52,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
         body: JSON.stringify({
           name,
           email,
+          phone,
           message,
           selected_items: selectedItems,
           _replyto: email,
@@ -69,7 +71,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
       if (count) clearCart();
       navigate(routes.thankYou);
     } catch (error) {
-      setHint("We could not send the message. Please email jeaustin.rdz@gmail.com or try again.");
+      setHint("We could not send the message. Please email info@alsamatourscr.com or try again.");
     } finally {
       setIsSending(false);
     }
@@ -110,6 +112,19 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
             <div className="form__control">
               <Mail size={18} aria-hidden="true" />
               <input name="email" type="email" required placeholder={t("you@email.com")} />
+            </div>
+          </label>
+          <label className="form__field">
+            <span>{t("Phone")}</span>
+            <div className="form__control">
+              <Phone size={18} aria-hidden="true" />
+              <input
+                name="phone"
+                type="tel"
+                required
+                autoComplete="tel"
+                placeholder={t("Your phone number")}
+              />
             </div>
           </label>
           <label className="form__field form__field--message">
