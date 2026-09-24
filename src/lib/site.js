@@ -7,7 +7,7 @@ export function asset(path) {
 export const safetyPdf = asset("Safety.pdf");
 
 export const routes = {
-  home: "/",
+  home: "/inicio",
   shuttle: "/shuttle",
   privateTransport: "/private-transport",
   tours: "/tours",
