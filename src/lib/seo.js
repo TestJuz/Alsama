@@ -142,7 +142,7 @@ function buildSchema(pathname, title, description, tour) {
     name: siteName,
     url: runtimeBaseUrl(),
     image: absoluteUrl("og.png"),
-    email: "jeaustin.rdz@gmail.com",
+    email: "info@alsamatourscr.com",
     telephone: "+50661672539",
     priceRange: "$$",
     areaServed: [
