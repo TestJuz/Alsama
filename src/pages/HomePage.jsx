@@ -822,7 +822,14 @@ export function HomePage() {
               <span className="home-eyebrow">Custom routes</span>
               <h2>Tell us where you land. We will shape the rest.</h2>
             </MotionBlock>
-            <MagneticAction className="home-btn home-btn--primary" href="#contact">
+            <MagneticAction
+              className="home-btn home-btn--primary"
+              href="#contact"
+              onClick={(event) => {
+                event.preventDefault();
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              }}
+            >
               Build my trip <ArrowRight size={18} aria-hidden="true" />
             </MagneticAction>
           </div>
