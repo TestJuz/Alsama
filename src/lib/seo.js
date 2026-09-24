@@ -1,7 +1,7 @@
 import { findTourBySlug, routes } from "./site";
 import { getPageTitle, translateText } from "./nativeI18n";
 
-export const siteBaseUrl = "https://alsamatourscr.com/Alsama/";
+export const siteBaseUrl = "https://alsamatourscr.com/";
 export const siteName = "Alsama Tours";
 
 const pageSeo = {
