@@ -166,6 +166,7 @@ export function LimitedPromosSection() {
               <span className="home-eyebrow">{copy.validUntil}</span>
               <h2>{copy.title}</h2>
               <p>{copy.intro}</p>
+              <p className="promo-eligibility"><strong>{copy.eligibilityNote}</strong></p>
             </div>
             <Link className="home-btn home-btn--primary" to={promotion.href} onClick={addPromotionToRequest}>
               {copy.cta}
