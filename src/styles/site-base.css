@@ -2485,8 +2485,13 @@ input:focus, textarea:focus{
 }
 
 .assistant-result__side strong{
+  display:block;
+  max-width:100%;
   font-size:13px;
-  white-space:nowrap;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  line-height:1.35;
 }
 
 .assistant-result__side a{
@@ -2606,10 +2611,18 @@ input:focus, textarea:focus{
   }
 
   .assistant-result__side{
-    grid-template-columns:auto auto;
-    justify-content:space-between;
+    width:100%;
+    min-width:0;
+    grid-template-columns:minmax(0, 1fr) auto;
+    justify-content:stretch;
     justify-items:start;
+    align-items:start;
     text-align:left;
+  }
+
+  .assistant-result__side strong{
+    min-width:0;
+    max-width:100%;
   }
 }
 .assistant-message--typing{
