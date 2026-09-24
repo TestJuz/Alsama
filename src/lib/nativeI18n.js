@@ -45,7 +45,7 @@ const exactTranslations = {
     "Available shuttle routes": "Rutas de shuttle disponibles", "Schedule": "Horario", "Stops": "Paradas", "Selected shuttle": "Shuttle seleccionado", "Shared service price": "Precio de servicio compartido",
     "Departure window": "Ventana de salida", "Shuttle path map": "Mapa de ruta del shuttle", "No shuttle results": "No hay resultados de shuttle", "Tour details": "Detalles del tour",
     "Overview": "Resumen", "Cost": "Costo", "Included": "Incluido", "Recommendations": "Recomendaciones", "Trip Highlights": "Puntos destacados", "What to expect": "Que esperar",
-    "Show Prices": "Ver precios", "/ Adult": "/ Adulto", "Departure": "Salida", "Next departures": "Proximas salidas", "View all tours": "Ver todos los tours", "View trip": "Ver viaje", "Close": "Cerrar"
+    "Show Prices": "Ver precios", "/ Adult": "/ Adulto", "Departure": "Salida", "Next departures": "Proximas salidas", "View all tours": "Ver todos los tours", "View trip": "Ver viaje", "Close": "Cerrar", "Phone": "Telefono", "Your phone number": "Tu numero de telefono", "Does this phone number have WhatsApp?": "¿Este numero de telefono tiene WhatsApp?", "Yes": "Si", "No": "No"
   },
   fr: {
     "Home": "Accueil", "Services": "Services", "Safety": "Securite", "Contact": "Contact", "Back to top": "Retour en haut", "Privacy Policy": "Politique de confidentialite", "Footer": "Pied de page", "Menu": "Menu",
@@ -71,7 +71,7 @@ const exactTranslations = {
     "Trip cart": "Panier de voyage", "Request all": "Tout demander", "Clear cart": "Vider le panier", "Service request": "Demande de service", "Full name": "Nom complet", "Phone number": "Telephone",
     "Coverage": "Couverture", "Basic insurance": "Assurance de base", "Full cover": "Couverture complete", "Rent a car rates": "Tarifs location de voiture", "Showing": "Affichage", "Category": "Categorie", "Transmission": "Transmission",
     "Available shuttle routes": "Routes de navette disponibles", "Schedule": "Horaire", "Stops": "Arrets", "Tour details": "Details de l'excursion", "Overview": "Apercu", "Cost": "Cout", "Included": "Inclus",
-    "Recommendations": "Recommandations", "What to expect": "A quoi s'attendre", "Show Prices": "Voir les prix", "/ Adult": "/ Adulte", "Departure": "Depart", "Close": "Fermer"
+    "Recommendations": "Recommandations", "What to expect": "A quoi s'attendre", "Show Prices": "Voir les prix", "/ Adult": "/ Adulte", "Departure": "Depart", "Close": "Fermer", "Phone": "Telephone", "Your phone number": "Votre numero de telephone", "Does this phone number have WhatsApp?": "Ce numero de telephone a-t-il WhatsApp ?", "Yes": "Oui", "No": "Non"
   }
 };
 
