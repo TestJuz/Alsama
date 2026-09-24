@@ -944,13 +944,13 @@ function answerPromotionQuestion(language) {
 
   return {
     title: copy.eyebrow,
-    body: `${copy.title} - ${copy.validUntil}\n${getPromotionRateLines(promotion, copy)}\n${copy.includesTitle}: ${copy.includes.join(", ")}. ${copy.excludesTitle}: ${copy.excludes.join(", ")}.`,
+    body: `${copy.title} — ${copy.validUntil}\n\n${copy.eligibilityNote}\n\n${getPromotionRateLines(promotion, copy)}\n\n${copy.includesTitle}: ${copy.includes.join(", ")}.\n${copy.excludesTitle}: ${copy.excludes.join(", ")}.`,
     items: [
       {
         type: "promotion",
         label: copy.title,
         eyebrow: copy.eyebrow,
-        description: copy.intro,
+        description: `${copy.intro} ${copy.eligibilityNote}`,
         price: getPromotionPriceSummary(promotion),
         meta: [copy.validUntil, ...copy.highlights],
         href: { pathname: routes.home, hash: "#promos" }
