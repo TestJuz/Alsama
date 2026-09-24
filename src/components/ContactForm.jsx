@@ -36,6 +36,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
     const name = String(data.get("name") || "").trim();
     const email = String(data.get("email") || "").trim();
     const phone = String(data.get("phone") || "").trim();
+    const hasWhatsApp = String(data.get("hasWhatsApp") || "").trim();
     const message = String(data.get("message") || "").trim();
     const selectedItems = formatCartItems(items);
 
@@ -53,6 +54,7 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
           name,
           email,
           phone,
+          whatsapp_on_this_number: hasWhatsApp === "yes" ? "Yes" : "No",
           message,
           selected_items: selectedItems,
           _replyto: email,
@@ -125,6 +127,19 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
                 autoComplete="tel"
                 placeholder={t("Your phone number")}
               />
+            </div>
+          </label>
+          <label className="control">
+            {t("Does this phone number have WhatsApp?")}
+            <div className="rate-choice">
+              <label>
+                <input type="radio" name="hasWhatsApp" value="yes" required />
+                <span>{t("Yes")}</span>
+              </label>
+              <label>
+                <input type="radio" name="hasWhatsApp" value="no" />
+                <span>{t("No")}</span>
+              </label>
             </div>
           </label>
           <label className="form__field form__field--message">
