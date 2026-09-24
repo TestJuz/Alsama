@@ -181,7 +181,7 @@ export const sanJoseFeaturedTours = [
     difficulty: "Easy",
     people: "",
     duration: "14 Hours",
-    price: 173.94,
+    price: 150.17,
     image: sourceTourImages.manuelAntonio,
     imagePosition: "center 52%"
   },
@@ -192,7 +192,7 @@ export const sanJoseFeaturedTours = [
     difficulty: "Easy",
     people: "",
     duration: "13 Hours",
-    price: 208.49,
+    price: 180,
     image: sourceTourImages.arenal,
     imagePosition: "center 50%"
   },
@@ -203,7 +203,7 @@ export const sanJoseFeaturedTours = [
     difficulty: "Easy",
     people: "",
     duration: "10 Hours",
-    price: 207.29,
+    price: 178.97,
     image: sourceTourImages.natureCombo,
     imagePosition: "center 44%"
   }
@@ -217,7 +217,7 @@ export const jacoFeaturedTours = [
     difficulty: "Medium",
     people: "",
     duration: "4 Hours",
-    price: 92.69,
+    price: 68.14,
     image: sourceTourImages.aerialTramHighRope,
     imagePosition: "center 44%"
   },
@@ -228,35 +228,35 @@ export const jacoFeaturedTours = [
     difficulty: "Medium",
     people: "",
     duration: "1 Day",
-    price: 182.42,
+    price: 157.5,
     image: sourceTourImages.whiteWaterRafting,
     imagePosition: "center 42%"
   }
 ];
 
 export const sanJoseTours = [
-  makeTour("Manuel Antonio", 173.94, { origin: "san-jose", galleryFolder: "sj/Manuel_Antonio", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.manuelAntonio, locations: ["Manuel Antonio", "Quepos"], people: "", excerpt: "Guided national park trails, Pacific coast scenery, tropical wildlife and beach time.", sourceUrl: "https://alsamatourscr.com/trip/manuel-antonio/" }),
-  makeTour("Beach Day", 198.56, { origin: "san-jose", galleryFolder: "sj/Beach_Day", durationText: "12 Hours", durationHours: 12, image: sourceTourImages.beachDay, locations: ["Central Pacific"], excerpt: "A relaxed Pacific beach day with resort access, lunch, natural trails and butterfly garden time.", sourceUrl: "https://alsamatourscr.com/trip/beach-day/" }),
-  makeTour("Nature Combo", 207.29, { origin: "san-jose", galleryFolder: "sj/Natural_Combo", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.natureCombo, locations: ["Alajuela", "Poas", "La Paz"], excerpt: "Coffee culture, Poas Volcano, La Paz waterfalls, wildlife sanctuary trails and buffet lunch.", sourceUrl: "https://alsamatourscr.com/trip/nature-combo/" }),
-  makeTour("City Bus", 87.86, { origin: "san-jose", galleryFolder: "sj/City_Bus", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.cityBus, locations: ["San Jose"], excerpt: "A double-decker San Jose city tour with museums, markets, historic stops and a local meal.", sourceUrl: "https://alsamatourscr.com/trip/city-bus/" }),
-  makeTour("La Paz Waterfall Gardens", 142.96, { origin: "san-jose", galleryFolder: "sj/La_Paz_Waterfall_Gardens", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.laPazWaterfall, locations: ["Alajuela", "Vara Blanca", "La Paz"], excerpt: "Waterfall trails, lush rainforest and a wildlife sanctuary with lunch from San Jose.", sourceUrl: "https://alsamatourscr.com/trip/la-paz-waterfall-gardens/" }),
-  makeTour("Irazu Volcano, Orosi Valley & Lankester Botanic Garden", 142.89, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Orisi_Valley_&_Lankester_Botanic_Garden", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.irazuOrosi, locations: ["Cartago", "Irazu", "Orosi", "Lankester"], excerpt: "Cartago history, Irazu Volcano, Orosi Valley and Lankester Botanic Garden in one scenic route.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-orosi-valley-lankester-botanic-garden/" }),
-  makeTour("Premium Tortuga Island Tour", 172.08, { origin: "san-jose", galleryFolder: "sj/Premium Tortuga Island_Tour", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.premiumTortuga, locations: ["Isla Tortuga", "Gulf of Nicoya"], excerpt: "A premium island day with turquoise water, beach time, ocean views and activities in the Gulf of Nicoya.", sourceUrl: "https://alsamatourscr.com/trip/premium-tortuga-island-tour/" }),
-  makeTour("Arenal Volcano and Hot Springs", 208.49, { origin: "san-jose", galleryFolder: "sj/Arenal_Volcano_and_Hot_Springs", durationText: "13 Hours", durationHours: 13, image: sourceTourImages.arenal, locations: ["Arenal", "La Fortuna", "Sarchi"], excerpt: "Arenal views, Sarchi culture, volcano viewpoint stops and time to relax in hot springs.", sourceUrl: "https://alsamatourscr.com/trip/arenal-volcano-and-hot-springs/" }),
-  makeTour("Typical Dinner and Folklore Show", 99.28, { origin: "san-jose", galleryFolder: "sj/Typical_Dinner_and_Folklore_Show", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.folklore, locations: ["San Jose", "Central Valley"], excerpt: "A traditional Costa Rican evening with local dinner, music, dance and cultural performances.", sourceUrl: "https://alsamatourscr.com/trip/typical-dinner-and-folklore-show/" }),
-  makeTour("Irazu Volcano Halfday", 90.46, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A shorter route to Irazu Volcano with Cartago scenery, crater views and Basilica history.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
+  makeTour("Manuel Antonio", 150.17, { origin: "san-jose", galleryFolder: "sj/Manuel_Antonio", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.manuelAntonio, locations: ["Manuel Antonio", "Quepos"], people: "", excerpt: "Guided national park trails, Pacific coast scenery, tropical wildlife and beach time.", sourceUrl: "https://alsamatourscr.com/trip/manuel-antonio/" }),
+  makeTour("Beach Day", 171.43, { origin: "san-jose", galleryFolder: "sj/Beach_Day", durationText: "12 Hours", durationHours: 12, image: sourceTourImages.beachDay, locations: ["Central Pacific"], excerpt: "A relaxed Pacific beach day with resort access, lunch, natural trails and butterfly garden time.", sourceUrl: "https://alsamatourscr.com/trip/beach-day/" }),
+  makeTour("Nature Combo", 178.97, { origin: "san-jose", galleryFolder: "sj/Natural_Combo", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.natureCombo, locations: ["Alajuela", "Poas", "La Paz"], excerpt: "Coffee culture, Poas Volcano, La Paz waterfalls, wildlife sanctuary trails and buffet lunch.", sourceUrl: "https://alsamatourscr.com/trip/nature-combo/" }),
+  makeTour("City Bus", 75.86, { origin: "san-jose", galleryFolder: "sj/City_Bus", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.cityBus, locations: ["San Jose"], excerpt: "A double-decker San Jose city tour with museums, markets, historic stops and a local meal.", sourceUrl: "https://alsamatourscr.com/trip/city-bus/" }),
+  makeTour("La Paz Waterfall Gardens", 123.43, { origin: "san-jose", galleryFolder: "sj/La_Paz_Waterfall_Gardens", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.laPazWaterfall, locations: ["Alajuela", "Vara Blanca", "La Paz"], excerpt: "Waterfall trails, lush rainforest and a wildlife sanctuary with lunch from San Jose.", sourceUrl: "https://alsamatourscr.com/trip/la-paz-waterfall-gardens/" }),
+  makeTour("Irazu Volcano, Orosi Valley & Lankester Botanic Garden", 123.37, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Orisi_Valley_&_Lankester_Botanic_Garden", durationText: "10 Hours", durationHours: 10, image: sourceTourImages.irazuOrosi, locations: ["Cartago", "Irazu", "Orosi", "Lankester"], excerpt: "Cartago history, Irazu Volcano, Orosi Valley and Lankester Botanic Garden in one scenic route.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-orosi-valley-lankester-botanic-garden/" }),
+  makeTour("Premium Tortuga Island Tour", 148.57, { origin: "san-jose", galleryFolder: "sj/Premium Tortuga Island_Tour", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.premiumTortuga, locations: ["Isla Tortuga", "Gulf of Nicoya"], excerpt: "A premium island day with turquoise water, beach time, ocean views and activities in the Gulf of Nicoya.", sourceUrl: "https://alsamatourscr.com/trip/premium-tortuga-island-tour/" }),
+  makeTour("Arenal Volcano and Hot Springs", 180, { origin: "san-jose", galleryFolder: "sj/Arenal_Volcano_and_Hot_Springs", durationText: "13 Hours", durationHours: 13, image: sourceTourImages.arenal, locations: ["Arenal", "La Fortuna", "Sarchi"], excerpt: "Arenal views, Sarchi culture, volcano viewpoint stops and time to relax in hot springs.", sourceUrl: "https://alsamatourscr.com/trip/arenal-volcano-and-hot-springs/" }),
+  makeTour("Typical Dinner and Folklore Show", 85.71, { origin: "san-jose", galleryFolder: "sj/Typical_Dinner_and_Folklore_Show", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.folklore, locations: ["San Jose", "Central Valley"], excerpt: "A traditional Costa Rican evening with local dinner, music, dance and cultural performances.", sourceUrl: "https://alsamatourscr.com/trip/typical-dinner-and-folklore-show/" }),
+  makeTour("Irazu Volcano Halfday", 78.1, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A shorter route to Irazu Volcano with Cartago scenery, crater views and Basilica history.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
 ];
 
 export const jacoTours = [
-  makeTour("White Water Rafting", 182.42, { origin: "jaco", galleryFolder: "jaco/White _Water_Rafting", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.whiteWaterRafting, locations: ["Central Pacific", "Rio Savegre", "Rio Naranjo"], excerpt: "Rafting routes for families or adrenaline seekers with river scenery, guide support and meals.", sourceUrl: "https://alsamatourscr.com/trip/white-water-rafting/" }),
-  makeTour("Half day pass: Aerial Tram and High Rope Circuit", 92.69, { origin: "jaco", galleryFolder: "jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.aerialTramHighRope, locations: ["Jaco", "Central Pacific"], excerpt: "Aerial tram forest views paired with canopy-style adventure and a high rope circuit.", sourceUrl: "https://alsamatourscr.com/trip/half-day-pass-aerial-tram-and-high-rope-circuit/" }),
-  makeTour("Carara National Park", 115.83, { origin: "jaco", galleryFolder: "jaco/Carara_National_Park", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.carara, locations: ["Jaco", "Carara", "Tarcoles"], excerpt: "Guided trails through transitional forest with birdlife, scarlet macaws and a Tarcoles River stop.", sourceUrl: "https://alsamatourscr.com/trip/carara-national-park/" }),
-  makeTour("Aerial Tram", 113.19, { origin: "jaco", galleryFolder: "jaco/Aerial_Tram", durationText: "2 Hours", durationHours: 2, difficulty: "Medium", image: sourceTourImages.aerialTram, locations: ["Jaco", "Central Pacific"], excerpt: "A peaceful aerial tram ride through transitional rainforest with Pacific views and guided nature insight.", sourceUrl: "https://alsamatourscr.com/trip/aerial-tram/" }),
-  makeTour("Monkey Mangrove Tour", 91.01, { origin: "jaco", galleryFolder: "jaco/Monkey_Mangrove_Tour", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.monkeyMangrove, locations: ["Jaco", "Los Suenos", "Mangroves"], excerpt: "A mangrove boat tour with white-faced monkeys, birds, reptiles and tropical river scenery.", sourceUrl: "https://alsamatourscr.com/trip/monkey-mangrove-tour/" }),
+  makeTour("White Water Rafting", 157.5, { origin: "jaco", galleryFolder: "jaco/White _Water_Rafting", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.whiteWaterRafting, locations: ["Central Pacific", "Rio Savegre", "Rio Naranjo"], excerpt: "Rafting routes for families or adrenaline seekers with river scenery, guide support and meals.", sourceUrl: "https://alsamatourscr.com/trip/white-water-rafting/" }),
+  makeTour("Half day pass: Aerial Tram and High Rope Circuit", 68.14, { origin: "jaco", galleryFolder: "jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.aerialTramHighRope, locations: ["Jaco", "Central Pacific"], excerpt: "Aerial tram forest views paired with canopy-style adventure and a high rope circuit.", sourceUrl: "https://alsamatourscr.com/trip/half-day-pass-aerial-tram-and-high-rope-circuit/" }),
+  makeTour("Carara National Park", 100, { origin: "jaco", galleryFolder: "jaco/Carara_National_Park", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.carara, locations: ["Jaco", "Carara", "Tarcoles"], excerpt: "Guided trails through transitional forest with birdlife, scarlet macaws and a Tarcoles River stop.", sourceUrl: "https://alsamatourscr.com/trip/carara-national-park/" }),
+  makeTour("Aerial Tram", 69, { origin: "jaco", galleryFolder: "jaco/Aerial_Tram", durationText: "2 Hours", durationHours: 2, difficulty: "Medium", image: sourceTourImages.aerialTram, locations: ["Jaco", "Central Pacific"], excerpt: "A peaceful aerial tram ride through transitional rainforest with Pacific views and guided nature insight.", sourceUrl: "https://alsamatourscr.com/trip/aerial-tram/" }),
+  makeTour("Monkey Mangrove Tour", 78.57, { origin: "jaco", galleryFolder: "jaco/Monkey_Mangrove_Tour", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.monkeyMangrove, locations: ["Jaco", "Los Suenos", "Mangroves"], excerpt: "A mangrove boat tour with white-faced monkeys, birds, reptiles and tropical river scenery.", sourceUrl: "https://alsamatourscr.com/trip/monkey-mangrove-tour/" }),
   makeTour("Waterfall Experience Tour", 108.36, { origin: "jaco", galleryFolder: "jaco/Waterfall_Experience_Tour", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.waterfallExperience, locations: ["Jaco", "Central Pacific"], excerpt: "A 4x4 waterfall adventure with jungle scenery, natural pools, swimming and optional jumps.", sourceUrl: "https://alsamatourscr.com/trip/waterfall-experience-tour/" }),
-  makeTour("Tranopy Tour", 85.08, { origin: "jaco", galleryFolder: "jaco/Tranopy_Tour", durationText: "4 Hours", durationHours: 4, image: sourceTourImages.tranopy, locations: ["Jaco", "Central Pacific"], excerpt: "Canopy-style forest adventure with elevated platforms, Pacific views and aerial tram scenery.", sourceUrl: "https://alsamatourscr.com/trip/tranopy-tour/" }),
-  makeTour("Tortuga Island Tour", 182.01, { origin: "jaco", galleryFolder: "jaco/Tortuga_Island_Tour", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.tortugaIsland, locations: ["Jaco", "Los Suenos", "Isla Tortuga"], excerpt: "A yacht or catamaran trip from the Jaco area to Tortuga Island with beach time and lunch.", sourceUrl: "https://alsamatourscr.com/trip/tortuga-island-tour/" }),
-  makeTour("Chocolate Tour", 41.37, { origin: "jaco", galleryFolder: "jaco/Chocolate_Tour", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.chocolate, locations: ["Puntarenas", "Jaco"], excerpt: "A chocolate experience with a forest walk, cacao history, hands-on production and tasting.", sourceUrl: "https://alsamatourscr.com/trip/chocolate-tour/" })
+  makeTour("Tranopy Tour", 73.46, { origin: "jaco", galleryFolder: "jaco/Tranopy_Tour", durationText: "4 Hours", durationHours: 4, image: sourceTourImages.tranopy, locations: ["Jaco", "Central Pacific"], excerpt: "Canopy-style forest adventure with elevated platforms, Pacific views and aerial tram scenery.", sourceUrl: "https://alsamatourscr.com/trip/tranopy-tour/" }),
+  makeTour("Tortuga Island Tour", 157.14, { origin: "jaco", galleryFolder: "jaco/Tortuga_Island_Tour", durationText: "8 Hours", durationHours: 8, image: sourceTourImages.tortugaIsland, locations: ["Jaco", "Los Suenos", "Isla Tortuga"], excerpt: "A yacht or catamaran trip from the Jaco area to Tortuga Island with beach time and lunch.", sourceUrl: "https://alsamatourscr.com/trip/tortuga-island-tour/" }),
+  makeTour("Chocolate Tour", 64.29, { origin: "jaco", galleryFolder: "jaco/Chocolate_Tour", durationText: "2 Hours", durationHours: 2, image: sourceTourImages.chocolate, locations: ["Puntarenas", "Jaco"], excerpt: "A chocolate experience with a forest walk, cacao history, hands-on production and tasting.", sourceUrl: "https://alsamatourscr.com/trip/chocolate-tour/" })
 ];
 
 
@@ -590,4 +590,3 @@ export function getAllTours() {
 export function findTourBySlug(slug) {
   return getAllTours().find((tour) => tour.slug === slug);
 }
-
