@@ -65,6 +65,7 @@ export function App() {
     <Suspense fallback={null}>
       <ScrollManager />
       <Routes>
+        <Route path="/" element={<Navigate replace to={routes.home} />} />
         <Route path={routes.home} element={<HomePage />} />
         <Route path={routes.shuttle} element={<ShuttlePage />} />
         <Route path={routes.privateTransport} element={<PrivateTransportPage />} />
