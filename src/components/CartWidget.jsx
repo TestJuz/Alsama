@@ -13,7 +13,7 @@ import {
 import { buildTourMeta, getTourBookingTotal } from "../lib/tourBooking";
 import { getRentalRateBreakdown } from "../lib/rentacarRates";
 
-const CONTACT_EMAIL = "jeaustin.rdz@gmail.com";
+const CONTACT_EMAIL = "info@alsamatourscr.com";
 const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 const SERVICE_REQUEST_SUBJECT = "Service Request from Website";
 const coverageOptions = [
@@ -208,6 +208,7 @@ export function CartWidget() {
     const fullName = String(data.get("fullName") || "").trim();
     const email = String(data.get("email") || "").trim();
     const phone = String(data.get("phone") || "").trim();
+    const hasWhatsApp = String(data.get("hasWhatsApp") || "").trim();
     const isCostaRicanNational = String(data.get("isCostaRicanNational") || "no");
     const nationalCedula = String(data.get("nationalCedula") || "").trim();
 
@@ -230,6 +231,7 @@ export function CartWidget() {
           full_name: fullName,
           email,
           phone,
+          whatsapp_on_this_number: hasWhatsApp === "yes" ? "Yes" : "No",
           national_discount: hasNationalDiscountEligibleItems ? "10% for Costa Rican nationals" : "Not applicable",
           costa_rican_national: isCostaRicanNational === "yes" ? "Yes" : "No",
           cedula: isCostaRicanNational === "yes" ? nationalCedula : "Not provided",
@@ -580,6 +582,19 @@ export function CartWidget() {
                 <div className="form__control">
                   <Phone size={18} aria-hidden="true" />
                   <input name="phone" type="tel" required placeholder="Phone number" autoComplete="tel" />
+                </div>
+              </label>
+              <label className="control">
+                Does this phone number have WhatsApp?
+                <div className="rate-choice">
+                  <label>
+                    <input type="radio" name="hasWhatsApp" value="yes" required />
+                    <span>Yes</span>
+                  </label>
+                  <label>
+                    <input type="radio" name="hasWhatsApp" value="no" />
+                    <span>No</span>
+                  </label>
                 </div>
               </label>
               {hasNationalDiscountEligibleItems ? (
