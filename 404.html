@@ -12,8 +12,8 @@
     </style>
     <script>
       (function () {
-        var base = "/Alsama";
-        var path = window.location.pathname.replace(base, "") || "/";
+        var base = "";
+        var path = window.location.pathname || "/";
         var hash = window.location.hash ? window.location.hash.slice(1) : "";
         var query = new URLSearchParams();
         query.set("p", path);

@@ -25,14 +25,14 @@
         var redirectHash = params.get("h");
         if (!redirectPath) return;
 
-        var base = "/Alsama/".replace(/\/$/, "");
+        var base = "/".replace(/\/$/, "");
         var normalizedPath = redirectPath.startsWith("/") ? redirectPath : "/" + redirectPath;
         var nextHash = redirectHash ? "#" + redirectHash : window.location.hash;
         window.history.replaceState(null, "", base + normalizedPath + nextHash);
       })();
     </script>
-    <script type="module" crossorigin src="/Alsama/assets/index-BBgtxjyv.js"></script>
-    <link rel="stylesheet" crossorigin href="/Alsama/assets/index-BbFmI0dk.css">
+    <script type="module" crossorigin src="/assets/index-BW4cuurF.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-lFeuS-X0.css">
   </head>
   <body>
     <div id="root"></div>
