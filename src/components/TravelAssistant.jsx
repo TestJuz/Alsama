@@ -99,6 +99,7 @@ export function TravelAssistant() {
   const [catalogQuery, setCatalogQuery] = useState("");
   const [category, setCategory] = useState("all");
   const [typing, setTyping] = useState(null);
+  const [hasAskedQuestion, setHasAskedQuestion] = useState(false);
 
   const catalogItems = useMemo(
     () => searchTravelAssistantItems(catalogQuery, category, 18),
@@ -194,6 +195,7 @@ export function TravelAssistant() {
     const answer = baseAnswer.items?.length
       ? baseAnswer
       : { ...baseAnswer, contact: buildAgentContact(value, language) };
+    setHasAskedQuestion(true);
     setMessages((current) => [...current, { role: "user", body: value }]);
     setTyping({
       role: "assistant",
@@ -299,13 +301,15 @@ export function TravelAssistant() {
                 ) : null}
               </div>
 
-              <div className="assistant-suggestions" aria-label="Suggested questions">
-                {suggestions.map((item) => (
-                  <button key={item} type="button" onClick={() => ask(item)}>
-                    {item}
-                  </button>
-                ))}
-              </div>
+              {!hasAskedQuestion ? (
+                <div className="assistant-suggestions" aria-label="Suggested questions">
+                  {suggestions.map((item) => (
+                    <button key={item} type="button" onClick={() => ask(item)}>
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
 
               <form className="assistant-form" onSubmit={submitQuestion}>
                 <label className="sr-only" htmlFor="assistantQuestion">Ask or pregunta sobre viajes</label>
