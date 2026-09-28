@@ -270,7 +270,7 @@ export function TourDetailPage() {
                   {gallery.map((image, index) => (
                     <SwiperSlide key={image}>
                       <button className="tour-gallery-carousel__zoom" type="button" style={{ "--tour-slide-image": cssImageUrl(image) }} aria-label={`${t("Open")} ${t(tour.title)} ${t("image")} ${index + 1}`} onClick={() => setGalleryIndex(index)}>
-                        <img src={image} alt={`${t(tour.title)} ${t("gallery")} ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} />
+                        <img src={image} alt={`${t(tour.title)} ${t("gallery")} ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
                       </button>
                     </SwiperSlide>
                   ))}
@@ -409,7 +409,7 @@ export function TourDetailPage() {
             <div className="tour-related-grid">
               {related.map((item) => (
                 <article className="tour-related-card" key={item.slug}>
-                  <img src={item.image} alt={`${t(item.title)} tour in Costa Rica`} loading="lazy" />
+                  <img src={item.image} alt={`${t(item.title)} tour in Costa Rica`} loading="lazy" decoding="async" />
                   <div>
                     <span>{formatUSD(item.price)}</span>
                     <h3>{t(item.title)}</h3>
