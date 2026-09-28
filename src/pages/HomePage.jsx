@@ -38,6 +38,7 @@ import {
   routes,
   sanJoseFeaturedTours,
 } from "../lib/site";
+import { destinationImageAlt, serviceImageAlt, tourFromImageAlt } from "../lib/imageAlt";
 
 const trustHighlights = [
   { icon: Sparkles, title: "10% national discount" },
@@ -378,7 +379,7 @@ function RatingStars({ label = "Rated 5 out of 5 on Tripadvisor" }) {
 }
 
 function DestinationMap() {
-  const { localize } = useLanguage();
+  const { localize, language, t } = useLanguage();
   const mapRef = useRef(null);
   const [activeDestination, setActiveDestination] = useState(destinations[1]);
   const activeRoute = activeDestination.route || [];
@@ -489,7 +490,7 @@ function DestinationMap() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28 }}
         >
-          <img src={activeDestination.image} alt={`${activeDestination.name} travel route in Costa Rica`} />
+          <img src={activeDestination.image} alt={destinationImageAlt(t(activeDestination.name), language)} />
           <div className="home-route-card__body">
             <span>{activeDestination.label}</span>
             <h3>{activeDestination.name}</h3>
@@ -515,7 +516,7 @@ function DestinationMap() {
 }
 
 export function HomePage() {
-  const { localize } = useLanguage();
+  const { localize, language, t } = useLanguage();
 
   return (
     <SiteLayout
@@ -641,7 +642,7 @@ export function HomePage() {
                   <>
                     <img
                       src={service.image}
-                      alt={service.alt}
+                      alt={serviceImageAlt(service.title, language)}
                       loading="lazy"
                       decoding="async"
                       style={service.imagePosition ? { objectPosition: service.imagePosition } : undefined}
@@ -729,7 +730,7 @@ export function HomePage() {
               {featuredPicks.map((tour, index) => (
                 <MotionBlock className="home-pick-shell" delay={index * 0.05} key={`${tour.title}-${tour.origin}`}>
                   <Link className="home-pick" to={localize(tour.detailPath)} aria-label={`View ${tour.title} tour details`}>
-                    <img src={tour.image} alt={`${tour.title} tour from ${tour.location}, Costa Rica`} loading="lazy" decoding="async" style={{ objectPosition: tour.imagePosition }} />
+                    <img src={tour.image} alt={tourFromImageAlt(t(tour.title), t(tour.location), language)} loading="lazy" decoding="async" style={{ objectPosition: tour.imagePosition }} />
                     <div>
                       <span>{tour.location}</span>
                       <h3>{tour.title}</h3>
