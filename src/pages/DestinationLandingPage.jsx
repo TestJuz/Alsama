@@ -177,7 +177,7 @@ function formatUSD(value) {
 
 export function DestinationLandingPage() {
   const location = useLocation();
-  const { language, localize } = useLanguage();
+  const { language, localize, t } = useLanguage();
   const basePath = stripLanguagePrefix(location.pathname);
   const page = landingPages[basePath];
 
@@ -219,13 +219,13 @@ export function DestinationLandingPage() {
                   </div>
                   <div className="card__body">
                     <div className="card__meta">
-                      <span className="badge">{tour.originLabel}</span>
+                      <span className="badge">{t(tour.originLabel)}</span>
                       {tour.locations.slice(0, 2).map((place) => <span className="badge" key={place}>{place}</span>)}
                     </div>
-                    <h3 className="card__title">{tour.title}</h3>
-                    <p className="card__desc">{tour.excerpt}</p>
+                    <h3 className="card__title">{t(tour.title)}</h3>
+                    <p className="card__desc">{t(tour.excerpt)}</p>
                     <div className="price-row">
-                      <div><span className="muted">{tour.durationText}</span></div>
+                      <div><span className="muted">{t(tour.durationText)}</span></div>
                       <div className="price">{formatUSD(tour.price)}</div>
                     </div>
                     <Link className="btn btn--primary" to={localize(getTourDetailPath(tour))}>
