@@ -85,7 +85,6 @@ export function App() {
         <Route path={routes.hotels} element={<HotelsPage />} />
         <Route path={routes.privacy} element={<PrivacyPolicyPage />} />
         <Route path={routes.thankYou} element={<ThankYouPage />} />
-        <Route path={routes.toursSanJose} element={<Navigate replace to={`${routes.tours}#from-san-jose`} />} />
         <Route path={routes.toursSanJose} element={<DestinationLandingPage />} />
         <Route path={routes.toursJaco} element={<DestinationLandingPage />} />
         <Route path={routes.manuelAntonioDestination} element={<DestinationLandingPage />} />
