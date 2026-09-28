@@ -42,7 +42,7 @@ export function NotFoundPage() {
         <section className="section">
           <div className="container not-found-links">
             {helpfulLinks.map((item) => (
-              <Link className="not-found-card" key={item.to} to={item.to}>
+              <Link className="not-found-card" key={item.to} to={localize(item.to)}>
                 <strong>{item.label}</strong>
                 <span>{item.text}</span>
                 <ArrowRight size={17} aria-hidden="true" />
