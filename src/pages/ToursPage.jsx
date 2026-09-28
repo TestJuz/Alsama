@@ -6,6 +6,7 @@ import { NationalDiscountBanner } from "../components/NationalDiscountBanner";
 import { SiteLayout } from "../components/SiteLayout";
 import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 import { asset, getAllTours, getTourDetailPath, routes, tourOrigins } from "../lib/site";
 
 const origins = [
@@ -18,6 +19,8 @@ function formatUSD(value) {
 }
 
 function TourCard({ item, onAdd, onOpenGallery, preview = false }) {
+  const { localize } = useLanguage();
+
   return (
     <article className={`card${preview ? " card--preview" : ""}`} aria-hidden={preview ? "true" : undefined}>
       <div className="card__media">
@@ -50,7 +53,7 @@ function TourCard({ item, onAdd, onOpenGallery, preview = false }) {
         </div>
 
         <div className="card__actions">
-          <Link className="btn btn--ghost" to={getTourDetailPath(item)} tabIndex={preview ? -1 : undefined}>View details</Link>
+          <Link className="btn btn--ghost" to={localize(getTourDetailPath(item))} tabIndex={preview ? -1 : undefined}>View details</Link>
           <button className="btn btn--primary card__cta" type="button" onClick={() => onAdd(item)} tabIndex={preview ? -1 : undefined}>
             Add to cart
           </button>
