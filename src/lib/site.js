@@ -21,8 +21,8 @@ export function getLanguageFromPath(pathname = "/") {
 
 export function localizePath(pathname = "/", language = "en") {
   const base = stripLanguagePrefix(pathname);
-  if (language === "en") return base;
-  return `/${language}${base === "/" ? "" : base}`;
+  const localized = language === "en" ? base : `/${language}${base === "/" ? "" : base}`;
+  return localized === "/" ? "/" : `${localized}/`;
 }
 
 export const routes = {

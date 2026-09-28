@@ -1,16 +1,24 @@
 from pathlib import Path
-import sys
 from PIL import Image
 
-path = Path(sys.argv[1] if len(sys.argv) > 1 else "dist/og.png")
-if not path.exists():
-    raise SystemExit(f"Image not found: {path}")
+source = Path("dist/og.png")
+output = Path("dist/og.jpg")
+if not source.exists():
+    raise SystemExit(f"Image not found: {source}")
 
-before = path.stat().st_size
-with Image.open(path) as image:
+before = source.stat().st_size
+with Image.open(source) as image:
     image.load()
-    image.save(path, format="PNG", optimize=True, compress_level=9)
-after = path.stat().st_size
+    if image.mode in ("RGBA", "LA"):
+        background = Image.new("RGB", image.size, "white")
+        alpha = image.getchannel("A")
+        background.paste(image.convert("RGB"), mask=alpha)
+        image = background
+    else:
+        image = image.convert("RGB")
+    image.save(output, format="JPEG", quality=88, optimize=True, progressive=True, subsampling="4:2:0")
+
+after = output.stat().st_size
 saved = before - after
 pct = (saved / before * 100) if before else 0
-print(f"Optimized {path}: {before:,} -> {after:,} bytes ({pct:.1f}% smaller)")
+print(f"Optimized social image: {before:,} byte PNG -> {after:,} byte JPEG ({pct:.1f}% smaller)")
