@@ -87,7 +87,13 @@ Object.assign(exactTranslations.es, {
   "Compare tours from San Jose and Jaco without jumping between separate catalogs.": "Compara tours desde San José y Jacó sin cambiar entre catálogos separados.",
   "Choose where you are staying to see tours that fit your starting point and travel time.": "Elige dónde te hospedas para ver tours que se ajusten a tu punto de partida y tiempo de traslado.",
   "A guided rafting experience on Costa Rica's Central Pacific rivers, with rainforest scenery, safety support and organized logistics.": "Una experiencia guiada de rafting en ríos del Pacífico Central de Costa Rica, con paisaje tropical, apoyo de seguridad y logística organizada.",
-  "Explore San Jose by double-decker bus, with museums, markets, historic landmarks and a local meal.": "Explora San José en autobús de dos pisos, con museos, mercados, sitios históricos y una comida local."
+  "Explore San Jose by double-decker bus, with museums, markets, historic landmarks and a local meal.": "Explora San José en autobús de dos pisos, con museos, mercados, sitios históricos y una comida local.",
+  "Costa Rica private transfer guide": "Guía de transporte privado en Costa Rica",
+  "Plan common routes, pickup details, luggage and useful stops before booking.": "Planifica rutas comunes, recogida, equipaje y paradas útiles antes de reservar.",
+  "SJO airport transportation guide": "Guía de transporte desde el aeropuerto SJO",
+  "Plan arrivals from Juan Santamaria Airport to beaches, mountains and San Jose.": "Planifica llegadas desde el Aeropuerto Juan Santamaría hacia playas, montañas y San José.",
+  "Costa Rica Private Transfer Guide": "Guía de transporte privado en Costa Rica",
+  "SJO Airport Transportation Guide": "Guía de transporte desde el aeropuerto SJO"
 });
 Object.assign(exactTranslations.fr, {
   "Day tours from San Jose to volcanoes, wildlife, beaches, waterfalls and cultural attractions.": "Excursions à la journée depuis San José vers volcans, faune, plages, cascades et sites culturels.",
@@ -96,7 +102,13 @@ Object.assign(exactTranslations.fr, {
   "Compare tours from San Jose and Jaco without jumping between separate catalogs.": "Comparez les excursions depuis San José et Jacó sans passer d'un catalogue à l'autre.",
   "Choose where you are staying to see tours that fit your starting point and travel time.": "Choisissez votre lieu de séjour pour voir les excursions adaptées à votre point de départ et au temps de trajet.",
   "A guided rafting experience on Costa Rica's Central Pacific rivers, with rainforest scenery, safety support and organized logistics.": "Une expérience guidée de rafting sur les rivières du Pacifique central, avec forêt tropicale, encadrement de sécurité et logistique organisée.",
-  "Explore San Jose by double-decker bus, with museums, markets, historic landmarks and a local meal.": "Découvrez San José en bus à impériale, avec musées, marchés, sites historiques et repas local."
+  "Explore San Jose by double-decker bus, with museums, markets, historic landmarks and a local meal.": "Découvrez San José en bus à impériale, avec musées, marchés, sites historiques et repas local.",
+  "Costa Rica private transfer guide": "Guide des transferts privés au Costa Rica",
+  "Plan common routes, pickup details, luggage and useful stops before booking.": "Planifiez les itinéraires courants, la prise en charge, les bagages et les arrêts utiles avant de réserver.",
+  "SJO airport transportation guide": "Guide des transports depuis l'aéroport SJO",
+  "Plan arrivals from Juan Santamaria Airport to beaches, mountains and San Jose.": "Planifiez les arrivées depuis l'aéroport Juan Santamaría vers les plages, les montagnes et San José.",
+  "Costa Rica Private Transfer Guide": "Guide des transferts privés au Costa Rica",
+  "SJO Airport Transportation Guide": "Guide des transports depuis l'aéroport SJO"
 });
 
 i18next.init({
