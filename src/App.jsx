@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from "react";
-import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, useNavigate, useParams } from "react-router-dom";
 import { useLanguage } from "./context/LanguageContext";
 import { applySeo, getRouteSeo } from "./lib/seo";
 import { routes } from "./lib/site";
@@ -64,13 +64,18 @@ function ScrollManager() {
 
   return null;
 }
+function LegacyTourRedirect() {
+  const { tourSlug } = useParams();
+  return <Navigate replace to={`${routes.tours}/${tourSlug}`} />;
+}
+
 export function App() {
   return (
     <Suspense fallback={null}>
       <ScrollManager />
       <Routes>
-        <Route path="/" element={<Navigate replace to={routes.home} />} />
         <Route path={routes.home} element={<HomePage />} />
+        <Route path="/inicio" element={<Navigate replace to={routes.home} />} />
         <Route path={routes.shuttle} element={<ShuttlePage />} />
         <Route path={routes.privateTransport} element={<PrivateTransportPage />} />
         <Route path={routes.rentACar} element={<RentACarPage />} />
@@ -83,6 +88,7 @@ export function App() {
         <Route path={routes.toursJaco} element={<Navigate replace to={`${routes.tours}#from-jaco`} />} />
 
         <Route path="/index.html" element={<Navigate replace to={routes.home} />} />
+        <Route path="/trip/:tourSlug" element={<LegacyTourRedirect />} />
         <Route path="/Rent-A-Car/*" element={<Navigate replace to={routes.rentACar} />} />
         <Route path="/transport/shuttle.html" element={<Navigate replace to={routes.shuttle} />} />
         <Route path="/transport/private-transport.html" element={<Navigate replace to={routes.privateTransport} />} />
