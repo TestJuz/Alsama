@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Compass, Home, MessageCircle } from "lucide-react";
 import { SiteLayout } from "../components/SiteLayout";
+import { useLanguage } from "../context/LanguageContext";
 import { asset, homeLinks, routes } from "../lib/site";
 
 const helpfulLinks = [
@@ -10,6 +11,7 @@ const helpfulLinks = [
 ];
 
 export function NotFoundPage() {
+  const { localize } = useLanguage();
   return (
     <SiteLayout
       homeTo={homeLinks.home}
@@ -27,10 +29,10 @@ export function NotFoundPage() {
               hotels or a custom Costa Rica route.
             </p>
             <div className="not-found-hero__actions">
-              <Link className="btn btn--primary" to={routes.home}>
+              <Link className="btn btn--primary" to={localize(routes.home)}>
                 <Home size={17} aria-hidden="true" /> Back home
               </Link>
-              <Link className="btn btn--ghost" to={routes.tours}>
+              <Link className="btn btn--ghost" to={localize(routes.tours)}>
                 <Compass size={17} aria-hidden="true" /> Explore tours
               </Link>
             </div>
@@ -55,7 +57,7 @@ export function NotFoundPage() {
               <span>Need a quick answer?</span>
               <h2>Send us your route and we will point you the right way.</h2>
             </div>
-            <Link className="btn btn--primary" to={homeLinks.contact}>
+            <Link className="btn btn--primary" to={{ ...homeLinks.contact, pathname: localize(homeLinks.contact.pathname) }}>
               Contact Alsama <MessageCircle size={17} aria-hidden="true" />
             </Link>
           </div>
