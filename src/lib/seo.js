@@ -131,8 +131,9 @@ export function absoluteUrl(value = "") {
 }
 
 function canonicalUrl(pathname) {
-  const path = normalizePath(pathname).replace(/^\/+/, "");
-  return new URL(path, runtimeBaseUrl()).href;
+  const normalized = normalizePath(pathname);
+  const canonicalPath = normalized === "/" ? "/" : `${normalized}/`;
+  return new URL(canonicalPath.replace(/^\/+/, ""), runtimeBaseUrl()).href;
 }
 
 function routeKeyFromPath(pathname) {
