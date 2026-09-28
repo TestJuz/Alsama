@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ImageGalleryModal } from "./ImageGalleryModal";
 import { TourBookingModal } from "./TourBookingModal";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 import { getAllTours, getTourDetailPath } from "../lib/site";
 
 function formatUSD(value) {
@@ -35,7 +36,7 @@ function FeaturedCard({ item, origin, originLabel, onOpenGallery, onBook }) {
         <div className="card__priceRow">
           <span className="price">{formatUSD(item.price)}</span>
           <div className="card__actions card__actions--inline">
-            <Link className="btn btn--ghost" to={getTourDetailPath(item)}>View details</Link>
+            <Link className="btn btn--ghost" to={localize(getTourDetailPath(item))}>View details</Link>
             <button className="btn btn--ghost" type="button" onClick={handleAddToCart}>Add to cart</button>
           </div>
         </div>
@@ -45,6 +46,7 @@ function FeaturedCard({ item, origin, originLabel, onOpenGallery, onBook }) {
 }
 
 export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jacoHref }) {
+  const { localize } = useLanguage();
   const { addItem } = useCart();
   const [galleryState, setGalleryState] = useState(null);
   const [tourRequest, setTourRequest] = useState(null);
