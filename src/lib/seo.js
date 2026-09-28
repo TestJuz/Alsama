@@ -8,7 +8,7 @@ const pageSeo = {
   home: {
     path: routes.home,
     description: "Plan Costa Rica tours, private transport, shared shuttles, hotels and car rentals with Alsama Tours, a local travel team.",
-    image: "og.png"
+    image: "og.jpg"
   },
   shuttle: {
     path: routes.shuttle,
@@ -38,7 +38,7 @@ const pageSeo = {
   privacy: {
     path: routes.privacy,
     description: "Read the Alsama Tours privacy policy for website forms, cart requests, WhatsApp messages and travel service coordination.",
-    image: "og.png"
+    image: "og.jpg"
   },
   thankYou: {
     path: routes.thankYou,
@@ -48,7 +48,7 @@ const pageSeo = {
       fr: "Merci | Alsama Tours"
     },
     description: "Thank you for contacting Alsama Tours. Our local team will review your Costa Rica travel request.",
-    image: "og.png",
+    image: "og.jpg",
     robots: "noindex, follow"
   },
   toursSanJose: {
@@ -199,7 +199,7 @@ export function getRouteSeo(pathname, language = "en") {
     description: "This Alsama Tours page could not be found.",
     canonical: canonicalUrl(localizePath(routes.home, language)),
     alternates: buildAlternates(routes.home),
-    image: absoluteUrl("og.png"),
+    image: absoluteUrl("og.jpg"),
     type: "website",
     robots: "noindex, follow",
     schema: buildSchema(routes.home, language, title, "This Alsama Tours page could not be found.")
@@ -214,7 +214,7 @@ function buildSchema(basePath, language, title, description, tour) {
     "@id": `${siteBaseUrl}#local-business`,
     name: siteName,
     url: siteBaseUrl,
-    image: absoluteUrl("og.png"),
+    image: absoluteUrl("og.jpg"),
     email: "info@alsamatourscr.com",
     telephone: "+50661672539",
     priceRange: "$$",
@@ -246,7 +246,7 @@ function buildSchema(basePath, language, title, description, tour) {
     name: title,
     description,
     url: canonicalUrl(localizedPagePath),
-    image: tour ? absoluteUrl(tour.image) : absoluteUrl("og.png"),
+    image: tour ? absoluteUrl(tour.image) : absoluteUrl("og.jpg"),
     provider: { "@id": business["@id"] }
   };
 
