@@ -16,7 +16,7 @@
         var base = "";
         var path = (window.location.pathname || "/")
           .replace(/\\+/g, "/")
-          .replace(/\/index\\.html$/i, "")
+          .replace(/\/index\.html$/i, "")
           .replace(/\/{2,}/g, "/");
         var hash = window.location.hash ? window.location.hash.slice(1) : "";
         var query = new URLSearchParams();
