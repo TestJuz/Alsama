@@ -218,12 +218,12 @@ export function ToursPage() {
         <section className="section service-summary">
           <div className="container summary-grid">
             <article className="summary-card">
-              <h3>One tours page</h3>
-              <p className="muted">Compare departures from both San Jose and Jaco without jumping between services.</p>
+              <h3>One place to compare tours</h3>
+              <p className="muted">Compare tours from San Jose and Jaco without jumping between separate catalogs.</p>
             </article>
             <article className="summary-card">
               <h3>Filter by starting point</h3>
-              <p className="muted">Select where you are staying and see the tours that make sense from that area.</p>
+              <p className="muted">Choose where you are staying to see tours that fit your starting point and travel time.</p>
             </article>
             <article className="summary-card">
               <h3>10% national discount</h3>
