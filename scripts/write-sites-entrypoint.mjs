@@ -77,7 +77,7 @@ function descriptionFromPath(pathname) {
 }
 
 function withSeo(html, pathname) {
-  const canonical = `https://alsamatourscr.com${pathname}`;
+  const canonical = `https://alsamatourscr.com${pathname}/`.replace(/\/{2,}$/, "/");
   const title = titleFromPath(pathname);
   const description = descriptionFromPath(pathname);
 
@@ -90,6 +90,18 @@ function withSeo(html, pathname) {
     .replace(/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${canonical}" />`)
     .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${escapeHtml(title)}" />`)
     .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${escapeHtml(description)}" />`);
+}
+
+function withIndexRedirect(html, pathname) {
+  const canonical = `https://alsamatourscr.com${pathname}/`.replace(/\/{2,}$/, "/");
+  const redirectScript = `<script>
+      if (window.location.pathname.endsWith("/index.html")) {
+        window.location.replace("${pathname}/" + window.location.search + window.location.hash);
+      }
+    </script>`;
+  return html
+    .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${canonical}" />`)
+    .replace("</head>", `${redirectScript}\n  </head>`);
 }
 
 async function writeStaticRouteEntrypoints() {
@@ -106,9 +118,10 @@ async function writeStaticRouteEntrypoints() {
     const dir = path.join("dist", clean);
     await mkdir(dir, { recursive: true });
 
-    // Support both /route/ and extensionless /route on GitHub Pages.
-    await writeFile(path.join(dir, "index.html"), routeHtml);
-    await writeFile(path.join("dist", `${clean}.html`), routeHtml);
+    // GitHub Pages serves /route/ from /route/index.html.
+    // If a visitor explicitly requests /route/index.html, redirect client-side
+    // to the single canonical clean URL /route/ to prevent duplicate indexing.
+    await writeFile(path.join(dir, "index.html"), withIndexRedirect(routeHtml, pathname));
   }
 }
 
