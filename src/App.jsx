@@ -131,8 +131,8 @@ export function App() {
         <Route path="/Rent-A-Car/*" element={<Navigate replace to={routes.rentACar} />} />
         <Route path="/transport/shuttle.html" element={<Navigate replace to={routes.shuttle} />} />
         <Route path="/transport/private-transport.html" element={<Navigate replace to={routes.privateTransport} />} />
-        <Route path="/tours/SanJose/*" element={<Navigate replace to={`${routes.tours}#from-san-jose`} />} />
-        <Route path="/tours/Jaco/*" element={<Navigate replace to={`${routes.tours}#from-jaco`} />} />
+        <Route path="/tours/SanJose/*" element={<Navigate replace to={routes.toursSanJose} />} />
+        <Route path="/tours/Jaco/*" element={<Navigate replace to={routes.toursJaco} />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
