@@ -282,8 +282,8 @@ export const jacoTours = [
 
 
 export const tourOrigins = [
-  { value: "san-jose", label: "From San Jose", description: "Tours and experiences from the original San Jose catalog.", tours: sanJoseTours },
-  { value: "jaco", label: "From Jaco", description: "Adventure, beach, wildlife and nature tours from the original Jaco catalog.", tours: jacoTours }
+  { value: "san-jose", label: "From San Jose", description: "Day tours from San Jose to volcanoes, wildlife, beaches, waterfalls and cultural attractions.", tours: sanJoseTours },
+  { value: "jaco", label: "From Jaco", description: "Adventure, wildlife, rainforest and ocean tours departing from Jaco and the Central Pacific.", tours: jacoTours }
 ];
 
 export function getTourDetailPath(tour) {
