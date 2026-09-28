@@ -6,6 +6,7 @@ import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { Map, MapMarker, MapRoute, MarkerContent, MarkerPopup } from "./ui/map";
 import { asset } from "../lib/site";
+import { promotionImageAlt } from "../lib/imageAlt";
 import {
   getActivePromotion,
   getNextPromotion,
@@ -150,7 +151,7 @@ export function LimitedPromosSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
         >
-          <img src={asset(promotion.image)} alt={`${copy.title} ${copy.tagline}`} loading="lazy" />
+          <img src={asset(promotion.image)} alt={promotionImageAlt(copy.title, copy.tagline, language)} loading="lazy" />
           <div className="promo-visual__shade" />
           <div className="promo-visual__copy">
             <span>{copy.eyebrow}</span>
