@@ -11,6 +11,8 @@ function formatUSD(value) {
 }
 
 function FeaturedCard({ item, origin, originLabel, onOpenGallery, onBook }) {
+  const { localize } = useLanguage();
+
   function handleAddToCart() {
     onBook(item, origin, originLabel);
   }
@@ -46,7 +48,6 @@ function FeaturedCard({ item, origin, originLabel, onOpenGallery, onBook }) {
 }
 
 export function FeaturedToursSection({ sanJoseTours, jacoTours, sanJoseHref, jacoHref }) {
-  const { localize } = useLanguage();
   const { addItem } = useCart();
   const [galleryState, setGalleryState] = useState(null);
   const [tourRequest, setTourRequest] = useState(null);
