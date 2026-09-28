@@ -46,7 +46,7 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
       <div className="container nav">
         <Link className="brand" to={typeof brandTo === "string" ? localize(brandTo) : { ...brandTo, pathname: localize(brandTo.pathname) }}>
           <span className="brand__logo" aria-hidden="true">
-            <img src={asset("img/tortuga.png")} alt="Alsama Tours logo" className="brand__logo-img" />
+            <img src={asset("img/tortuga.png")} alt="" className="brand__logo-img" />
           </span>
           <span className="brand__text">Alsama Tours</span>
         </Link>
