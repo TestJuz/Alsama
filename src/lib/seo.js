@@ -1,4 +1,4 @@
-import { findTourBySlug, localizePath, routes, stripLanguagePrefix } from "./site";
+import { businessContact, findTourBySlug, localizePath, routes, stripLanguagePrefix } from "./site";
 import { getPageTitle, translateText } from "./nativeI18n";
 
 export const siteBaseUrl = "https://alsamatourscr.com/";
@@ -245,12 +245,14 @@ function buildSchema(basePath, language, title, description, tour) {
     url: siteBaseUrl,
     image: absoluteUrl("og.jpg"),
     email: "info@alsamatourscr.com",
-    telephone: "+50661672539",
+    telephone: businessContact.phoneHref.replace("tel:", ""),
     priceRange: "$$",
     sameAs: [
       "https://www.visitcostarica.com/planning-your-trip/local-agency/alsama-tours",
       "https://www.tripadvisor.com/Attraction_Review-g309293-d23810882-Reviews-Alsama_Tours-San_Jose_San_Jose_Metro_Province_of_San_Jose.html",
-      "https://www.getyourguide.com/ro-ro/alsama-tours-s308586/"
+      "https://www.getyourguide.com/ro-ro/alsama-tours-s308586/",
+      businessContact.facebook,
+      businessContact.instagram
     ],
     areaServed: [
       { "@type": "Country", name: "Costa Rica" },

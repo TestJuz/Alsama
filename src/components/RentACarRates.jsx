@@ -10,6 +10,7 @@ import {
 } from "../lib/bookingDates";
 import { getRentalRateBreakdown, rentACarRates } from "../lib/rentacarRates";
 import { asset } from "../lib/site";
+import { vehicleImageAlt } from "../lib/imageAlt";
 
 const periods = [
   { value: "diario", label: "Daily" },
@@ -432,7 +433,7 @@ export function RentACarRates() {
                 whileHover={{ y: -4 }}
               >
                 <div className="rent-vehicle-card__media">
-                  <img src={item.image} alt={item.title} loading="lazy" />
+                  <img src={item.image} alt={vehicleImageAlt(t(item.title), item.model, language)} loading="lazy" />
                 </div>
 
                 <div className="rent-vehicle-card__body">

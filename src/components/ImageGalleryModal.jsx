@@ -1,6 +1,9 @@
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
+import { galleryImageAlt } from "../lib/imageAlt";
 
 export function ImageGalleryModal({ gallery, title, index, onChangeIndex, onClose }) {
+  const { language, t } = useLanguage();
   if (!gallery?.length) return null;
 
   const currentImage = gallery[index] || gallery[0];
@@ -26,7 +29,7 @@ export function ImageGalleryModal({ gallery, title, index, onChangeIndex, onClos
             <ChevronLeft size={24} />
           </button>
         ) : null}
-        <img src={currentImage} alt={`${title} gallery image`} />
+        <img src={currentImage} alt={galleryImageAlt(t(title), index + 1, language)} />
         {hasMultiple ? (
           <button className="image-galleryModal__nav image-galleryModal__nav--next" type="button" aria-label="Next image" onClick={goToNext}>
             <ChevronRight size={24} />

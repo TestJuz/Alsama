@@ -11,6 +11,7 @@ import { ImageGalleryModal } from "../components/ImageGalleryModal";
 import { SiteLayout } from "../components/SiteLayout";
 import { useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 import {
   getOneBusinessDayAdvanceDateInputValue,
   isDateBeforeMinimumInput,
@@ -18,6 +19,7 @@ import {
 } from "../lib/bookingDates";
 import { hotelZones } from "../lib/hotels";
 import { asset, routes } from "../lib/site";
+import { hotelImageAlt } from "../lib/imageAlt";
 
 function formatUSD(value) {
   if (typeof value !== "number") return "Price on request";
@@ -212,6 +214,7 @@ function HotelRequestModal({
 
 export function HotelsPage() {
   const { addItem } = useCart();
+  const { language, t } = useLanguage();
   const [searchParams] = useSearchParams();
   const initialZone = hotelZones.some((zone) => zone.id === searchParams.get("zone")) ? searchParams.get("zone") : "all";
   const [zoneId, setZoneId] = useState(initialZone);
@@ -458,8 +461,8 @@ export function HotelsPage() {
                       className={`hotel-card${selectedHotel === hotel.hotel ? " hotel-card--active" : ""}`}
                     >
                       <div className="hotel-card__media">
-                        <button type="button" aria-label={`View ${hotel.hotel} image`} onClick={() => openHotelGallery(hotel)}>
-                          <img src={hotel.image} alt={`${hotel.hotel} hotel in ${zone.name}, Costa Rica`} loading="lazy" />
+                        <button type="button" aria-label={`${t("View")} ${hotel.hotel} ${t("image")}`} onClick={() => openHotelGallery(hotel)}>
+                          <img src={hotel.image} alt={hotelImageAlt(hotel.hotel, zone.name, language)} loading="lazy" />
                         </button>
                         <span>{zone.name}</span>
                       </div>

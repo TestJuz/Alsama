@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Mail, MessageSquareText, Phone, Send, User } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
-import { routes } from "../lib/site";
+import { businessContact, routes } from "../lib/site";
 
 const CONTACT_EMAIL = "info@alsamatourscr.com";
 const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
@@ -96,6 +96,18 @@ export function ContactForm({ title = "Contact", text, placeholder, buttonLabel 
               <MessageSquareText size={18} />
             </span>
             <p>{t("Tell us where you are going, your dates and the kind of trip you have in mind.")}</p>
+          </div>
+          <div className="contact__note">
+            <span className="contact__noteIcon" aria-hidden="true">
+              <Phone size={18} />
+            </span>
+            <p>
+              <a href={businessContact.phoneHref}>{businessContact.phoneDisplay}</a>
+              {" · "}
+              <a href={businessContact.facebook} target="_blank" rel="noreferrer">Facebook</a>
+              {" · "}
+              <a href={businessContact.instagram} target="_blank" rel="noreferrer">Instagram</a>
+            </p>
           </div>
         </div>
 

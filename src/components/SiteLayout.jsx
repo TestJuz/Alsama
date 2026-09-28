@@ -5,7 +5,7 @@ import { CartWidget } from "./CartWidget";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { TravelAssistant } from "./TravelAssistant";
 import { useLanguage } from "../context/LanguageContext";
-import { asset, homeLinks, routes, safetyPdf, serviceMenu } from "../lib/site";
+import { asset, businessContact, homeLinks, routes, safetyPdf, serviceMenu } from "../lib/site";
 
 
 function SmartLink({ to, className, children, ...props }) {
@@ -46,7 +46,7 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
       <div className="container nav">
         <Link className="brand" to={typeof brandTo === "string" ? localize(brandTo) : { ...brandTo, pathname: localize(brandTo.pathname) }}>
           <span className="brand__logo" aria-hidden="true">
-            <img src={asset("img/tortuga.png")} alt="Alsama Tours logo" className="brand__logo-img" />
+            <img src={asset("img/tortuga.png")} alt="" aria-hidden="true" className="brand__logo-img" />
           </span>
           <span className="brand__text">Alsama Tours</span>
         </Link>
@@ -129,6 +129,9 @@ export function SiteLayout({
         <div className="container footer__grid">
           <p className="muted">{footerLabel} {new Date().getFullYear()} Alsama Tours. All rights reserved.</p>
           <nav className="footer__links" aria-label="Footer">
+            <a className="muted" href={businessContact.phoneHref}>{businessContact.phoneDisplay}</a>
+            <a className="muted" href={businessContact.facebook} target="_blank" rel="noreferrer">Facebook</a>
+            <a className="muted" href={businessContact.instagram} target="_blank" rel="noreferrer">Instagram</a>
             <Link className="muted" to={localize(routes.privacy)}>Privacy Policy</Link>
             <a className="muted" href={footerBackToTop}>Back to top</a>
           </nav>

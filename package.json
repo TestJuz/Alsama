@@ -7,7 +7,7 @@
         "start": "vite",
         "predev": "node scripts/generate-tour-gallery-manifest.mjs",
         "dev": "vite",
-        "prebuild": "node scripts/generate-tour-gallery-manifest.mjs",
+        "prebuild": "node scripts/generate-tour-gallery-manifest.mjs && node scripts/audit-image-alt.mjs",
         "build": "vite build && node scripts/write-sites-entrypoint.mjs",
         "preview": "vite preview",
         "predeploy": "npm run build",

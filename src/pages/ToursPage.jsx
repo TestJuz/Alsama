@@ -8,6 +8,7 @@ import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { asset, getAllTours, getTourDetailPath, routes, tourOrigins } from "../lib/site";
+import { tourImageAlt } from "../lib/imageAlt";
 
 const origins = [
   { value: "all", label: "All departures" },
@@ -19,13 +20,13 @@ function formatUSD(value) {
 }
 
 function TourCard({ item, onAdd, onOpenGallery, preview = false }) {
-  const { localize } = useLanguage();
+  const { localize, language, t } = useLanguage();
 
   return (
     <article className={`card${preview ? " card--preview" : ""}`} aria-hidden={preview ? "true" : undefined}>
       <div className="card__media">
         <button type="button" aria-label={`View ${item.title} image`} onClick={() => onOpenGallery(item)} tabIndex={preview ? -1 : undefined}>
-          <img src={item.image} alt={`${item.title} tour ${item.originLabel}`} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
+          <img src={item.image} alt={tourImageAlt(t(item.title), language)} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
         </button>
       </div>
       <div className="card__body">
