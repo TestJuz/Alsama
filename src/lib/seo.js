@@ -1,4 +1,4 @@
-import { findTourBySlug, routes } from "./site";
+import { findTourBySlug, localizePath, routes, stripLanguagePrefix } from "./site";
 import { getPageTitle, translateText } from "./nativeI18n";
 
 export const siteBaseUrl = "https://alsamatourscr.com/";
@@ -50,6 +50,62 @@ const pageSeo = {
     description: "Thank you for contacting Alsama Tours. Our local team will review your Costa Rica travel request.",
     image: "og.png",
     robots: "noindex, follow"
+  },
+  toursSanJose: {
+    path: routes.toursSanJose,
+    title: {
+      en: "Tours from San Jose, Costa Rica | Alsama Tours",
+      es: "Tours desde San José, Costa Rica | Alsama Tours",
+      fr: "Excursions depuis San José, Costa Rica | Alsama Tours"
+    },
+    description: {
+      en: "Compare day tours from San Jose to volcanoes, wildlife, beaches, waterfalls and cultural attractions across Costa Rica.",
+      es: "Compara tours desde San José a volcanes, vida silvestre, playas, cataratas y atracciones culturales de Costa Rica.",
+      fr: "Comparez les excursions depuis San José vers volcans, faune, plages, cascades et sites culturels du Costa Rica."
+    },
+    image: "img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp"
+  },
+  toursJaco: {
+    path: routes.toursJaco,
+    title: {
+      en: "Tours from Jaco, Costa Rica | Alsama Tours",
+      es: "Tours desde Jacó, Costa Rica | Alsama Tours",
+      fr: "Excursions depuis Jacó, Costa Rica | Alsama Tours"
+    },
+    description: {
+      en: "Explore tours from Jaco for rafting, waterfalls, wildlife, rainforest, national parks and ocean experiences on Costa Rica's Central Pacific.",
+      es: "Explora tours desde Jacó de rafting, cataratas, vida silvestre, bosque tropical, parques nacionales y experiencias marinas.",
+      fr: "Découvrez les excursions depuis Jacó: rafting, cascades, faune, forêt tropicale, parcs nationaux et expériences marines."
+    },
+    image: "img/tours/jaco/White _Water_Rafting/Rafting-1.webp"
+  },
+  manuelAntonioDestination: {
+    path: routes.manuelAntonioDestination,
+    title: {
+      en: "Manuel Antonio Tours & Day Trips | Alsama Tours",
+      es: "Tours y excursiones a Manuel Antonio | Alsama Tours",
+      fr: "Excursions à Manuel Antonio | Alsama Tours"
+    },
+    description: {
+      en: "Plan Manuel Antonio tours with guided wildlife walks, Pacific scenery, beaches and day-trip options from San Jose.",
+      es: "Planea tours a Manuel Antonio con caminatas guiadas, vida silvestre, playas del Pacífico y opciones desde San José.",
+      fr: "Planifiez Manuel Antonio avec balades guidées, faune tropicale, plages du Pacifique et options depuis San José."
+    },
+    image: "img/tours/sj/Manuel_Antonio/1.webp"
+  },
+  arenalDestination: {
+    path: routes.arenalDestination,
+    title: {
+      en: "Arenal Volcano & La Fortuna Tours | Alsama Tours",
+      es: "Tours al Volcán Arenal y La Fortuna | Alsama Tours",
+      fr: "Excursions au volcan Arenal et à La Fortuna | Alsama Tours"
+    },
+    description: {
+      en: "Explore Arenal Volcano and La Fortuna tours with scenic routes, volcano viewpoints, hot springs and options from San Jose.",
+      es: "Explora tours al Volcán Arenal y La Fortuna con rutas escénicas, miradores, aguas termales y opciones desde San José.",
+      fr: "Découvrez Arenal et La Fortuna avec routes panoramiques, vues sur le volcan, sources chaudes et options depuis San José."
+    },
+    image: "img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp"
   }
 };
 
@@ -81,68 +137,83 @@ function canonicalUrl(pathname) {
 
 function routeKeyFromPath(pathname) {
   const path = normalizePath(pathname);
-  return Object.entries(pageSeo).find(([, value]) => value.path === path)?.[0] || "home";
+  return Object.entries(pageSeo).find(([, value]) => value.path === path)?.[0] || null;
 }
 
-function makeDescription(value, language) {
-  const text = translateText(value, language);
-  return text.length > 160 ? `${text.slice(0, 157).trim()}...` : text;
+function localizedDescription(value, language) {
+  const source = typeof value === "object" ? (value[language] || value.en) : translateText(value, language);
+  return source.length > 160 ? `${source.slice(0, 157).trim()}...` : source;
+}
+
+function buildAlternates(basePath) {
+  return {
+    en: canonicalUrl(localizePath(basePath, "en")),
+    es: canonicalUrl(localizePath(basePath, "es")),
+    fr: canonicalUrl(localizePath(basePath, "fr")),
+    "x-default": canonicalUrl(localizePath(basePath, "en"))
+  };
 }
 
 export function getRouteSeo(pathname, language = "en") {
-  const path = normalizePath(pathname);
-  const tourPrefix = `${routes.tours}/`;
+  const localizedPathname = normalizePath(pathname);
+  const basePath = normalizePath(stripLanguagePrefix(localizedPathname));
+  const routeKey = routeKeyFromPath(basePath);
 
-  if (path.startsWith(tourPrefix)) {
-    const tour = findTourBySlug(path.slice(tourPrefix.length));
+  if (routeKey) {
+    const meta = pageSeo[routeKey];
+    const title = meta.title?.[language] || getPageTitle(routeKey, language);
+    const description = localizedDescription(meta.description, language);
+    return {
+      title,
+      description,
+      canonical: canonicalUrl(localizePath(basePath, language)),
+      alternates: buildAlternates(basePath),
+      image: absoluteUrl(meta.image),
+      type: "website",
+      robots: meta.robots,
+      schema: buildSchema(basePath, language, title, description)
+    };
+  }
+
+  const tourPrefix = `${routes.tours}/`;
+  if (basePath.startsWith(tourPrefix)) {
+    const tour = findTourBySlug(basePath.slice(tourPrefix.length));
     if (tour) {
       const title = `${translateText(tour.title, language)} | ${siteName}`;
+      const description = localizedDescription(`Book ${tour.title} from ${tour.originLabel}. ${tour.excerpt}`, language);
       return {
         title,
-        description: makeDescription(`Book ${tour.title} from ${tour.originLabel}. ${tour.excerpt}`, language),
-        canonical: canonicalUrl(path),
+        description,
+        canonical: canonicalUrl(localizePath(basePath, language)),
+        alternates: buildAlternates(basePath),
         image: absoluteUrl(tour.image),
         type: "article",
-        schema: buildSchema(path, title, tour.excerpt, tour)
+        schema: buildSchema(basePath, language, title, description, tour)
       };
     }
   }
 
-  const knownRoute = Object.values(pageSeo).some((value) => value.path === path);
-  if (!knownRoute && path !== routes.home) {
-    const title = `Page Not Found | ${siteName}`;
-    return {
-      title,
-      description: "This Alsama Tours page could not be found.",
-      canonical: canonicalUrl(routes.home),
-      image: absoluteUrl("og.png"),
-      type: "website",
-      robots: "noindex, follow",
-      schema: buildSchema(routes.home, title, "This Alsama Tours page could not be found.")
-    };
-  }
-
-  const key = routeKeyFromPath(path);
-  const meta = pageSeo[key];
-  const title = meta.title?.[language] || getPageTitle(key, language);
+  const title = `Page Not Found | ${siteName}`;
   return {
     title,
-    description: makeDescription(meta.description, language),
-    canonical: canonicalUrl(meta.path),
-    image: absoluteUrl(meta.image),
+    description: "This Alsama Tours page could not be found.",
+    canonical: canonicalUrl(localizePath(routes.home, language)),
+    alternates: buildAlternates(routes.home),
+    image: absoluteUrl("og.png"),
     type: "website",
-    robots: meta.robots,
-    schema: buildSchema(meta.path, title, meta.description)
+    robots: "noindex, follow",
+    schema: buildSchema(routes.home, language, title, "This Alsama Tours page could not be found.")
   };
 }
 
-function buildSchema(pathname, title, description, tour) {
+function buildSchema(basePath, language, title, description, tour) {
+  const localizedPagePath = localizePath(basePath, language);
   const business = {
     "@context": "https://schema.org",
     "@type": "TravelAgency",
-    "@id": `${runtimeBaseUrl()}#local-business`,
+    "@id": `${siteBaseUrl}#local-business`,
     name: siteName,
-    url: runtimeBaseUrl(),
+    url: siteBaseUrl,
     image: absoluteUrl("og.png"),
     email: "info@alsamatourscr.com",
     telephone: "+50661672539",
@@ -170,10 +241,11 @@ function buildSchema(pathname, title, description, tour) {
   const webPage = {
     "@context": "https://schema.org",
     "@type": tour ? "TouristTrip" : "WebPage",
-    "@id": `${canonicalUrl(pathname)}#webpage`,
+    "@id": `${canonicalUrl(localizedPagePath)}#webpage`,
+    inLanguage: language,
     name: title,
     description,
-    url: canonicalUrl(pathname),
+    url: canonicalUrl(localizedPagePath),
     image: tour ? absoluteUrl(tour.image) : absoluteUrl("og.png"),
     provider: { "@id": business["@id"] }
   };
@@ -185,33 +257,31 @@ function buildSchema(pathname, title, description, tour) {
       price: tour.price,
       priceCurrency: "USD",
       availability: "https://schema.org/InStock",
-      url: canonicalUrl(pathname)
+      url: canonicalUrl(localizedPagePath)
     };
     webPage.itinerary = tour.locations.map((name) => ({ "@type": "Place", name }));
   }
 
-  const breadcrumbItems = [
-    { name: "Home", path: routes.home }
-  ];
+  const breadcrumbItems = [{ name: translateText("Home", language), path: routes.home }];
 
   if (tour) {
     breadcrumbItems.push(
-      { name: "Tours", path: routes.tours },
-      { name: title.replace(` | ${siteName}`, ""), path: pathname }
+      { name: translateText("Tours", language), path: routes.tours },
+      { name: title.replace(` | ${siteName}`, ""), path: basePath }
     );
-  } else if (pathname !== routes.home) {
-    breadcrumbItems.push({ name: title.replace(` | ${siteName}`, ""), path: pathname });
+  } else if (basePath !== routes.home) {
+    breadcrumbItems.push({ name: title.replace(` | ${siteName}`, ""), path: basePath });
   }
 
   const breadcrumbs = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "@id": `${canonicalUrl(pathname)}#breadcrumbs`,
+    "@id": `${canonicalUrl(localizedPagePath)}#breadcrumbs`,
     itemListElement: breadcrumbItems.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: canonicalUrl(item.path)
+      item: canonicalUrl(localizePath(item.path, language))
     }))
   };
 
@@ -254,8 +324,14 @@ export function applySeo(seo) {
   setMeta('meta[name="description"]', { name: "description" }, seo.description);
   setMeta('meta[name="robots"]', { name: "robots" }, seo.robots || "index, follow");
   setLink('link[rel="canonical"]', { rel: "canonical" }, seo.canonical);
-  setLink('link[rel="alternate"][hreflang="en"]', { rel: "alternate", hreflang: "en" }, seo.canonical);
-  setLink('link[rel="alternate"][hreflang="x-default"]', { rel: "alternate", hreflang: "x-default" }, seo.canonical);
+
+  Object.entries(seo.alternates || {}).forEach(([hreflang, href]) => {
+    setLink(
+      `link[rel="alternate"][hreflang="${hreflang}"]`,
+      { rel: "alternate", hreflang },
+      href
+    );
+  });
 
   setMeta('meta[property="og:site_name"]', { property: "og:site_name" }, siteName);
   setMeta('meta[property="og:title"]', { property: "og:title" }, seo.title);
