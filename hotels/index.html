@@ -7,12 +7,12 @@
     <link rel="apple-touch-icon" href="/img/tortuga.png" />
     <meta name="description" content="Browse Costa Rica hotel options by region and add lodging to your trip with Alsama Tours." />
     <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://alsamatourscr.com/hotels" />
+    <link rel="canonical" href="https://alsamatourscr.com/hotels/" />
     <meta property="og:site_name" content="Alsama Tours" />
     <meta property="og:title" content="Hotels in Costa Rica | Alsama Tours" />
     <meta property="og:description" content="Browse Costa Rica hotel options by region and add lodging to your trip with Alsama Tours." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://alsamatourscr.com/hotels" />
+    <meta property="og:url" content="https://alsamatourscr.com/hotels/" />
     <meta property="og:image" content="https://alsamatourscr.com/og.png" />
     <meta property="og:image:alt" content="Alsama Tours Costa Rica travel services" />
     <meta name="twitter:card" content="summary_large_image" />
@@ -38,6 +38,11 @@
     </script>
     <script type="module" crossorigin src="/assets/index-BHKJ6mv9.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-DIOfJsYb.css">
+  <script>
+      if (window.location.pathname.endsWith("/index.html")) {
+        window.location.replace("/hotels/" + window.location.search + window.location.hash);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
