@@ -636,6 +636,8 @@ export function HomePage() {
                     <img
                       src={service.image}
                       alt={service.alt}
+                      loading="lazy"
+                      decoding="async"
                       style={service.imagePosition ? { objectPosition: service.imagePosition } : undefined}
                     />
                     <div className="home-bento__shade" />
@@ -721,7 +723,7 @@ export function HomePage() {
               {featuredPicks.map((tour, index) => (
                 <MotionBlock className="home-pick-shell" delay={index * 0.05} key={`${tour.title}-${tour.origin}`}>
                   <Link className="home-pick" to={tour.detailPath} aria-label={`View ${tour.title} tour details`}>
-                    <img src={tour.image} alt={`${tour.title} tour from ${tour.location}, Costa Rica`} style={{ objectPosition: tour.imagePosition }} />
+                    <img src={tour.image} alt={`${tour.title} tour from ${tour.location}, Costa Rica`} loading="lazy" decoding="async" style={{ objectPosition: tour.imagePosition }} />
                     <div>
                       <span>{tour.location}</span>
                       <h3>{tour.title}</h3>

@@ -147,6 +147,9 @@ function buildSchema(pathname, title, description, tour) {
     email: "info@alsamatourscr.com",
     telephone: "+50661672539",
     priceRange: "$$",
+    sameAs: [
+      "https://www.tripadvisor.es/Attraction_Review-g309293-d23810882-Reviews-Alsama_Tours-San_Jose_San_Jose_Metro_Province_of_San_Jose.html"
+    ],
     areaServed: [
       { "@type": "Country", name: "Costa Rica" },
       { "@type": "City", name: "San Jose" },
@@ -187,7 +190,32 @@ function buildSchema(pathname, title, description, tour) {
     webPage.itinerary = tour.locations.map((name) => ({ "@type": "Place", name }));
   }
 
-  return [business, webPage];
+  const breadcrumbItems = [
+    { name: "Home", path: routes.home }
+  ];
+
+  if (tour) {
+    breadcrumbItems.push(
+      { name: "Tours", path: routes.tours },
+      { name: title.replace(` | ${siteName}`, ""), path: pathname }
+    );
+  } else if (pathname !== routes.home) {
+    breadcrumbItems.push({ name: title.replace(` | ${siteName}`, ""), path: pathname });
+  }
+
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${canonicalUrl(pathname)}#breadcrumbs`,
+    itemListElement: breadcrumbItems.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: canonicalUrl(item.path)
+    }))
+  };
+
+  return [business, webPage, breadcrumbs];
 }
 
 function setMeta(selector, attrs, content) {
@@ -226,6 +254,8 @@ export function applySeo(seo) {
   setMeta('meta[name="description"]', { name: "description" }, seo.description);
   setMeta('meta[name="robots"]', { name: "robots" }, seo.robots || "index, follow");
   setLink('link[rel="canonical"]', { rel: "canonical" }, seo.canonical);
+  setLink('link[rel="alternate"][hreflang="en"]', { rel: "alternate", hreflang: "en" }, seo.canonical);
+  setLink('link[rel="alternate"][hreflang="x-default"]', { rel: "alternate", hreflang: "x-default" }, seo.canonical);
 
   setMeta('meta[property="og:site_name"]', { property: "og:site_name" }, siteName);
   setMeta('meta[property="og:title"]', { property: "og:title" }, seo.title);
