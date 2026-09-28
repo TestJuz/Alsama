@@ -177,6 +177,7 @@ function makeTour(title, price, options = {}) {
 
   return {
     title,
+    slug: options.slug,
     excerpt: options.excerpt || `${title} available through Alsama Tours with booking support, pickup planning and clear per-person pricing.`,
     image: options.image || getTourImage(title, options.origin),
     imagePosition: options.imagePosition || "center 48%",
@@ -265,12 +266,12 @@ export const sanJoseTours = [
   makeTour("Premium Tortuga Island Tour", 148.57, { origin: "san-jose", galleryFolder: "sj/Premium Tortuga Island_Tour", durationText: "14 Hours", durationHours: 14, image: sourceTourImages.premiumTortuga, locations: ["Isla Tortuga", "Gulf of Nicoya"], excerpt: "A premium island day with turquoise water, beach time, ocean views and activities in the Gulf of Nicoya.", sourceUrl: "https://alsamatourscr.com/trip/premium-tortuga-island-tour/" }),
   makeTour("Arenal Volcano and Hot Springs", 180, { origin: "san-jose", galleryFolder: "sj/Arenal_Volcano_and_Hot_Springs", durationText: "13 Hours", durationHours: 13, image: sourceTourImages.arenal, locations: ["Arenal", "La Fortuna", "Sarchi"], excerpt: "Arenal views, Sarchi culture, volcano viewpoint stops and time to relax in hot springs.", sourceUrl: "https://alsamatourscr.com/trip/arenal-volcano-and-hot-springs/" }),
   makeTour("Typical Dinner and Folklore Show", 85.71, { origin: "san-jose", galleryFolder: "sj/Typical_Dinner_and_Folklore_Show", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.folklore, locations: ["San Jose", "Central Valley"], excerpt: "A traditional Costa Rican evening with local dinner, music, dance and cultural performances.", sourceUrl: "https://alsamatourscr.com/trip/typical-dinner-and-folklore-show/" }),
-  makeTour("Irazu Volcano Half-Day Tour", 78.1, { origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A shorter route to Irazu Volcano with Cartago scenery, crater views and Basilica history.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
+  makeTour("Irazu Volcano Half-Day Tour", 78.1, { slug: "irazu-volcano-halfday", origin: "san-jose", galleryFolder: "sj/Irazu_Volcano_Halfday", durationText: "6 Hours", durationHours: 6, image: sourceTourImages.irazuHalfday, locations: ["Cartago", "Irazu"], excerpt: "A shorter route to Irazu Volcano with Cartago scenery, crater views and Basilica history.", sourceUrl: "https://alsamatourscr.com/trip/irazu-volcano-halfday/" })
 ];
 
 export const jacoTours = [
   makeTour("White Water Rafting", 157.5, { origin: "jaco", galleryFolder: "jaco/White _Water_Rafting", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.whiteWaterRafting, locations: ["Central Pacific", "Rio Savegre", "Rio Naranjo"], excerpt: "Rafting routes for families or adrenaline seekers with river scenery, guide support and meals.", sourceUrl: "https://alsamatourscr.com/trip/white-water-rafting/" }),
-  makeTour("Half-Day Aerial Tram and High-Rope Circuit", 68.14, { origin: "jaco", galleryFolder: "jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.aerialTramHighRope, locations: ["Jaco", "Central Pacific"], excerpt: "Aerial tram forest views paired with canopy-style adventure and a high rope circuit.", sourceUrl: "https://alsamatourscr.com/trip/half-day-pass-aerial-tram-and-high-rope-circuit/" }),
+  makeTour("Half-Day Aerial Tram and High-Rope Circuit", 68.14, { slug: "half-day-pass-aerial-tram-and-high-rope-circuit", origin: "jaco", galleryFolder: "jaco/Half_day_pass_Aerial_Tram_and_High_Rope_Circuit", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.aerialTramHighRope, locations: ["Jaco", "Central Pacific"], excerpt: "Aerial tram forest views paired with canopy-style adventure and a high rope circuit.", sourceUrl: "https://alsamatourscr.com/trip/half-day-pass-aerial-tram-and-high-rope-circuit/" }),
   makeTour("Carara National Park", 100, { origin: "jaco", galleryFolder: "jaco/Carara_National_Park", durationText: "4 Hours", durationHours: 4, difficulty: "Medium", image: sourceTourImages.carara, locations: ["Jaco", "Carara", "Tarcoles"], excerpt: "Guided trails through transitional forest with birdlife, scarlet macaws and a Tarcoles River stop.", sourceUrl: "https://alsamatourscr.com/trip/carara-national-park/" }),
   makeTour("Aerial Tram", 69, { origin: "jaco", galleryFolder: "jaco/Aerial_Tram", durationText: "2 Hours", durationHours: 2, difficulty: "Medium", image: sourceTourImages.aerialTram, locations: ["Jaco", "Central Pacific"], excerpt: "A peaceful aerial tram ride through transitional rainforest with Pacific views and guided nature insight.", sourceUrl: "https://alsamatourscr.com/trip/aerial-tram/" }),
   makeTour("Monkey Mangrove Tour", 78.57, { origin: "jaco", galleryFolder: "jaco/Monkey_Mangrove_Tour", durationText: "5 Hours", durationHours: 5, image: sourceTourImages.monkeyMangrove, locations: ["Jaco", "Los Suenos", "Mangroves"], excerpt: "A mangrove boat tour with white-faced monkeys, birds, reptiles and tropical river scenery.", sourceUrl: "https://alsamatourscr.com/trip/monkey-mangrove-tour/" }),
@@ -578,21 +579,21 @@ function getToursWithOrigin() {
       ...tour,
       origin: origin.value,
       originLabel: origin.label,
-      detail: { ...getDefaultTourDetail(tour), ...(tourDetailTemplates[slugify(tour.title)] || {}), ...(pdfTourDetailUpdates[slugify(tour.title)] || {}) }
+      detail: { ...getDefaultTourDetail(tour), ...(tourDetailTemplates[tour.slug || slugify(tour.title)] || {}), ...(pdfTourDetailUpdates[tour.slug || slugify(tour.title)] || {}) }
     }))
   );
 }
 
 function addUniqueSlugs(tours) {
   const baseCounts = tours.reduce((counts, tour) => {
-    const baseSlug = slugify(tour.title);
+    const baseSlug = tour.slug || slugify(tour.title);
     counts.set(baseSlug, (counts.get(baseSlug) || 0) + 1);
     return counts;
   }, new Map());
   const used = new Map();
 
   return tours.map((tour) => {
-    const baseSlug = slugify(tour.title);
+    const baseSlug = tour.slug || slugify(tour.title);
     const scopedSlug = baseCounts.get(baseSlug) > 1 ? `${tour.origin}-${baseSlug}` : baseSlug;
     const count = (used.get(scopedSlug) || 0) + 1;
     used.set(scopedSlug, count);
