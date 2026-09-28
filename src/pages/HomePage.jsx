@@ -26,6 +26,7 @@ import { ContactForm } from "../components/ContactForm";
 import { LimitedPromosSection } from "../components/LimitedPromosSection";
 import { NationalDiscountBanner } from "../components/NationalDiscountBanner";
 import { SiteLayout } from "../components/SiteLayout";
+import { useLanguage } from "../context/LanguageContext";
 import { Button } from "../components/ui/button";
 import { Map, MapControls, MapMarker, MapRoute, MarkerContent, MarkerPopup } from "../components/ui/map";
 import {
@@ -375,6 +376,7 @@ function RatingStars({ label = "Rated 5 out of 5 on Tripadvisor" }) {
 }
 
 function DestinationMap() {
+  const { localize } = useLanguage();
   const mapRef = useRef(null);
   const [activeDestination, setActiveDestination] = useState(destinations[1]);
   const activeRoute = activeDestination.route || [];
@@ -496,7 +498,7 @@ function DestinationMap() {
               ))}
             </div>
             <div className="home-route-card__actions">
-              <Link className="home-btn home-btn--primary" to={activeDestination.to}>
+              <Link className="home-btn home-btn--primary" to={localize(activeDestination.to)}>
                 {activeDestination.cta} <ArrowRight size={17} aria-hidden="true" />
               </Link>
               <a className="home-btn home-btn--ghost" href="#contact">
@@ -511,6 +513,8 @@ function DestinationMap() {
 }
 
 export function HomePage() {
+  const { localize } = useLanguage();
+
   return (
     <SiteLayout
       homeTo={homeLinks.home}
@@ -662,7 +666,7 @@ export function HomePage() {
                     key={service.title}
                   >
                     {service.to ? (
-                      <Link to={service.to} id={service.title === "Rent a car" ? "rent" : undefined}>
+                      <Link to={localize(service.to)} id={service.title === "Rent a car" ? "rent" : undefined}>
                         {content}
                       </Link>
                     ) : (
@@ -682,7 +686,7 @@ export function HomePage() {
                 <span className="home-eyebrow">Plan faster</span>
                 <h2>Jump to the service that matches your route.</h2>
               </div>
-              <Link className="home-btn home-btn--light" to={homeLinks.contact}>
+              <Link className="home-btn home-btn--light" to={{ ...homeLinks.contact, pathname: localize(homeLinks.contact.pathname) }}>
                 Ask for a route <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </MotionBlock>
@@ -690,7 +694,7 @@ export function HomePage() {
             <div className="home-link-grid">
               {internalLinks.map((item, index) => (
                 <MotionBlock className="home-link-card" delay={index * 0.035} key={item.label}>
-                  <Link to={item.to}>
+                  <Link to={localize(item.to)}>
                     <Link2 size={18} aria-hidden="true" />
                     <strong>{item.label}</strong>
                     <span>{item.text}</span>
@@ -722,7 +726,7 @@ export function HomePage() {
             <div className="home-picks">
               {featuredPicks.map((tour, index) => (
                 <MotionBlock className="home-pick-shell" delay={index * 0.05} key={`${tour.title}-${tour.origin}`}>
-                  <Link className="home-pick" to={tour.detailPath} aria-label={`View ${tour.title} tour details`}>
+                  <Link className="home-pick" to={localize(tour.detailPath)} aria-label={`View ${tour.title} tour details`}>
                     <img src={tour.image} alt={`${tour.title} tour from ${tour.location}, Costa Rica`} loading="lazy" decoding="async" style={{ objectPosition: tour.imagePosition }} />
                     <div>
                       <span>{tour.location}</span>
@@ -732,7 +736,7 @@ export function HomePage() {
                   </Link>
                 </MotionBlock>
               ))}
-              <Link className="home-btn home-btn--light home-picks__all" to={routes.tours}>
+              <Link className="home-btn home-btn--light home-picks__all" to={localize(routes.tours)}>
                 View all tours <ArrowRight size={18} aria-hidden="true" />
               </Link>
             </div>
