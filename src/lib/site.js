@@ -9,7 +9,7 @@ export const safetyPdf = asset("Safety.pdf");
 export const supportedLanguages = ["en", "es", "fr"];
 
 export function stripLanguagePrefix(pathname = "/") {
-  const cleaned = \`/\${String(pathname || "/").replace(/^\/+|\/+$/g, "")}\`.replace(/\/{2,}/g, "/");
+  const cleaned = `/${String(pathname || "/").replace(/^\/+|\/+$/g, "")}`.replace(/\/{2,}/g, "/");
   const stripped = cleaned.replace(/^\/(es|fr)(?=\/|$)/, "");
   return stripped || "/";
 }
