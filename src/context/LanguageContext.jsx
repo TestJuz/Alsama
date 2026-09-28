@@ -99,17 +99,6 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     const pathLanguage = getLanguageFromPath(location.pathname);
     if (pathLanguage !== language) {
-      if (pathLanguage === "en" && language !== "en") {
-        navigate(
-          {
-            pathname: localizePath(location.pathname, language),
-            search: location.search,
-            hash: location.hash
-          },
-          { replace: true }
-        );
-        return;
-      }
       setLanguageState(pathLanguage);
       return;
     }
@@ -136,7 +125,7 @@ export function LanguageProvider({ children }) {
     });
 
     return () => observer.disconnect();
-  }, [language, location.hash, location.pathname, location.search, navigate]);
+  }, [language, location.pathname]);
 
   useEffect(() => {
     const routeTranslateTimer = window.setTimeout(() => translateTree(document.body, language), 0);
@@ -144,7 +133,6 @@ export function LanguageProvider({ children }) {
   }, [language, location.pathname, location.hash]);
   function setLanguage(code) {
     if (!languages.some((item) => item.code === code)) return;
-    setLanguageState(code);
     navigate(
       {
         pathname: localizePath(location.pathname, code),
