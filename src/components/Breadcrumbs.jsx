@@ -13,7 +13,9 @@ const routeLabels = {
   [routes.toursSanJose]: "Tours from San Jose",
   [routes.toursJaco]: "Tours from Jaco",
   [routes.manuelAntonioDestination]: "Manuel Antonio",
-  [routes.arenalDestination]: "Arenal"
+  [routes.arenalDestination]: "Arenal",
+  [routes.privateTransferGuide]: "Costa Rica Private Transfer Guide",
+  [routes.sjoAirportGuide]: "SJO Airport Transportation Guide"
 };
 
 function getCrumbs(pathname) {

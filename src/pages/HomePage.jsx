@@ -119,12 +119,14 @@ const responsePromise = [
 ];
 
 const internalLinks = [
-  { label: "Tours from San Jose", text: "Volcanoes, waterfalls, city nights and classic full-day routes.", to: `${routes.tours}#from-san-jose` },
-  { label: "Tours from Jaco", text: "Beach, rainforest, wildlife and adventure options from the Pacific.", to: `${routes.tours}#from-jaco` },
+  { label: "Tours from San Jose", text: "Volcanoes, waterfalls, city nights and classic full-day routes.", to: routes.toursSanJose },
+  { label: "Tours from Jaco", text: "Beach, rainforest, wildlife and adventure options from the Pacific.", to: routes.toursJaco },
   { label: "Private transport routes", text: "Direct transfers between airports, hotels and Costa Rica destinations.", to: routes.privateTransport },
   { label: "Rent a car rates", text: "Compare vehicles for independent city, mountain and beach travel.", to: routes.rentACar },
   { label: "Hotel options", text: "Match lodging to your route before confirming services.", to: routes.hotels },
-  { label: "Shared shuttle service", text: "Scheduled options for popular destinations and lighter budgets.", to: routes.shuttle }
+  { label: "Shared shuttle service", text: "Scheduled options for popular destinations and lighter budgets.", to: routes.shuttle },
+  { label: "Costa Rica private transfer guide", text: "Plan common routes, pickup details, luggage and useful stops before booking.", to: routes.privateTransferGuide },
+  { label: "SJO airport transportation guide", text: "Plan arrivals from Juan Santamaria Airport to beaches, mountains and San Jose.", to: routes.sjoAirportGuide }
 ];
 
 const caseStudies = [
@@ -177,7 +179,7 @@ const destinations = [
     bestFor: "Arrivals, city nights and Central Valley day trips.",
     services: ["Airport pickup", "Hotels", "City tours"],
     cta: "Plan from San Jose",
-    to: `${routes.tours}#from-san-jose`,
+    to: routes.toursSanJose,
     route: [[-84.0907, 9.9281], [-84.2207, 10.0081], [-84.7032, 10.4678]]
   },
   {
@@ -190,7 +192,7 @@ const destinations = [
     bestFor: "Beach days, adventure parks and quick Pacific transfers.",
     services: ["Shuttle", "Private transport", "Day tours"],
     cta: "Explore Jaco tours",
-    to: `${routes.tours}#from-jaco`,
+    to: routes.toursJaco,
     route: [[-84.0907, 9.9281], [-84.36, 9.78], [-84.6356, 9.6148]]
   },
   {
@@ -203,7 +205,7 @@ const destinations = [
     bestFor: "Volcano views, hot springs and mountain scenery.",
     services: ["Private route", "Full-day tour", "Hotel pairing"],
     cta: "See Arenal tour",
-    to: routes.tours,
+    to: routes.arenalDestination,
     route: [[-84.0907, 9.9281], [-84.31, 10.1], [-84.7032, 10.4678]]
   },
   {
@@ -229,7 +231,7 @@ const destinations = [
     bestFor: "Wildlife trails, ocean views and family-friendly beach time.",
     services: ["Day tour", "Private pickup", "Hotel stay"],
     cta: "See Manuel Antonio",
-    to: routes.tours,
+    to: routes.manuelAntonioDestination,
     route: [[-84.0907, 9.9281], [-84.36, 9.78], [-84.6356, 9.6148], [-84.1557, 9.3894]]
   },
   {

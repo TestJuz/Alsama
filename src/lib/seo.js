@@ -106,6 +106,34 @@ const pageSeo = {
       fr: "Découvrez Arenal et La Fortuna avec routes panoramiques, vues sur le volcan, sources chaudes et options depuis San José."
     },
     image: "img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp"
+  },
+  privateTransferGuide: {
+    path: routes.privateTransferGuide,
+    title: {
+      en: "Costa Rica Private Transfer Guide | Alsama Tours",
+      es: "Guía de transporte privado en Costa Rica | Alsama Tours",
+      fr: "Guide des transferts privés au Costa Rica | Alsama Tours"
+    },
+    description: {
+      en: "Compare common private transfer routes from San Jose to Jaco, Manuel Antonio, Arenal and Monteverde, with planning tips for pickups, stops and luggage.",
+      es: "Compara rutas de transporte privado desde San José a Jacó, Manuel Antonio, Arenal y Monteverde, con consejos sobre recogida, paradas y equipaje.",
+      fr: "Comparez les transferts privés depuis San José vers Jacó, Manuel Antonio, Arenal et Monteverde, avec conseils sur prise en charge, arrêts et bagages."
+    },
+    image: "img/gallery/Buseta.webp"
+  },
+  sjoAirportGuide: {
+    path: routes.sjoAirportGuide,
+    title: {
+      en: "SJO Airport Transportation Guide | Alsama Tours",
+      es: "Guía de transporte desde el Aeropuerto SJO | Alsama Tours",
+      fr: "Guide des transports depuis l'aéroport SJO | Alsama Tours"
+    },
+    description: {
+      en: "Plan transportation from SJO airport to San Jose, Jaco, Arenal, Monteverde and Manuel Antonio with arrival, luggage and pickup planning tips.",
+      es: "Planea transporte desde el aeropuerto SJO hacia San José, Jacó, Arenal, Monteverde y Manuel Antonio con consejos de llegada, equipaje y recogida.",
+      fr: "Planifiez le transport depuis l'aéroport SJO vers San José, Jacó, Arenal, Monteverde et Manuel Antonio avec conseils d'arrivée et de prise en charge."
+    },
+    image: "img/gallery/Private.webp"
   }
 };
 
@@ -220,7 +248,9 @@ function buildSchema(basePath, language, title, description, tour) {
     telephone: "+50661672539",
     priceRange: "$$",
     sameAs: [
-      "https://www.tripadvisor.es/Attraction_Review-g309293-d23810882-Reviews-Alsama_Tours-San_Jose_San_Jose_Metro_Province_of_San_Jose.html"
+      "https://www.visitcostarica.com/planning-your-trip/local-agency/alsama-tours",
+      "https://www.tripadvisor.com/Attraction_Review-g309293-d23810882-Reviews-Alsama_Tours-San_Jose_San_Jose_Metro_Province_of_San_Jose.html",
+      "https://www.getyourguide.com/ro-ro/alsama-tours-s308586/"
     ],
     areaServed: [
       { "@type": "Country", name: "Costa Rica" },

@@ -1080,4 +1080,64 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  <url>
+    <loc>https://alsamatourscr.com/guides/costa-rica-private-transfers/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://alsamatourscr.com/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://alsamatourscr.com/es/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://alsamatourscr.com/fr/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alsamatourscr.com/guides/costa-rica-private-transfers/" />
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alsamatourscr.com/es/guides/costa-rica-private-transfers/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://alsamatourscr.com/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://alsamatourscr.com/es/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://alsamatourscr.com/fr/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alsamatourscr.com/guides/costa-rica-private-transfers/" />
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alsamatourscr.com/fr/guides/costa-rica-private-transfers/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://alsamatourscr.com/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://alsamatourscr.com/es/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://alsamatourscr.com/fr/guides/costa-rica-private-transfers/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alsamatourscr.com/guides/costa-rica-private-transfers/" />
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alsamatourscr.com/guides/sjo-airport-transportation/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://alsamatourscr.com/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://alsamatourscr.com/es/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://alsamatourscr.com/fr/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alsamatourscr.com/guides/sjo-airport-transportation/" />
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alsamatourscr.com/es/guides/sjo-airport-transportation/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://alsamatourscr.com/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://alsamatourscr.com/es/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://alsamatourscr.com/fr/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alsamatourscr.com/guides/sjo-airport-transportation/" />
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://alsamatourscr.com/fr/guides/sjo-airport-transportation/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://alsamatourscr.com/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://alsamatourscr.com/es/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://alsamatourscr.com/fr/guides/sjo-airport-transportation/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://alsamatourscr.com/guides/sjo-airport-transportation/" />
+    <lastmod>2026-09-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>

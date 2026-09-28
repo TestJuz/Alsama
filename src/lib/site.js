@@ -34,6 +34,8 @@ export const routes = {
   toursJaco: "/tours/jaco",
   manuelAntonioDestination: "/destinations/manuel-antonio",
   arenalDestination: "/destinations/arenal",
+  privateTransferGuide: "/guides/costa-rica-private-transfers",
+  sjoAirportGuide: "/guides/sjo-airport-transportation",
   hotels: "/hotels",
   rentACar: "/rent-a-car",
   privacy: "/privacy-policy",
