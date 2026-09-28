@@ -48,7 +48,8 @@ const pageSeo = {
       fr: "Merci | Alsama Tours"
     },
     description: "Thank you for contacting Alsama Tours. Our local team will review your Costa Rica travel request.",
-    image: "og.png"
+    image: "og.png",
+    robots: "noindex, follow"
   }
 };
 
@@ -130,6 +131,7 @@ export function getRouteSeo(pathname, language = "en") {
     canonical: canonicalUrl(meta.path),
     image: absoluteUrl(meta.image),
     type: "website",
+    robots: meta.robots,
     schema: buildSchema(meta.path, title, meta.description)
   };
 }
