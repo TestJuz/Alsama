@@ -94,7 +94,7 @@ export function TourDetailPage() {
   const { tourSlug } = useParams();
   const navigate = useNavigate();
   const { addItem } = useCart();
-  const { language, t } = useLanguage();
+  const { language, t, localize } = useLanguage();
   const [bookingOpen, setBookingOpen] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(null);
   const [activeSection, setActiveSection] = useState("overview");
@@ -119,7 +119,7 @@ export function TourDetailPage() {
   }, [language, t, tour]);
 
   if (!tour) {
-    return <Navigate replace to={routes.tours} />;
+    return <Navigate replace to={localize(routes.tours)} />;
   }
 
   const relatedTours = getAllTours()
@@ -196,7 +196,7 @@ export function TourDetailPage() {
                   <ArrowLeft size={16} aria-hidden="true" />
                   <span>{t("Back")}</span>
                 </button>
-                <Link to={routes.tours}>{t("Tours")}</Link>
+                <Link to={localize(routes.tours)}>{t("Tours")}</Link>
                 <span>/</span>
                 <span>{t(tour.title)}</span>
               </div>
@@ -404,7 +404,7 @@ export function TourDetailPage() {
                 <h2>{t("Related trips you might be interested in")}</h2>
                 <p className="muted">{t("More tours that can be combined with transportation, hotels or rent a car.")}</p>
               </div>
-              <Link className="btn btn--ghost" to={routes.tours}>{t("View all tours")}</Link>
+              <Link className="btn btn--ghost" to={localize(routes.tours)}>{t("View all tours")}</Link>
             </div>
             <div className="tour-related-grid">
               {related.map((item) => (
@@ -414,7 +414,7 @@ export function TourDetailPage() {
                     <span>{formatUSD(item.price)}</span>
                     <h3>{t(item.title)}</h3>
                     <p>{t(item.durationText)} | {t(item.difficulty)}</p>
-                    <Link to={getTourDetailPath(item)}>
+                    <Link to={localize(getTourDetailPath(item))}>
                       <CheckCircle2 size={16} aria-hidden="true" />
                       {t("View trip")}
                     </Link>

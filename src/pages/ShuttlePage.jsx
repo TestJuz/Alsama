@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { ContactForm } from "../components/ContactForm";
 import { ShuttleExplorer } from "../components/ShuttleExplorer";
 import { SiteLayout } from "../components/SiteLayout";
+import { useLanguage } from "../context/LanguageContext";
 import { asset, routes } from "../lib/site";
 
 const shuttleBenefits = [
@@ -48,6 +49,7 @@ const shuttleFlowItemVariants = {
 };
 
 export function ShuttlePage() {
+  const { localize } = useLanguage();
   return (
     <SiteLayout
       homeTo={routes.home}
@@ -105,7 +107,7 @@ export function ShuttlePage() {
                 <span className="transport-card__tag">Need more flexibility?</span>
                 <h3>Private transport may fit better</h3>
                 <p className="muted">If you are carrying more luggage, need a direct ride or want personalized pickup times, private transport is usually the better option.</p>
-                <Link className="btn btn--ghost" to={routes.privateTransport}>Compare with private transport</Link>
+                <Link className="btn btn--ghost" to={localize(routes.privateTransport)}>Compare with private transport</Link>
               </article>
             </div>
           </div>

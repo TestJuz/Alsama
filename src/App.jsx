@@ -18,6 +18,7 @@ const PrivacyPolicyPage = lazy(() =>
 );
 const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((module) => ({ default: module.ThankYouPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((module) => ({ default: module.NotFoundPage })));
+const DestinationLandingPage = lazy(() => import("./pages/DestinationLandingPage").then((module) => ({ default: module.DestinationLandingPage })));
 
 
 function ScrollManager() {
@@ -84,8 +85,37 @@ export function App() {
         <Route path={routes.hotels} element={<HotelsPage />} />
         <Route path={routes.privacy} element={<PrivacyPolicyPage />} />
         <Route path={routes.thankYou} element={<ThankYouPage />} />
-        <Route path={routes.toursSanJose} element={<Navigate replace to={`${routes.tours}#from-san-jose`} />} />
-        <Route path={routes.toursJaco} element={<Navigate replace to={`${routes.tours}#from-jaco`} />} />
+        <Route path={routes.toursSanJose} element={<DestinationLandingPage />} />
+        <Route path={routes.toursJaco} element={<DestinationLandingPage />} />
+        <Route path={routes.manuelAntonioDestination} element={<DestinationLandingPage />} />
+        <Route path={routes.arenalDestination} element={<DestinationLandingPage />} />
+
+        <Route path="/es" element={<HomePage />} />
+        <Route path="/fr" element={<HomePage />} />
+        <Route path="/es/shuttle" element={<ShuttlePage />} />
+        <Route path="/fr/shuttle" element={<ShuttlePage />} />
+        <Route path="/es/private-transport" element={<PrivateTransportPage />} />
+        <Route path="/fr/private-transport" element={<PrivateTransportPage />} />
+        <Route path="/es/rent-a-car" element={<RentACarPage />} />
+        <Route path="/fr/rent-a-car" element={<RentACarPage />} />
+        <Route path="/es/hotels" element={<HotelsPage />} />
+        <Route path="/fr/hotels" element={<HotelsPage />} />
+        <Route path="/es/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/fr/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/es/thank-you" element={<ThankYouPage />} />
+        <Route path="/fr/thank-you" element={<ThankYouPage />} />
+        <Route path="/es/tours" element={<ToursPage />} />
+        <Route path="/fr/tours" element={<ToursPage />} />
+        <Route path="/es/tours/san-jose" element={<DestinationLandingPage />} />
+        <Route path="/fr/tours/san-jose" element={<DestinationLandingPage />} />
+        <Route path="/es/tours/jaco" element={<DestinationLandingPage />} />
+        <Route path="/fr/tours/jaco" element={<DestinationLandingPage />} />
+        <Route path="/es/destinations/manuel-antonio" element={<DestinationLandingPage />} />
+        <Route path="/fr/destinations/manuel-antonio" element={<DestinationLandingPage />} />
+        <Route path="/es/destinations/arenal" element={<DestinationLandingPage />} />
+        <Route path="/fr/destinations/arenal" element={<DestinationLandingPage />} />
+        <Route path="/es/tours/:tourSlug" element={<TourDetailPage />} />
+        <Route path="/fr/tours/:tourSlug" element={<TourDetailPage />} />
 
         <Route path="/index.html" element={<Navigate replace to={routes.home} />} />
         <Route path="/trip/:tourSlug" element={<LegacyTourRedirect />} />

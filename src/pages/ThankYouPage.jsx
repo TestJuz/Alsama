@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, CheckCircle2, Clock3, MessageCircle } from "lucide-react";
 import { SiteLayout } from "../components/SiteLayout";
+import { useLanguage } from "../context/LanguageContext";
 import { homeLinks, routes } from "../lib/site";
 
 const nextSteps = [
@@ -10,6 +11,7 @@ const nextSteps = [
 ];
 
 export function ThankYouPage() {
+  const { localize } = useLanguage();
   return (
     <SiteLayout
       homeTo={homeLinks.home}
@@ -29,10 +31,10 @@ export function ThankYouPage() {
               Your message was sent successfully. We aim to answer quote and planning requests within 2 business hours.
             </p>
             <div className="thank-you-actions">
-              <Link className="btn btn--primary" to={routes.tours}>
+              <Link className="btn btn--primary" to={localize(routes.tours)}>
                 Keep exploring tours <ArrowRight size={17} aria-hidden="true" />
               </Link>
-              <Link className="btn btn--ghost" to={routes.home}>
+              <Link className="btn btn--ghost" to={localize(routes.home)}>
                 Back home
               </Link>
             </div>
@@ -56,7 +58,7 @@ export function ThankYouPage() {
                   <li key={step}>{step}</li>
                 ))}
               </ol>
-              <Link to={homeLinks.contact}>
+              <Link to={{ ...homeLinks.contact, pathname: localize(homeLinks.contact.pathname) }}>
                 Add another detail <MessageCircle size={16} aria-hidden="true" />
               </Link>
             </article>

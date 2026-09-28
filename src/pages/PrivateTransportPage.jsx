@@ -22,6 +22,7 @@ import {
   getPrivateTransportPriceLabel,
   privateTransportRoutes
 } from "../lib/privateTransportRates";
+import { useLanguage } from "../context/LanguageContext";
 import { asset, routes } from "../lib/site";
 
 const naturalMapStyle = "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json";
@@ -58,6 +59,7 @@ function PrivateRouteCard({ route, onAdd, preview = false }) {
 }
 
 export function PrivateTransportPage() {
+  const { localize } = useLanguage();
   const { addItem } = useCart();
   const [searchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("query") || "");
@@ -326,7 +328,7 @@ export function PrivateTransportPage() {
                 <span className="transport-card__tag">Need a lower-cost option?</span>
                 <h3>Shuttle may fit better</h3>
                 <p className="muted">If you are traveling light on a common route and prefer a more budget-friendly transfer, shared shuttle service can be the better match.</p>
-                <Link className="btn btn--ghost" to={routes.shuttle}>Compare with shuttle</Link>
+                <Link className="btn btn--ghost" to={localize(routes.shuttle)}>Compare with shuttle</Link>
               </article>
             </div>
           </div>

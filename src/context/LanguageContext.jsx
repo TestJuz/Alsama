@@ -1,6 +1,7 @@
 ﻿import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { setI18nLanguage, translateText } from "../lib/nativeI18n";
+import { getLanguageFromPath, localizePath } from "../lib/site";
 
 export const languages = [
   { code: "en", label: "English", shortLabel: "EN" },
@@ -16,10 +17,9 @@ const attributeRecords = new WeakMap();
 const translatedAttributes = ["placeholder", "aria-label", "title", "alt", "data-label"];
 const skippedTags = ["SCRIPT", "STYLE", "NOSCRIPT", "IFRAME", "SVG"];
 
-function getStoredLanguage() {
+function getInitialLanguage() {
   if (typeof window === "undefined") return DEFAULT_LANGUAGE;
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  return languages.some((item) => item.code === stored) ? stored : DEFAULT_LANGUAGE;
+  return getLanguageFromPath(window.location.pathname);
 }
 
 function shouldSkipElement(element) {
@@ -92,10 +92,17 @@ function translateTree(root, language) {
 }
 
 export function LanguageProvider({ children }) {
-  const [language, setLanguage] = useState(getStoredLanguage);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [language, setLanguageState] = useState(getInitialLanguage);
 
   useEffect(() => {
+    const pathLanguage = getLanguageFromPath(location.pathname);
+    if (pathLanguage !== language) {
+      setLanguageState(pathLanguage);
+      return;
+    }
+
     setI18nLanguage(language);
     document.documentElement.lang = language;
     window.localStorage.setItem(STORAGE_KEY, language);
@@ -118,13 +125,34 @@ export function LanguageProvider({ children }) {
     });
 
     return () => observer.disconnect();
-  }, [language]);
+  }, [language, location.pathname]);
 
   useEffect(() => {
     const routeTranslateTimer = window.setTimeout(() => translateTree(document.body, language), 0);
     return () => window.clearTimeout(routeTranslateTimer);
   }, [language, location.pathname, location.hash]);
-  const value = useMemo(() => ({ language, setLanguage, languages, t: (text) => translateText(text, language) }), [language]);
+  function setLanguage(code) {
+    if (!languages.some((item) => item.code === code)) return;
+    navigate(
+      {
+        pathname: localizePath(location.pathname, code),
+        search: location.search,
+        hash: location.hash
+      },
+      { replace: false }
+    );
+  }
+
+  const value = useMemo(
+    () => ({
+      language,
+      setLanguage,
+      languages,
+      localize: (path) => localizePath(path, language),
+      t: (text) => translateText(text, language)
+    }),
+    [language, location.hash, location.pathname, location.search]
+  );
 
   return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }

@@ -6,6 +6,7 @@ import { NationalDiscountBanner } from "../components/NationalDiscountBanner";
 import { SiteLayout } from "../components/SiteLayout";
 import { TourBookingModal } from "../components/TourBookingModal";
 import { useCart } from "../context/CartContext";
+import { useLanguage } from "../context/LanguageContext";
 import { asset, getAllTours, getTourDetailPath, routes, tourOrigins } from "../lib/site";
 
 const origins = [
@@ -18,6 +19,8 @@ function formatUSD(value) {
 }
 
 function TourCard({ item, onAdd, onOpenGallery, preview = false }) {
+  const { localize } = useLanguage();
+
   return (
     <article className={`card${preview ? " card--preview" : ""}`} aria-hidden={preview ? "true" : undefined}>
       <div className="card__media">
@@ -50,7 +53,7 @@ function TourCard({ item, onAdd, onOpenGallery, preview = false }) {
         </div>
 
         <div className="card__actions">
-          <Link className="btn btn--ghost" to={getTourDetailPath(item)} tabIndex={preview ? -1 : undefined}>View details</Link>
+          <Link className="btn btn--ghost" to={localize(getTourDetailPath(item))} tabIndex={preview ? -1 : undefined}>View details</Link>
           <button className="btn btn--primary card__cta" type="button" onClick={() => onAdd(item)} tabIndex={preview ? -1 : undefined}>
             Add to cart
           </button>
@@ -215,12 +218,12 @@ export function ToursPage() {
         <section className="section service-summary">
           <div className="container summary-grid">
             <article className="summary-card">
-              <h3>One tours page</h3>
-              <p className="muted">Compare departures from both San Jose and Jaco without jumping between services.</p>
+              <h3>One place to compare tours</h3>
+              <p className="muted">Compare tours from San Jose and Jaco without jumping between separate catalogs.</p>
             </article>
             <article className="summary-card">
               <h3>Filter by starting point</h3>
-              <p className="muted">Select where you are staying and see the tours that make sense from that area.</p>
+              <p className="muted">Choose where you are staying to see tours that fit your starting point and travel time.</p>
             </article>
             <article className="summary-card">
               <h3>10% national discount</h3>
