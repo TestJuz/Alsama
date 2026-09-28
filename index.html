@@ -34,7 +34,7 @@
         var base = "%BASE_URL%".replace(/\/$/, "");
         var normalizedPath = ("/" + redirectPath)
           .replace(/\\+/g, "/")
-          .replace(/\/index\\.html$/i, "")
+          .replace(/\/index\.html$/i, "")
           .replace(/\/{2,}/g, "/");
         var nextHash = redirectHash ? "#" + redirectHash : window.location.hash;
         window.history.replaceState(null, "", base + normalizedPath + nextHash);
