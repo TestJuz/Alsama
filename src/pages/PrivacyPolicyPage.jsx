@@ -235,6 +235,7 @@ function renderSection(section) {
 }
 
 export function PrivacyPolicyPage() {
+  const { localize } = useLanguage();
   const { language } = useLanguage();
   const content = policyContent[language] || policyContent.en;
 
@@ -249,7 +250,7 @@ export function PrivacyPolicyPage() {
       <main className="privacy-page" id="privacy-top" data-no-translate>
         <section className="privacy-hero">
           <div className="container privacy-hero__inner">
-            <Link className="privacy-back" to={routes.home}>{content.back}</Link>
+            <Link className="privacy-back" to={localize(routes.home)}>{content.back}</Link>
             <p>{content.updated}</p>
             <h1>{content.title}</h1>
             <span>{content.intro}</span>
