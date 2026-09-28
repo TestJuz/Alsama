@@ -102,9 +102,13 @@ async function writeStaticRouteEntrypoints() {
     if (pathname === "/") continue;
     const clean = pathname.replace(/^\/+|\/+$/g, "");
     if (!clean) continue;
+    const routeHtml = withSeo(html, pathname);
     const dir = path.join("dist", clean);
     await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, "index.html"), withSeo(html, pathname));
+
+    // Support both /route/ and extensionless /route on GitHub Pages.
+    await writeFile(path.join(dir, "index.html"), routeHtml);
+    await writeFile(path.join("dist", `${clean}.html`), routeHtml);
   }
 }
 
