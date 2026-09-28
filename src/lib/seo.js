@@ -146,7 +146,7 @@ function buildSchema(pathname, title, description, tour) {
     image: absoluteUrl("og.png"),
     email: "info@alsamatourscr.com",
     telephone: "+50661672539",
-    priceRange: "$",
+    priceRange: "$$",
     sameAs: [
       "https://www.tripadvisor.es/Attraction_Review-g309293-d23810882-Reviews-Alsama_Tours-San_Jose_San_Jose_Metro_Province_of_San_Jose.html"
     ],
