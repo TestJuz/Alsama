@@ -58,13 +58,13 @@ function languageFromPath(pathname) {
 }
 
 function basePathFromPath(pathname) {
-  const stripped = pathname.replace(/^\/(es|fr)(?=\/|$)/, "");
+  const stripped = pathname.replace(/^\/(es|fr)(?=\/|$)/, "").replace(/\/+$/, "");
   return stripped || "/";
 }
 
 function localizedPath(basePath, language) {
-  if (language === "en") return basePath;
-  return `/${language}${basePath === "/" ? "" : basePath}`;
+  const localized = language === "en" ? basePath : `/${language}${basePath === "/" ? "" : basePath}`;
+  return localized === "/" ? "/" : `${localized.replace(/\/+$/, "")}/`;
 }
 
 function absoluteRouteUrl(pathname) {
@@ -200,10 +200,11 @@ function withSeo(html, pathname) {
 }
 
 function withIndexRedirect(html, pathname) {
-  const canonical = `https://alsamatourscr.com${pathname}/`.replace(/\/{2,}$/, "/");
+  const canonicalPath = pathname === "/" ? "/" : `${pathname.replace(/\/+$/, "")}/`;
+  const canonical = absoluteRouteUrl(canonicalPath);
   const redirectScript = `<script>
       if (window.location.pathname.endsWith("/index.html")) {
-        window.location.replace("${pathname}/" + window.location.search + window.location.hash);
+        window.location.replace("${canonicalPath}" + window.location.search + window.location.hash);
       }
     </script>`;
   return html
