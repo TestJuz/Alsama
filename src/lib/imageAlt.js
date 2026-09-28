@@ -3,7 +3,8 @@ const copy = {
     destination: (name) => `${name} destination and travel route in Costa Rica`,
     tour: (title) => `${title} tour experience in Costa Rica`,
     tourFrom: (title, place) => `${title} tour from ${place}, Costa Rica`,
-    gallery: (title, index) => `Photo ${index} of the ${title} tour in Costa Rica`,
+    gallery: (title, index) => `Photo ${index} showing ${title}`,
+    tourGallery: (title, index) => `Photo ${index} of the ${title} tour in Costa Rica`,
     hotel: (hotel, zone) => `${hotel} accommodation in ${zone}, Costa Rica`,
     vehicle: (title, model) => `${model} ${title.toLowerCase()} rental vehicle in Costa Rica`,
     promo: (title, tagline) => `${title}: ${tagline}`
@@ -12,7 +13,8 @@ const copy = {
     destination: (name) => `Destino ${name} y ruta de viaje en Costa Rica`,
     tour: (title) => `Experiencia del tour ${title} en Costa Rica`,
     tourFrom: (title, place) => `Tour ${title} desde ${place}, Costa Rica`,
-    gallery: (title, index) => `Foto ${index} del tour ${title} en Costa Rica`,
+    gallery: (title, index) => `Foto ${index} de ${title}`,
+    tourGallery: (title, index) => `Foto ${index} del tour ${title} en Costa Rica`,
     hotel: (hotel, zone) => `Alojamiento ${hotel} en ${zone}, Costa Rica`,
     vehicle: (title, model) => `Vehículo de alquiler ${model}, categoría ${title.toLowerCase()}, en Costa Rica`,
     promo: (title, tagline) => `${title}: ${tagline}`
@@ -21,7 +23,8 @@ const copy = {
     destination: (name) => `Destination ${name} et itinéraire de voyage au Costa Rica`,
     tour: (title) => `Excursion ${title} au Costa Rica`,
     tourFrom: (title, place) => `Excursion ${title} au départ de ${place}, Costa Rica`,
-    gallery: (title, index) => `Photo ${index} de l'excursion ${title} au Costa Rica`,
+    gallery: (title, index) => `Photo ${index} de ${title}`,
+    tourGallery: (title, index) => `Photo ${index} de l'excursion ${title} au Costa Rica`,
     hotel: (hotel, zone) => `Hébergement ${hotel} à ${zone}, Costa Rica`,
     vehicle: (title, model) => `Véhicule de location ${model}, catégorie ${title.toLowerCase()}, au Costa Rica`,
     promo: (title, tagline) => `${title} : ${tagline}`
@@ -77,8 +80,12 @@ export function tourFromImageAlt(title, place, language = "en") {
   return languageCopy(language).tourFrom(title, place);
 }
 
-export function tourGalleryImageAlt(title, index, language = "en") {
+export function galleryImageAlt(title, index, language = "en") {
   return languageCopy(language).gallery(title, index);
+}
+
+export function tourGalleryImageAlt(title, index, language = "en") {
+  return languageCopy(language).tourGallery(title, index);
 }
 
 export function hotelImageAlt(hotel, zone, language = "en") {
