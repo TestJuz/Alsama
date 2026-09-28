@@ -52,36 +52,131 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;");
 }
 
+function languageFromPath(pathname) {
+  const match = pathname.match(/^\/(es|fr)(?=\/|$)/);
+  return match?.[1] || "en";
+}
+
+function basePathFromPath(pathname) {
+  const stripped = pathname.replace(/^\/(es|fr)(?=\/|$)/, "");
+  return stripped || "/";
+}
+
+function localizedPath(basePath, language) {
+  if (language === "en") return basePath;
+  return `/${language}${basePath === "/" ? "" : basePath}`;
+}
+
+function absoluteRouteUrl(pathname) {
+  return pathname === "/"
+    ? "https://alsamatourscr.com/"
+    : `https://alsamatourscr.com${pathname}`;
+}
+
 function titleFromPath(pathname) {
-  if (pathname === "/inicio") return "Alsama Tours | Costa Rica Tours, Shuttles & Travel Services";
-  if (pathname === "/shuttle") return "Shared Shuttle Costa Rica | Alsama Tours";
-  if (pathname === "/private-transport") return "Private Transportation Costa Rica | Alsama Tours";
-  if (pathname === "/rent-a-car") return "Rent a Car Costa Rica | Alsama Tours";
-  if (pathname === "/tours") return "Costa Rica Tours from San Jose & Jaco | Alsama Tours";
-  if (pathname === "/hotels") return "Hotels in Costa Rica | Alsama Tours";
-  if (pathname === "/privacy-policy") return "Privacy Policy | Alsama Tours";
-  const slug = pathname.split("/").filter(Boolean).pop() || "Costa Rica Travel";
+  const language = languageFromPath(pathname);
+  const basePath = basePathFromPath(pathname);
+  const localized = {
+    en: {
+      "/": "Alsama Tours | Travel Services in Costa Rica",
+      "/shuttle": "Shuttle Service | Alsama Tours",
+      "/private-transport": "Private Transport | Alsama Tours",
+      "/rent-a-car": "Rent a Car | Alsama Tours",
+      "/tours": "Tours | Alsama Tours",
+      "/tours/san-jose": "Tours from San Jose, Costa Rica | Alsama Tours",
+      "/tours/jaco": "Tours from Jaco, Costa Rica | Alsama Tours",
+      "/destinations/manuel-antonio": "Manuel Antonio Tours & Day Trips | Alsama Tours",
+      "/destinations/arenal": "Arenal Volcano & La Fortuna Tours | Alsama Tours",
+      "/hotels": "Hotels | Alsama Tours",
+      "/privacy-policy": "Privacy Policy | Alsama Tours"
+    },
+    es: {
+      "/": "Alsama Tours | Servicios de viaje en Costa Rica",
+      "/shuttle": "Servicio de shuttle | Alsama Tours",
+      "/private-transport": "Transporte privado | Alsama Tours",
+      "/rent-a-car": "Alquiler de autos | Alsama Tours",
+      "/tours": "Tours | Alsama Tours",
+      "/tours/san-jose": "Tours desde San José, Costa Rica | Alsama Tours",
+      "/tours/jaco": "Tours desde Jacó, Costa Rica | Alsama Tours",
+      "/destinations/manuel-antonio": "Tours y excursiones a Manuel Antonio | Alsama Tours",
+      "/destinations/arenal": "Tours al Volcán Arenal y La Fortuna | Alsama Tours",
+      "/hotels": "Hoteles | Alsama Tours",
+      "/privacy-policy": "Política de privacidad | Alsama Tours"
+    },
+    fr: {
+      "/": "Alsama Tours | Services de voyage au Costa Rica",
+      "/shuttle": "Service de navette | Alsama Tours",
+      "/private-transport": "Transport privé | Alsama Tours",
+      "/rent-a-car": "Location de voiture | Alsama Tours",
+      "/tours": "Excursions | Alsama Tours",
+      "/tours/san-jose": "Excursions depuis San José, Costa Rica | Alsama Tours",
+      "/tours/jaco": "Excursions depuis Jacó, Costa Rica | Alsama Tours",
+      "/destinations/manuel-antonio": "Excursions à Manuel Antonio | Alsama Tours",
+      "/destinations/arenal": "Excursions au volcan Arenal et à La Fortuna | Alsama Tours",
+      "/hotels": "Hôtels | Alsama Tours",
+      "/privacy-policy": "Politique de confidentialité | Alsama Tours"
+    }
+  };
+  if (localized[language]?.[basePath]) return localized[language][basePath];
+
+  const slug = basePath.split("/").filter(Boolean).pop() || "Costa Rica Travel";
   const label = slug.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
   return `${label} | Alsama Tours`;
 }
 
 function descriptionFromPath(pathname) {
-  if (pathname === "/inicio") return "Plan Costa Rica tours, private transportation, shared shuttles, hotels and car rentals with Alsama Tours.";
-  if (pathname === "/shuttle") return "Book shared shuttle transportation between Costa Rica airports, hotels, beaches and popular destinations.";
-  if (pathname === "/private-transport") return "Book private transportation in Costa Rica for airport pickups, families, groups and custom itineraries.";
-  if (pathname === "/rent-a-car") return "Request Costa Rica car rental options with local travel and route support.";
-  if (pathname === "/tours") return "Explore Costa Rica tours from San Jose and Jaco, including beaches, volcanoes, wildlife, waterfalls and adventure.";
-  if (pathname === "/hotels") return "Browse Costa Rica hotel options by region and add lodging to your trip with Alsama Tours.";
-  if (pathname === "/privacy-policy") return "Read the Alsama Tours privacy policy for website forms, travel requests and communications.";
-  return "Explore this Costa Rica tour with Alsama Tours, including local booking support, transportation planning and trip coordination.";
+  const language = languageFromPath(pathname);
+  const basePath = basePathFromPath(pathname);
+  const descriptions = {
+    en: {
+      "/": "Plan Costa Rica tours, private transport, shared shuttles, hotels and car rentals with Alsama Tours, a local travel team.",
+      "/shuttle": "Book shared shuttle routes between Costa Rica airports, hotels, beaches and popular destinations with local travel support.",
+      "/private-transport": "Compare private transport routes from San Jose and Jaco for families, groups, airport pickups and custom Costa Rica itineraries.",
+      "/rent-a-car": "Request Costa Rica rent a car options with local route guidance for city, beach, mountain and multi-destination travel.",
+      "/tours": "Explore Costa Rica tours from San Jose and Jaco, including beaches, volcanoes, wildlife, waterfalls and adventure experiences.",
+      "/tours/san-jose": "Compare day tours from San Jose to volcanoes, wildlife, beaches, waterfalls and cultural attractions across Costa Rica.",
+      "/tours/jaco": "Explore tours from Jaco for rafting, waterfalls, wildlife, rainforest, national parks and ocean experiences on Costa Rica's Central Pacific.",
+      "/destinations/manuel-antonio": "Plan Manuel Antonio tours with guided wildlife walks, Pacific scenery, beaches and day-trip options from San Jose.",
+      "/destinations/arenal": "Explore Arenal Volcano and La Fortuna tours with scenic routes, volcano viewpoints, hot springs and options from San Jose.",
+      "/hotels": "Browse Costa Rica hotel options by region and add lodging to your trip request with Alsama Tours."
+    },
+    es: {
+      "/": "Planea tours, transporte privado, shuttles compartidos, hoteles y alquiler de autos en Costa Rica con Alsama Tours.",
+      "/tours": "Explora tours en Costa Rica desde San José y Jacó, incluyendo playas, volcanes, vida silvestre, cataratas y aventura.",
+      "/tours/san-jose": "Compara tours desde San José a volcanes, vida silvestre, playas, cataratas y atracciones culturales de Costa Rica.",
+      "/tours/jaco": "Explora tours desde Jacó de rafting, cataratas, vida silvestre, bosque tropical, parques nacionales y experiencias marinas.",
+      "/destinations/manuel-antonio": "Planea tours a Manuel Antonio con caminatas guiadas, vida silvestre, playas del Pacífico y opciones desde San José.",
+      "/destinations/arenal": "Explora tours al Volcán Arenal y La Fortuna con rutas escénicas, miradores, aguas termales y opciones desde San José."
+    },
+    fr: {
+      "/": "Planifiez excursions, transport privé, navettes, hôtels et location de voiture au Costa Rica avec Alsama Tours.",
+      "/tours": "Découvrez les excursions au Costa Rica depuis San José et Jacó: plages, volcans, faune, cascades et aventure.",
+      "/tours/san-jose": "Comparez les excursions depuis San José vers volcans, faune, plages, cascades et sites culturels du Costa Rica.",
+      "/tours/jaco": "Découvrez les excursions depuis Jacó: rafting, cascades, faune, forêt tropicale, parcs nationaux et expériences marines.",
+      "/destinations/manuel-antonio": "Planifiez Manuel Antonio avec balades guidées, faune tropicale, plages du Pacifique et options depuis San José.",
+      "/destinations/arenal": "Découvrez Arenal et La Fortuna avec routes panoramiques, vues sur le volcan, sources chaudes et options depuis San José."
+    }
+  };
+  return descriptions[language]?.[basePath]
+    || descriptions.en[basePath]
+    || "Explore Costa Rica travel experiences with Alsama Tours, including local booking support and trip coordination.";
 }
 
 function withSeo(html, pathname) {
-  const canonical = `https://alsamatourscr.com${pathname}/`.replace(/\/{2,}$/, "/");
+  const language = languageFromPath(pathname);
+  const basePath = basePathFromPath(pathname);
+  const canonical = absoluteRouteUrl(pathname);
   const title = titleFromPath(pathname);
   const description = descriptionFromPath(pathname);
+  const alternates = {
+    en: absoluteRouteUrl(localizedPath(basePath, "en")),
+    es: absoluteRouteUrl(localizedPath(basePath, "es")),
+    fr: absoluteRouteUrl(localizedPath(basePath, "fr")),
+    "x-default": absoluteRouteUrl(localizedPath(basePath, "en"))
+  };
 
-  return html
+  let result = html
+    .replace(/<html lang="[^"]*">/, `<html lang="${language}">`)
     .replace(/<title>.*?<\/title>/, `<title>${escapeHtml(title)}</title>`)
     .replace(/<meta name="description" content="[^"]*" \/>/, `<meta name="description" content="${escapeHtml(description)}" />`)
     .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${canonical}" />`)
@@ -90,6 +185,18 @@ function withSeo(html, pathname) {
     .replace(/<meta property="og:url" content="[^"]*" \/>/, `<meta property="og:url" content="${canonical}" />`)
     .replace(/<meta name="twitter:title" content="[^"]*" \/>/, `<meta name="twitter:title" content="${escapeHtml(title)}" />`)
     .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${escapeHtml(description)}" />`);
+
+  for (const [hreflang, href] of Object.entries(alternates)) {
+    const pattern = new RegExp(`<link rel="alternate" hreflang="${hreflang}" href="[^"]*" \\/>`);
+    const tag = `<link rel="alternate" hreflang="${hreflang}" href="${href}" />`;
+    if (pattern.test(result)) {
+      result = result.replace(pattern, tag);
+    } else {
+      result = result.replace("</head>", `    ${tag}\n  </head>`);
+    }
+  }
+
+  return result;
 }
 
 function withIndexRedirect(html, pathname) {
