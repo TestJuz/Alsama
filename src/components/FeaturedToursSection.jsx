@@ -5,13 +5,14 @@ import { TourBookingModal } from "./TourBookingModal";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { getAllTours, getTourDetailPath } from "../lib/site";
+import { tourImageAlt } from "../lib/imageAlt";
 
 function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 }
 
 function FeaturedCard({ item, origin, originLabel, onOpenGallery, onBook }) {
-  const { localize } = useLanguage();
+  const { localize, language, t } = useLanguage();
 
   function handleAddToCart() {
     onBook(item, origin, originLabel);
@@ -21,7 +22,7 @@ function FeaturedCard({ item, origin, originLabel, onOpenGallery, onBook }) {
     <article className="card">
       <div className="card__media">
         <button type="button" aria-label={`View ${item.title} image`} onClick={() => onOpenGallery(item)}>
-          <img src={item.image} alt={`${item.title} tour in Costa Rica`} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
+          <img src={item.image} alt={tourImageAlt(t(item.title), language)} loading="lazy" style={item.imagePosition ? { objectPosition: item.imagePosition } : undefined} />
         </button>
       </div>
       <div className="card__body">
