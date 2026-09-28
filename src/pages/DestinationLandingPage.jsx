@@ -2,10 +2,11 @@ import { Link, useLocation } from "react-router-dom";
 import { ContactForm } from "../components/ContactForm";
 import { SiteLayout } from "../components/SiteLayout";
 import { useLanguage } from "../context/LanguageContext";
-import { getAllTours, getTourDetailPath, localizePath, routes, stripLanguagePrefix } from "../lib/site";
+import { asset, getAllTours, getTourDetailPath, localizePath, routes, stripLanguagePrefix } from "../lib/site";
 
 const landingPages = {
   "/tours/san-jose": {
+    heroImage: asset("img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp"),
     filter: (tour) => tour.origin === "san-jose",
     content: {
       en: {
@@ -47,6 +48,7 @@ const landingPages = {
     }
   },
   "/tours/jaco": {
+    heroImage: asset("img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp"),
     filter: (tour) => tour.origin === "jaco",
     content: {
       en: {
@@ -88,6 +90,7 @@ const landingPages = {
     }
   },
   "/destinations/manuel-antonio": {
+    heroImage: asset("img/tours/sj/Manuel_Antonio/1.webp"),
     filter: (tour) => tour.locations.some((place) => ["Manuel Antonio", "Quepos"].includes(place)),
     content: {
       en: {
@@ -129,6 +132,7 @@ const landingPages = {
     }
   },
   "/destinations/arenal": {
+    heroImage: asset("img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp"),
     filter: (tour) => tour.locations.some((place) => ["Arenal", "La Fortuna"].includes(place)),
     content: {
       en: {
@@ -185,6 +189,7 @@ export function DestinationLandingPage() {
 
   const copy = page.content[language] || page.content.en;
   const tours = getAllTours().filter(page.filter);
+  const heroImage = page.heroImage || tours[0]?.image || asset("img/tours/sj/Arenal_Volcano_and_Hot_Springs/Arenal.webp");
 
   return (
     <SiteLayout
@@ -194,7 +199,10 @@ export function DestinationLandingPage() {
       footerBackToTop="#top"
     >
       <main id="top">
-        <section className="page-hero page-hero--image page-hero--tours">
+        <section
+          className="page-hero page-hero--image page-hero--tours"
+          style={{ "--hero-image": `url(${heroImage})` }}
+        >
           <div className="container">
             <p className="home-eyebrow">{copy.eyebrow}</p>
             <h1 className="page-title">{copy.title}</h1>
