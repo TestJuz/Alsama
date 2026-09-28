@@ -28,12 +28,15 @@
         if (!redirectPath) return;
 
         var base = "/".replace(/\/$/, "");
-        var normalizedPath = redirectPath.startsWith("/") ? redirectPath : "/" + redirectPath;
+        var normalizedPath = ("/" + redirectPath)
+          .replace(/\\+/g, "/")
+          .replace(/\/index\\.html$/i, "")
+          .replace(/\/{2,}/g, "/");
         var nextHash = redirectHash ? "#" + redirectHash : window.location.hash;
         window.history.replaceState(null, "", base + normalizedPath + nextHash);
       })();
     </script>
-    <script type="module" crossorigin src="/assets/index-B4ucUzxi.js"></script>
+    <script type="module" crossorigin src="/assets/index-BHKJ6mv9.js"></script>
     <link rel="stylesheet" crossorigin href="/assets/index-DIOfJsYb.css">
   </head>
   <body>
