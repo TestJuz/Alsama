@@ -87,6 +87,8 @@ function titleFromPath(pathname) {
       "/tours/jaco": "Tours from Jaco, Costa Rica | Alsama Tours",
       "/destinations/manuel-antonio": "Manuel Antonio Tours & Day Trips | Alsama Tours",
       "/destinations/arenal": "Arenal Volcano & La Fortuna Tours | Alsama Tours",
+      "/guides/costa-rica-private-transfers": "Costa Rica Private Transfer Guide | Alsama Tours",
+      "/guides/sjo-airport-transportation": "SJO Airport Transportation Guide | Alsama Tours",
       "/hotels": "Hotels | Alsama Tours",
       "/privacy-policy": "Privacy Policy | Alsama Tours"
     },
@@ -100,6 +102,8 @@ function titleFromPath(pathname) {
       "/tours/jaco": "Tours desde Jacó, Costa Rica | Alsama Tours",
       "/destinations/manuel-antonio": "Tours y excursiones a Manuel Antonio | Alsama Tours",
       "/destinations/arenal": "Tours al Volcán Arenal y La Fortuna | Alsama Tours",
+      "/guides/costa-rica-private-transfers": "Guía de transporte privado en Costa Rica | Alsama Tours",
+      "/guides/sjo-airport-transportation": "Guía de transporte desde el Aeropuerto SJO | Alsama Tours",
       "/hotels": "Hoteles | Alsama Tours",
       "/privacy-policy": "Política de privacidad | Alsama Tours"
     },
@@ -113,6 +117,8 @@ function titleFromPath(pathname) {
       "/tours/jaco": "Excursions depuis Jacó, Costa Rica | Alsama Tours",
       "/destinations/manuel-antonio": "Excursions à Manuel Antonio | Alsama Tours",
       "/destinations/arenal": "Excursions au volcan Arenal et à La Fortuna | Alsama Tours",
+      "/guides/costa-rica-private-transfers": "Guide des transferts privés au Costa Rica | Alsama Tours",
+      "/guides/sjo-airport-transportation": "Guide des transports depuis l'aéroport SJO | Alsama Tours",
       "/hotels": "Hôtels | Alsama Tours",
       "/privacy-policy": "Politique de confidentialité | Alsama Tours"
     }
@@ -138,6 +144,8 @@ function descriptionFromPath(pathname) {
       "/tours/jaco": "Explore tours from Jaco for rafting, waterfalls, wildlife, rainforest, national parks and ocean experiences on Costa Rica's Central Pacific.",
       "/destinations/manuel-antonio": "Plan Manuel Antonio tours with guided wildlife walks, Pacific scenery, beaches and day-trip options from San Jose.",
       "/destinations/arenal": "Explore Arenal Volcano and La Fortuna tours with scenic routes, volcano viewpoints, hot springs and options from San Jose.",
+      "/guides/costa-rica-private-transfers": "Compare common private transfer routes from San Jose to Jaco, Manuel Antonio, Arenal and Monteverde, with pickup, stop and luggage planning tips.",
+      "/guides/sjo-airport-transportation": "Plan transportation from SJO airport to San Jose, Jaco, Arenal, Monteverde and Manuel Antonio with practical arrival and pickup tips.",
       "/hotels": "Browse Costa Rica hotel options by region and add lodging to your trip request with Alsama Tours."
     },
     es: {
@@ -146,7 +154,9 @@ function descriptionFromPath(pathname) {
       "/tours/san-jose": "Compara tours desde San José a volcanes, vida silvestre, playas, cataratas y atracciones culturales de Costa Rica.",
       "/tours/jaco": "Explora tours desde Jacó de rafting, cataratas, vida silvestre, bosque tropical, parques nacionales y experiencias marinas.",
       "/destinations/manuel-antonio": "Planea tours a Manuel Antonio con caminatas guiadas, vida silvestre, playas del Pacífico y opciones desde San José.",
-      "/destinations/arenal": "Explora tours al Volcán Arenal y La Fortuna con rutas escénicas, miradores, aguas termales y opciones desde San José."
+      "/destinations/arenal": "Explora tours al Volcán Arenal y La Fortuna con rutas escénicas, miradores, aguas termales y opciones desde San José.",
+      "/guides/costa-rica-private-transfers": "Compara rutas de transporte privado desde San José a Jacó, Manuel Antonio, Arenal y Monteverde, con consejos de recogida, paradas y equipaje.",
+      "/guides/sjo-airport-transportation": "Planea transporte desde el aeropuerto SJO hacia San José, Jacó, Arenal, Monteverde y Manuel Antonio con consejos prácticos de llegada."
     },
     fr: {
       "/": "Planifiez excursions, transport privé, navettes, hôtels et location de voiture au Costa Rica avec Alsama Tours.",
@@ -154,7 +164,9 @@ function descriptionFromPath(pathname) {
       "/tours/san-jose": "Comparez les excursions depuis San José vers volcans, faune, plages, cascades et sites culturels du Costa Rica.",
       "/tours/jaco": "Découvrez les excursions depuis Jacó: rafting, cascades, faune, forêt tropicale, parcs nationaux et expériences marines.",
       "/destinations/manuel-antonio": "Planifiez Manuel Antonio avec balades guidées, faune tropicale, plages du Pacifique et options depuis San José.",
-      "/destinations/arenal": "Découvrez Arenal et La Fortuna avec routes panoramiques, vues sur le volcan, sources chaudes et options depuis San José."
+      "/destinations/arenal": "Découvrez Arenal et La Fortuna avec routes panoramiques, vues sur le volcan, sources chaudes et options depuis San José.",
+      "/guides/costa-rica-private-transfers": "Comparez les transferts privés depuis San José vers Jacó, Manuel Antonio, Arenal et Monteverde, avec conseils sur prise en charge et bagages.",
+      "/guides/sjo-airport-transportation": "Planifiez le transport depuis l'aéroport SJO vers San José, Jacó, Arenal, Monteverde et Manuel Antonio avec conseils pratiques d'arrivée."
     }
   };
   return descriptions[language]?.[basePath]
@@ -233,9 +245,59 @@ async function writeStaticRouteEntrypoints() {
   }
 }
 
+
+function redirectHtml(html, targetPath) {
+  const canonical = absoluteRouteUrl(targetPath);
+  const safeTarget = escapeHtml(targetPath);
+  return html
+    .replace(/<meta name="robots" content="[^"]*" \/>/, '<meta name="robots" content="noindex, follow" />')
+    .replace(/<link rel="canonical" href="[^"]*" \/>/, `<link rel="canonical" href="${canonical}" />`)
+    .replace("</head>", `    <meta http-equiv="refresh" content="0; url=${safeTarget}" />
+    <script>window.location.replace("${safeTarget}" + window.location.search + window.location.hash);<\/script>
+  </head>`);
+}
+
+async function writeLegacyRedirectEntrypoints() {
+  const html = await readFile("dist/index.html", "utf8");
+  const sitemap = await readFile("public/sitemap.xml", "utf8");
+  const canonicalPaths = [...sitemap.matchAll(/<loc>https:\/\/alsamatourscr\.com([^<]*)<\/loc>/g)]
+    .map((match) => match[1] || "/");
+
+  const redirects = new Map([
+    ["/inicio/", "/"],
+    ["/transport/", "/private-transport/"],
+    ["/transporte/", "/private-transport/"],
+    ["/Rent-A-Car/", "/rent-a-car/"],
+    ["/transport/shuttle.html", "/shuttle/"],
+    ["/transport/private-transport.html", "/private-transport/"],
+    ["/tours/SanJose/", "/tours/san-jose/"],
+    ["/tours/Jaco/", "/tours/jaco/"]
+  ]);
+
+  canonicalPaths
+    .filter((pathname) => /^\/tours\/[^/]+\/$/.test(pathname))
+    .filter((pathname) => !["/tours/san-jose/", "/tours/jaco/"].includes(pathname))
+    .forEach((pathname) => {
+      const slug = pathname.split("/").filter(Boolean).pop();
+      redirects.set(`/trip/${slug}/`, pathname);
+    });
+
+  for (const [legacyPath, targetPath] of redirects) {
+    const clean = legacyPath.replace(/^\/+|\/+$/g, "");
+    const isHtmlFile = clean.endsWith(".html");
+    const output = isHtmlFile
+      ? path.join("dist", clean)
+      : path.join("dist", clean, "index.html");
+
+    await mkdir(path.dirname(output), { recursive: true });
+    await writeFile(output, redirectHtml(html, targetPath));
+  }
+}
+
 await mkdir("dist/.openai", { recursive: true });
 await mkdir("dist/server", { recursive: true });
 await copyFile(".openai/hosting.json", "dist/.openai/hosting.json");
 await writeFile("dist/index.js", source);
 await writeFile("dist/server/index.js", source);
 await writeStaticRouteEntrypoints();
+await writeLegacyRedirectEntrypoints();
