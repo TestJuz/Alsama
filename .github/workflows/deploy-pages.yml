@@ -34,6 +34,11 @@ jobs:
       - name: Build site
         run: npm run build
 
+      - name: Optimize social image
+        run: |
+          python -m pip install --disable-pip-version-check pillow
+          python scripts/optimize-images.py dist/og.png
+
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
