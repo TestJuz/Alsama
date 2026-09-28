@@ -8,6 +8,13 @@ export const safetyPdf = asset("Safety.pdf");
 
 export const supportedLanguages = ["en", "es", "fr"];
 
+export const businessContact = {
+  phoneDisplay: "+506 6167 2539",
+  phoneHref: "tel:+50661672539",
+  facebook: "https://www.facebook.com/AlsamaToursCR",
+  instagram: "https://www.instagram.com/alsama_tours_cr/"
+};
+
 export function stripLanguagePrefix(pathname = "/") {
   const cleaned = `/${String(pathname || "/").replace(/^\/+|\/+$/g, "")}`.replace(/\/{2,}/g, "/");
   const stripped = cleaned.replace(/^\/(es|fr)(?=\/|$)/, "");
