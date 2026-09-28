@@ -223,7 +223,7 @@ export function DestinationLandingPage() {
               {tours.map((tour) => (
                 <article className="card" key={tour.slug}>
                   <div className="card__media">
-                    <img src={tour.image} alt={`${tour.title} in Costa Rica`} loading="lazy" decoding="async" />
+                    <img src={tour.image} alt={tourImageAlt(t(tour.title), language)} loading="lazy" decoding="async" />
                   </div>
                   <div className="card__body">
                     <div className="card__meta">
