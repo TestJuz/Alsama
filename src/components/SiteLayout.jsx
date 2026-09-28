@@ -4,6 +4,7 @@ import { Breadcrumbs } from "./Breadcrumbs";
 import { CartWidget } from "./CartWidget";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { TravelAssistant } from "./TravelAssistant";
+import { useLanguage } from "../context/LanguageContext";
 import { asset, homeLinks, routes, safetyPdf, serviceMenu } from "../lib/site";
 
 
@@ -16,6 +17,7 @@ function SmartLink({ to, className, children, ...props }) {
 }
 
 function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
+  const { localize } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const menuRef = useRef(null);
@@ -42,7 +44,7 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
   return (
     <header className="site-header">
       <div className="container nav">
-        <Link className="brand" to={brandTo}>
+        <Link className="brand" to={typeof brandTo === "string" ? localize(brandTo) : { ...brandTo, pathname: localize(brandTo.pathname) }}>
           <span className="brand__logo" aria-hidden="true">
             <img src={asset("img/tortuga.png")} alt="Alsama Tours logo" className="brand__logo-img" />
           </span>
@@ -64,7 +66,7 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
         </div>
 
         <nav ref={menuRef} className="nav__menu" id="navMenu" data-open={menuOpen ? "true" : "false"}>
-          <SmartLink to={homeTo} className="nav__link">Home</SmartLink>
+          <SmartLink to={typeof homeTo === "string" ? localize(homeTo) : { ...homeTo, pathname: localize(homeTo.pathname) }} className="nav__link">Home</SmartLink>
 
           <div ref={dropdownRef} className="nav__dropdown" data-dropdown data-open={dropdownOpen ? "true" : undefined}>
             <button
@@ -77,7 +79,7 @@ function Navigation({ homeTo, safetyHref, contactTo, brandTo }) {
             </button>
             <div className="nav__dropdownMenu" role="menu">
               {serviceMenu.map((item) => (
-                <Link key={item.to} role="menuitem" to={item.to}>
+                <Link key={item.to} role="menuitem" to={localize(item.to)}>
                   {item.label}
                 </Link>
               ))}
@@ -109,6 +111,8 @@ export function SiteLayout({
   footerLabel = "Copyright",
   showBreadcrumbs = true
 }) {
+  const { localize } = useLanguage();
+
   return (
     <>
       <Navigation
@@ -125,7 +129,7 @@ export function SiteLayout({
         <div className="container footer__grid">
           <p className="muted">{footerLabel} {new Date().getFullYear()} Alsama Tours. All rights reserved.</p>
           <nav className="footer__links" aria-label="Footer">
-            <Link className="muted" to={routes.privacy}>Privacy Policy</Link>
+            <Link className="muted" to={localize(routes.privacy)}>Privacy Policy</Link>
             <a className="muted" href={footerBackToTop}>Back to top</a>
           </nav>
         </div>
