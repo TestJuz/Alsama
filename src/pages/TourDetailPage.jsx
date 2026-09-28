@@ -15,6 +15,7 @@ import { Map, MapMarker, MapRoute, MarkerContent, MarkerTooltip } from "../compo
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
 import { findTourBySlug, getAllTours, getTourDetailPath, routes } from "../lib/site";
+import { tourGalleryImageAlt, tourImageAlt } from "../lib/imageAlt";
 
 function formatUSD(value) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
@@ -270,7 +271,7 @@ export function TourDetailPage() {
                   {gallery.map((image, index) => (
                     <SwiperSlide key={image}>
                       <button className="tour-gallery-carousel__zoom" type="button" style={{ "--tour-slide-image": cssImageUrl(image) }} aria-label={`${t("Open")} ${t(tour.title)} ${t("image")} ${index + 1}`} onClick={() => setGalleryIndex(index)}>
-                        <img src={image} alt={`${t(tour.title)} ${t("gallery")} ${index + 1}`} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
+                        <img src={image} alt={tourGalleryImageAlt(t(tour.title), index + 1, language)} loading={index === 0 ? "eager" : "lazy"} decoding="async" />
                       </button>
                     </SwiperSlide>
                   ))}
@@ -409,7 +410,7 @@ export function TourDetailPage() {
             <div className="tour-related-grid">
               {related.map((item) => (
                 <article className="tour-related-card" key={item.slug}>
-                  <img src={item.image} alt={`${t(item.title)} tour in Costa Rica`} loading="lazy" decoding="async" />
+                  <img src={item.image} alt={tourImageAlt(t(item.title), language)} loading="lazy" decoding="async" />
                   <div>
                     <span>{formatUSD(item.price)}</span>
                     <h3>{t(item.title)}</h3>
