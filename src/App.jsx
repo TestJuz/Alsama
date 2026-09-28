@@ -29,7 +29,11 @@ function ScrollManager() {
     const params = new URLSearchParams(location.search);
     const redirectedPath = params.get("p");
     if (redirectedPath) {
-      const pathname = redirectedPath.startsWith("/") ? redirectedPath : `/${redirectedPath}`;
+      const normalized = `/${redirectedPath}`
+        .replace(/\\+/g, "/")
+        .replace(/\/index\\.html$/i, "")
+        .replace(/\/{2,}/g, "/");
+      const pathname = normalized || "/";
       const hash = params.get("h");
       navigate({ pathname, hash: hash ? `#${hash}` : "" }, { replace: true });
     }
