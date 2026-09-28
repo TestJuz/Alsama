@@ -19,6 +19,7 @@ const PrivacyPolicyPage = lazy(() =>
 const ThankYouPage = lazy(() => import("./pages/ThankYouPage").then((module) => ({ default: module.ThankYouPage })));
 const NotFoundPage = lazy(() => import("./pages/NotFoundPage").then((module) => ({ default: module.NotFoundPage })));
 const DestinationLandingPage = lazy(() => import("./pages/DestinationLandingPage").then((module) => ({ default: module.DestinationLandingPage })));
+const TravelGuidePage = lazy(() => import("./pages/TravelGuidePage").then((module) => ({ default: module.TravelGuidePage })));
 
 
 function ScrollManager() {
@@ -89,6 +90,8 @@ export function App() {
         <Route path={routes.toursJaco} element={<DestinationLandingPage />} />
         <Route path={routes.manuelAntonioDestination} element={<DestinationLandingPage />} />
         <Route path={routes.arenalDestination} element={<DestinationLandingPage />} />
+        <Route path={routes.privateTransferGuide} element={<TravelGuidePage />} />
+        <Route path={routes.sjoAirportGuide} element={<TravelGuidePage />} />
 
         <Route path="/es" element={<HomePage />} />
         <Route path="/fr" element={<HomePage />} />
@@ -114,6 +117,10 @@ export function App() {
         <Route path="/fr/destinations/manuel-antonio" element={<DestinationLandingPage />} />
         <Route path="/es/destinations/arenal" element={<DestinationLandingPage />} />
         <Route path="/fr/destinations/arenal" element={<DestinationLandingPage />} />
+        <Route path="/es/guides/costa-rica-private-transfers" element={<TravelGuidePage />} />
+        <Route path="/fr/guides/costa-rica-private-transfers" element={<TravelGuidePage />} />
+        <Route path="/es/guides/sjo-airport-transportation" element={<TravelGuidePage />} />
+        <Route path="/fr/guides/sjo-airport-transportation" element={<TravelGuidePage />} />
         <Route path="/es/tours/:tourSlug" element={<TourDetailPage />} />
         <Route path="/fr/tours/:tourSlug" element={<TourDetailPage />} />
 
