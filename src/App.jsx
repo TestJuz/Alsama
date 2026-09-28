@@ -32,7 +32,7 @@ function ScrollManager() {
     if (redirectedPath) {
       const normalized = `/${redirectedPath}`
         .replace(/\\+/g, "/")
-        .replace(/\/index\\.html$/i, "")
+        .replace(/\/index\.html$/i, "")
         .replace(/\/{2,}/g, "/");
       const pathname = normalized || "/";
       const hash = params.get("h");
