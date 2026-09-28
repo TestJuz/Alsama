@@ -89,6 +89,8 @@ export function App() {
 
         <Route path="/index.html" element={<Navigate replace to={routes.home} />} />
         <Route path="/trip/:tourSlug" element={<LegacyTourRedirect />} />
+        <Route path="/transport" element={<Navigate replace to={routes.privateTransport} />} />
+        <Route path="/transporte" element={<Navigate replace to={routes.privateTransport} />} />
         <Route path="/Rent-A-Car/*" element={<Navigate replace to={routes.rentACar} />} />
         <Route path="/transport/shuttle.html" element={<Navigate replace to={routes.shuttle} />} />
         <Route path="/transport/private-transport.html" element={<Navigate replace to={routes.privateTransport} />} />
