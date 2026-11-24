@@ -21,3 +21,6 @@ Immersive landscape, keep screen on, no local storage of contact details, automa
 - Verify assistance yes requires name; no clears it. Use authorized test address and a test request to confirm inbox and receptionist attribution.
 - Turn off Wi-Fi and verify error and retained cart. Reconnect; check for duplicates before retrying.
 - Verify reset, idle timeout and successful request remove all customer data. Confirm device-management lock-down and privacy notice before launch.
+
+## v1.0.1 delivery troubleshooting
+Native FormSubmit requests now include the Alsama business origin and referrer. Delivery failures show safe diagnostic codes (ACTIVATION, REFERER, DNS, TLS, TIMEOUT, HTTP_status, etc.), without logging customer data. For ACTIVATION, check the official business mailbox and verify FormSubmit activation. No real reservation was submitted during development. Debug APKs built on separate runners may use different signing keys; uninstall the previous debug APK if Android rejects the update, then install the new one. Production requires consistent release signing.
