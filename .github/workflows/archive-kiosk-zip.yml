@@ -1,0 +1,41 @@
+name: Archive original kiosk ZIP in apk branch
+on:
+  push:
+    branches: [apk]
+    paths: ['.github/workflows/archive-kiosk-zip.yml']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+concurrency:
+  group: archive-kiosk-zip
+  cancel-in-progress: false
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: apk
+          lfs: true
+      - name: Download and verify original artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --retry 3 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "https://api.github.com/repos/TestJuz/Alsama/actions/artifacts/14969079046/zip" -o Alsama-Kiosk-Android-debug.zip
+          echo "65e103e629bc5adb266c6b0d9345b38b7739c4a1aea13cfaf26b28f43b1b8ed6  Alsama-Kiosk-Android-debug.zip" | sha256sum -c -
+          unzip -t Alsama-Kiosk-Android-debug.zip
+      - name: Commit original ZIP with Git LFS
+        run: |
+          set -euo pipefail
+          git lfs install --local
+          git lfs track "Alsama-Kiosk-Android-debug.zip"
+          git add .gitattributes Alsama-Kiosk-Android-debug.zip
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --cached --quiet; then
+            git commit -m "Archive original SUNMI kiosk APK ZIP"
+            git lfs push origin apk
+            git push origin HEAD:apk
+          fi
