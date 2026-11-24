@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS reservations (reference TEXT PRIMARY KEY, created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, status TEXT NOT NULL DEFAULT 'pending', language TEXT NOT NULL, full_name TEXT NOT NULL, email TEXT NOT NULL, phone TEXT NOT NULL, whatsapp INTEGER NOT NULL, reception_assisted INTEGER NOT NULL, receptionist_name TEXT, national_discount_requested INTEGER NOT NULL, items_json TEXT NOT NULL, estimate_json TEXT NOT NULL, payload_hash TEXT NOT NULL, notification_status TEXT NOT NULL DEFAULT 'pending', source_hash TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS reservations_created ON reservations(created_at);
+CREATE INDEX IF NOT EXISTS reservations_source ON reservations(source_hash,created_at);

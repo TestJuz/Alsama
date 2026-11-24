@@ -24,3 +24,7 @@ Immersive landscape, keep screen on, no local storage of contact details, automa
 
 ## v1.0.1 delivery troubleshooting
 Native FormSubmit requests now include the Alsama business origin and referrer. Delivery failures show safe diagnostic codes (ACTIVATION, REFERER, DNS, TLS, TIMEOUT, HTTP_status, etc.), without logging customer data. For ACTIVATION, check the official business mailbox and verify FormSubmit activation. No real reservation was submitted during development. Debug APKs built on separate runners may use different signing keys; uninstall the previous debug APK if Android rejects the update, then install the new one. Production requires consistent release signing.
+
+
+## v1.1.0 — Direct reservation API
+FormSubmit is no longer used for kiosk requests. POST https://alsama-tour-reservations.alsama-digital-id.workers.dev/reservations saves requests in the private D1 database alsama-tour-reservations. Only a successful database write or matching idempotent retry returns success. No customer email is sent yet; notification_status is pending for future integration. Staff can view reservations via the Cloudflare D1 dashboard. Public API has no read endpoint. Estimates remain client-supplied and require staff validation. Full national ID is not collected; staff verifies eligibility. Basic public intake rate limiting is in place; strengthen device authentication, abuse controls and retention policy before broad rollout. No payment or live availability is provided.

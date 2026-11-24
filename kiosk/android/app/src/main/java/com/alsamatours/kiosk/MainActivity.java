@@ -43,11 +43,11 @@ public class MainActivity extends Activity {
      JSONObject data=new JSONObject(payload);
      if(!data.has("request_reference")||!data.has("selected_items")||!data.has("email")||!"Yes".equals(data.optString("consent"))){reply(requestId,false,"INVALID");return;}
      byte[] bytes=data.toString().getBytes(StandardCharsets.UTF_8);
-     conn=(HttpURLConnection)new URL("https://formsubmit.co/ajax/info@alsamatourscr.com").openConnection();
+     conn=(HttpURLConnection)new URL("https://alsama-tour-reservations.alsama-digital-id.workers.dev/reservations").openConnection();
      conn.setInstanceFollowRedirects(false);conn.setConnectTimeout(10000);conn.setReadTimeout(20000);conn.setRequestMethod("POST");conn.setDoOutput(true);
      conn.setRequestProperty("Content-Type","application/json");conn.setRequestProperty("Accept","application/json");
      conn.setRequestProperty("Referer",BUSINESS_ORIGIN+"/");conn.setRequestProperty("Origin",BUSINESS_ORIGIN);
-     conn.setRequestProperty("User-Agent","AlsamaToursKiosk/1.0.1 (Android)");
+     conn.setRequestProperty("User-Agent","AlsamaToursKiosk/1.1.0 (Android)");
      conn.setFixedLengthStreamingMode(bytes.length);
      try(OutputStream out=conn.getOutputStream()){out.write(bytes);}
      int status=conn.getResponseCode();code="HTTP_"+status;
@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
        try{
         JSONObject result=new JSONObject(buffer.toString("UTF-8"));ok="true".equalsIgnoreCase(result.optString("success"));
         String msg=result.optString("message").toLowerCase(java.util.Locale.ROOT);
-        code=ok?"OK":msg.contains("activat")?"ACTIVATION":msg.contains("web server")||msg.contains("referrer")||msg.contains("referer")?"REFERER":"REJECTED";
+        code=ok?"OK":"REJECTED";
        }catch(org.json.JSONException e){code="INVALID_RESPONSE";}
       }
      }
