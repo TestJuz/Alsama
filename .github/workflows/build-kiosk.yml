@@ -1,0 +1,32 @@
+name: Build SUNMI kiosk APK
+on:
+  push:
+    branches: [feature/self-service-kiosk]
+    paths: ['kiosk/**', 'src/lib/**', 'public/img/**', '.github/workflows/build-kiosk.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx vite build --config kiosk/vite.config.mjs
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - run: gradle -p kiosk/android :app:assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Alsama-Kiosk-Android-debug
+          path: kiosk/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
